@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "title": "Flora Global Corporate",
+    "description": "통합 농업 공급망 생태계 — Vertically Integrated. Vertically Trusted."
+  },
+  "topbar": {
+    "tagline": "수직 통합. 수직 신뢰."
+  },
+  "nav": {
+    "home": "홈",
+    "about": "회사 소개",
+    "services": "서비스",
+    "news": "뉴스",
+    "products": "제품",
+    "contact": "문의",
+    "getInTouch": "문의하기",
+    "cart": "장바구니"
+  },
+  "services": {
+    "premium-agricultural-inputs-the-japanese-foundation": "농업 투입재",
+    "strategic-sourcing-procurement-your-bridge-to-vietnam": "제품 소싱",
+    "the-export-logistic-chain-precision-velocity-thermal-integrity": "수출 물류",
+    "farming-precision-cultivation-the-honey-no-9-legacy": "정밀 재배",
+    "organic-certification-global-compliance-solutions": "인증 준수"
+  },
+  "newsCategories": {
+    "news": "뉴스",
+    "press": "보도자료",
+    "market-information": "시장 정보"
+  },
+  "home": {
+    "learnMore": "자세히 보기",
+    "aboutCta": "회사 소개",
+    "catalogEyebrow": "카탈로그",
+    "productsTitle": "제품",
+    "allProducts": "전체 제품",
+    "blogEyebrow": "블로그",
+    "newsTitle": "뉴스",
+    "allNews": "전체 뉴스",
+    "ceoCaption": "레티투이호아 – Flora Global CEO",
+    "ecosystemTitle": "통합 농업 공급망 생태계",
+    "ecosystemSubtitle": "수직 통합. 수직 신뢰.",
+    "ecosystemP1": "Flora Global은 세계 가장 까다로운 시장이 단순한 제품이 아니라 검증되고 투명한 여정을 필요로 한다고 믿습니다. 저희 사업은 농업 가치사슬의 모든 핵심 접점을 관리하는 폐쇄형 생태계 위에 구축되어 있습니다.",
+    "ecosystemP2": "일본 표준 투입재를 수입하고, 베트남의 가장 비옥한 지역에서 20헥타르의 프리미엄 황색 패션프루트를 관리하며, 글로벌 인증 기술 심사를 주도함으로써 제3자 소싱 리스크를 제거합니다. 이는 단순한 농업이 아니라, 100% 추적 가능성으로 “Honey No. 9” 단맛을 전달하도록 설계된 정밀 관리 공급망입니다.",
+    "pillars": [
+      {
+        "eyebrow": "일본의 기반",
+        "title": "엘리트 투입재",
+        "body": "일본에서 완전 발효·열처리된 계분을 수입하여 토양의 활력과 높은 질소 영양을 확보하고, 고브릭스 과실의 기반을 마련합니다."
+      },
+      {
+        "eyebrow": "20헥타르의 우수성",
+        "title": "정밀 재배",
+        "body": "동나이, 롱안, 끼엔장에 걸쳐 고정밀 생물학적 프로토콜을 적용하여 일관성, 규격, 그리고 시그니처 17–19 Brix 당도를 보장합니다."
+      },
+      {
+        "eyebrow": "글로벌 여권",
+        "title": "토탈 컴플라이언스",
+        "body": "내부 인증 전문가가 USDA, EU Organic, GlobalG.A.P., HACCP에 대한 엄격한 심사를 관리하여 시장 진입 규제 장벽을 제거합니다."
+      },
+      {
+        "eyebrow": "과수원에서 식탁까지",
+        "title": "원활한 수출",
+        "body": "수확 후 냉각부터 국제 운송과 서류까지 통합 물류 인프라가 관리하여 최고 신선도로 도착하도록 보장합니다."
+      }
+    ]
+  },
+  "footer": {
+    "needHelp": "궁금하신가요?",
+    "needSupport": "지원이 필요하신가요?",
+    "infoAbout": "정보",
+    "aboutUs": "회사 소개",
+    "newUpdates": "최신",
+    "fromUs": "소식",
+    "contact": "문의",
+    "withUs": "하기",
+    "aboutTitle": "회사 소개",
+    "servicesTitle": "서비스",
+    "blogsTitle": "블로그",
+    "companyTitle": "Flora Global 유한회사",
+    "address": "베트남 호치민시 Xom Chieu 동 Doan Van Bo 거리 692/31",
+    "facebook": "Facebook: Flora Global – Ms. Hoa",
+    "copyright": "저작권 {year} © Flora Global"
+  },
+  "floating": {
+    "contact": "문의"
+  },
+  "common": {
+    "readMore": "더 읽기 →",
+    "home": "홈",
+    "all": "전체",
+    "relatedPosts": "관련 글",
+    "otherServices": "다른 서비스",
+    "readyPartner": "저희 생태계와 함께할 준비가 되셨나요?",
+    "initiatePartnership": "파트너십 시작",
+    "backProducts": "← 제품으로 돌아가기",
+    "inStock": "재고 있음",
+    "outOfStock": "품절",
+    "organic": "유기농",
+    "priceOnRequest": "가격 문의",
+    "requestQuote": "견적 문의",
+    "addToCart": "장바구니 담기",
+    "addedToCart": "장바구니에 담았습니다"
+  },
+  "about": {
+    "eyebrow": "“생태계” 리더",
+    "title": "회사 소개"
+  },
+  "servicesPage": {
+    "eyebrow": "수직 통합. 수직 신뢰.",
+    "title": "서비스"
+  },
+  "newsPage": {
+    "eyebrow": "블로그",
+    "title": "뉴스"
+  },
+  "productsPage": {
+    "eyebrow": "카탈로그",
+    "title": "제품",
+    "intro": "유기농 농산물과 수입 농업 투입재 — VND 가격, 온라인 주문.",
+    "all": "전체",
+    "empty": "이 카테고리에 제품이 없습니다."
+  },
+  "contact": {
+    "eyebrow": "단순한 거래를 넘어",
+    "title": "문의하기",
+    "sent": "감사합니다. 문의가 접수되었습니다 — 곧 연락드리겠습니다.",
+    "error": "* 표시된 필수 항목을 모두 입력해 주세요.",
+    "name": "성명 및 직함 *",
+    "email": "회사 이메일 *",
+    "company": "회사명 *",
+    "location": "본사 위치 *",
+    "phone": "전화",
+    "inquiry": "문의 유형 *",
+    "message": "프로젝트 상세 / 메시지",
+    "timeline": "일정 *",
+    "submit": "파트너십 시작",
+    "companyName": "FLORA GLOBAL 유한회사",
+    "intro1": "Flora Global은 단순한 공급자가 아니라, 베트남 농업 잠재력과 세계 가장 까다로운 시장을 잇는 전략적 다리입니다. 소싱을 위한 단일 책임 창구를 찾는 글로벌 기업, 글로벌 인증이 필요한 농장, 또는 Honey No. 9 패션프루트의 안정적 공급이 필요한 소매업체라면, 저희 생태계가 함께할 준비가 되어 있습니다.",
+    "intro2": "단순한 거래를 넘어, 정직·정밀·탁월함으로 정의되는 공급망을 함께 만들어가겠습니다.",
+    "emailLabel": "이메일",
+    "phoneLabel": "전화",
+    "addressLabel": "주소",
+    "hoursLabel": "운영 시간",
+    "hours": "월요일 – 금요일: 08:30 – 17:30 (ICT / GMT+7)",
+    "hoursNote": "글로벌 공급망 팀은 주요 시간대에서 예약 상담이 가능합니다.",
+    "inquiries": [
+      "전략적 소싱 및 조달",
+      "Honey No. 9 수출 및 공급",
+      "유기농 인증 지원 (심사/컨설팅)",
+      "일본 농업 투입재 (유통/시험)",
+      "투자자 및 이해관계자 관계"
+    ],
+    "timelines": ["즉시", "다음 시즌", "연구 단계"]
+  }
+}

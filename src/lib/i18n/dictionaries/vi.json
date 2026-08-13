@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "title": "Flora Global Corporate",
+    "description": "Hệ sinh thái chuỗi cung ứng nông nghiệp tích hợp — Vertically Integrated. Vertically Trusted."
+  },
+  "topbar": {
+    "tagline": "Tích hợp dọc. Tin cậy dọc."
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "about": "Về chúng tôi",
+    "services": "Dịch vụ",
+    "news": "Tin tức",
+    "products": "Sản phẩm",
+    "contact": "Liên hệ",
+    "getInTouch": "Liên hệ",
+    "cart": "Giỏ hàng"
+  },
+  "services": {
+    "premium-agricultural-inputs-the-japanese-foundation": "Đầu vào nông nghiệp",
+    "strategic-sourcing-procurement-your-bridge-to-vietnam": "Thu mua sản phẩm",
+    "the-export-logistic-chain-precision-velocity-thermal-integrity": "Xuất khẩu",
+    "farming-precision-cultivation-the-honey-no-9-legacy": "Canh tác chính xác",
+    "organic-certification-global-compliance-solutions": "Chứng nhận"
+  },
+  "newsCategories": {
+    "news": "Tin tức",
+    "press": "Báo chí",
+    "market-information": "Thông tin thị trường"
+  },
+  "home": {
+    "learnMore": "Tìm hiểu thêm",
+    "aboutCta": "Về chúng tôi",
+    "catalogEyebrow": "Danh mục",
+    "productsTitle": "Sản phẩm",
+    "allProducts": "Tất cả sản phẩm",
+    "blogEyebrow": "Blog",
+    "newsTitle": "Tin tức",
+    "allNews": "Tất cả tin tức",
+    "ceoCaption": "Bà Lê Thị Thúy Hoa – CEO Flora Global",
+    "ecosystemTitle": "Hệ sinh thái chuỗi cung ứng nông nghiệp tích hợp",
+    "ecosystemSubtitle": "Tích hợp dọc. Tin cậy dọc.",
+    "ecosystemP1": "Tại Flora Global, chúng tôi tin rằng những thị trường khó tính nhất thế giới cần nhiều hơn một sản phẩm — họ cần một hành trình minh bạch và đã được kiểm chứng. Doanh nghiệp của chúng tôi được xây trên hệ sinh thái khép kín, quản lý mọi điểm chạm then chốt của chuỗi giá trị nông nghiệp.",
+    "ecosystemP2": "Bằng cách nhập khẩu đầu vào chuẩn Nhật Bản, quản lý 20 hecta chanh dây vàng cao cấp tại các tỉnh màu mỡ của Việt Nam, và dẫn dắt kiểm toán kỹ thuật cho chứng nhận toàn cầu, chúng tôi loại bỏ rủi ro từ nguồn cung bên thứ ba. Đây không chỉ là trồng trọt — mà là chuỗi cung ứng được quản trị chặt chẽ để mang đến hương vị Honey No. 9 với khả năng truy xuất nguồn gốc 100%.",
+    "pillars": [
+      {
+        "eyebrow": "Nền tảng Nhật Bản",
+        "title": "ĐẦU VÀO TINH HOA",
+        "body": "Chúng tôi nhập khẩu phân gà lên men và xử lý nhiệt từ Nhật Bản để đảm bảo sức sống đất và dinh dưỡng đạm cao — nền tảng cho trái cây đạt độ Brix cao."
+      },
+      {
+        "eyebrow": "20 hecta xuất sắc",
+        "title": "CANH TÁC CHÍNH XÁC",
+        "body": "Trải dài Đồng Nai, Long An và Kiên Giang, vùng trồng áp dụng quy trình sinh học chính xác để đảm bảo độ đồng đều, kích cỡ và độ ngọt đặc trưng 17–19 Brix."
+      },
+      {
+        "eyebrow": "Hộ chiếu toàn cầu",
+        "title": "TUÂN THỦ TOÀN DIỆN",
+        "body": "Chuyên gia chứng nhận nội bộ quản lý kiểm toán nghiêm ngặt cho USDA, EU Organic, GlobalG.A.P. và HACCP, gỡ bỏ rào cản pháp lý khi tiếp cận thị trường."
+      },
+      {
+        "eyebrow": "Logistics từ vườn đến bàn",
+        "title": "XUẤT KHẨU MƯỢT MÀ",
+        "body": "Hạ tầng logistics tích hợp quản lý từ làm lạnh sau thu hoạch đến vận tải quốc tế và chứng từ — đảm bảo sản phẩm đến nơi ở độ tươi đỉnh cao."
+      }
+    ]
+  },
+  "footer": {
+    "needHelp": "CẦN HỖ TRỢ?",
+    "needSupport": "CHÚNG TÔI SẴN SÀNG GIÚP.",
+    "infoAbout": "Thông tin",
+    "aboutUs": "Về chúng tôi",
+    "newUpdates": "Cập nhật",
+    "fromUs": "mới nhất",
+    "contact": "Liên hệ",
+    "withUs": "với chúng tôi",
+    "aboutTitle": "Về chúng tôi",
+    "servicesTitle": "Dịch vụ",
+    "blogsTitle": "Blog",
+    "companyTitle": "Công ty TNHH Flora Global",
+    "address": "692/31 Đường Đoàn Văn Bơ, Phường Xóm Chiếu, TP. Hồ Chí Minh, Việt Nam",
+    "facebook": "Facebook: Flora Global – Ms. Hoa",
+    "copyright": "Bản quyền {year} © Flora Global"
+  },
+  "floating": {
+    "contact": "Liên hệ"
+  },
+  "common": {
+    "readMore": "Đọc tiếp →",
+    "home": "Trang chủ",
+    "all": "Tất cả",
+    "relatedPosts": "Bài viết liên quan",
+    "otherServices": "Dịch vụ khác",
+    "readyPartner": "Sẵn sàng đồng hành cùng hệ sinh thái của chúng tôi?",
+    "initiatePartnership": "Bắt đầu hợp tác",
+    "backProducts": "← Quay lại sản phẩm",
+    "inStock": "Còn hàng",
+    "outOfStock": "Hết hàng",
+    "organic": "Hữu cơ",
+    "priceOnRequest": "Liên hệ",
+    "requestQuote": "Liên hệ báo giá",
+    "addToCart": "Thêm vào giỏ",
+    "addedToCart": "Đã thêm vào giỏ"
+  },
+  "about": {
+    "eyebrow": "Người dẫn dắt “Hệ sinh thái”",
+    "title": "Về chúng tôi"
+  },
+  "servicesPage": {
+    "eyebrow": "Tích hợp dọc. Tin cậy dọc.",
+    "title": "Dịch vụ"
+  },
+  "newsPage": {
+    "eyebrow": "Blog",
+    "title": "Tin tức"
+  },
+  "productsPage": {
+    "eyebrow": "Danh mục",
+    "title": "Sản phẩm",
+    "intro": "Nông sản hữu cơ và nguyên liệu nhập khẩu — giá VND, giao dịch trực tuyến.",
+    "all": "Tất cả",
+    "empty": "Không có sản phẩm trong danh mục này."
+  },
+  "contact": {
+    "eyebrow": "Hãy vượt qua giao dịch đơn thuần",
+    "title": "Liên hệ",
+    "sent": "Cảm ơn bạn. Yêu cầu đã được ghi nhận — đội ngũ sẽ phản hồi sớm.",
+    "error": "Vui lòng điền đầy đủ các trường bắt buộc đánh dấu *.",
+    "name": "Họ tên & chức danh *",
+    "email": "Email công ty *",
+    "company": "Tên công ty *",
+    "location": "Trụ sở *",
+    "phone": "Điện thoại",
+    "inquiry": "Nội dung quan tâm *",
+    "message": "Chi tiết dự án / Tin nhắn",
+    "timeline": "Thời hạn *",
+    "submit": "Bắt đầu hợp tác",
+    "companyName": "CÔNG TY TNHH FLORA GLOBAL",
+    "intro1": "Flora Global không chỉ là nhà cung cấp; chúng tôi là cầu nối chiến lược giữa tiềm năng nông nghiệp Việt Nam và những thị trường đòi hỏi khắt khe nhất. Dù bạn là tập đoàn toàn cầu cần một Điểm chịu trách nhiệm duy nhất cho thu mua, một trang trại muốn mở khóa Chứng nhận toàn cầu, hay nhà bán lẻ cần nguồn cung ổn định Passion Fruit Honey No. 9 — hệ sinh thái của chúng tôi sẵn sàng đồng hành.",
+    "intro2": "Hãy vượt qua giao dịch đơn thuần. Hãy cùng xây dựng chuỗi cung ứng dựa trên chính trực, chính xác và xuất sắc.",
+    "emailLabel": "Email",
+    "phoneLabel": "Điện thoại",
+    "addressLabel": "Địa chỉ",
+    "hoursLabel": "Giờ làm việc",
+    "hours": "Thứ Hai – Thứ Sáu: 08:30 – 17:30 (ICT / GMT+7)",
+    "hoursNote": "Đội ngũ chuỗi cung ứng toàn cầu sẵn sàng tư vấn theo lịch trên mọi múi giờ chính.",
+    "inquiries": [
+      "Thu mua & cung ứng chiến lược",
+      "Xuất khẩu & cung ứng Honey No. 9",
+      "Hỗ trợ chứng nhận hữu cơ (Kiểm toán/Tư vấn)",
+      "Đầu vào nông nghiệp Nhật Bản (Phân phối/Thử nghiệm)",
+      "Quan hệ nhà đầu tư & đối tác"
+    ],
+    "timelines": ["Ngay lập tức", "Mùa vụ tới", "Giai đoạn nghiên cứu"]
+  }
+}

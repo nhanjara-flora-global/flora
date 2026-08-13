@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "title": "Flora Global Corporate",
+    "description": "一体化农业供应链生态系统 — Vertically Integrated. Vertically Trusted."
+  },
+  "topbar": {
+    "tagline": "垂直整合。垂直可信。"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "services": "服务",
+    "news": "新闻",
+    "products": "产品",
+    "contact": "联系",
+    "getInTouch": "联系我们",
+    "cart": "购物车"
+  },
+  "services": {
+    "premium-agricultural-inputs-the-japanese-foundation": "农业投入品",
+    "strategic-sourcing-procurement-your-bridge-to-vietnam": "产品采购",
+    "the-export-logistic-chain-precision-velocity-thermal-integrity": "出口物流",
+    "farming-precision-cultivation-the-honey-no-9-legacy": "精准种植",
+    "organic-certification-global-compliance-solutions": "认证合规"
+  },
+  "newsCategories": {
+    "news": "新闻",
+    "press": "媒体",
+    "market-information": "市场资讯"
+  },
+  "home": {
+    "learnMore": "了解更多",
+    "aboutCta": "关于我们",
+    "catalogEyebrow": "目录",
+    "productsTitle": "产品",
+    "allProducts": "全部产品",
+    "blogEyebrow": "博客",
+    "newsTitle": "新闻",
+    "allNews": "全部新闻",
+    "ceoCaption": "黎氏翠花女士 – Flora Global 首席执行官",
+    "ecosystemTitle": "一体化农业供应链生态系统",
+    "ecosystemSubtitle": "垂直整合。垂直可信。",
+    "ecosystemP1": "在 Flora Global，我们相信全球最严苛的市场需要的不仅是产品，更是一条可验证、透明的旅程。我们的业务建立在闭环生态系统之上，覆盖农业价值链的每一个关键触点。",
+    "ecosystemP2": "通过进口日本标准投入品、在越南最肥沃省份管理 20 公顷优质黄百香果，并主导全球认证技术审核，我们消除了第三方采购的风险。这不只是种植，而是精心管理的供应链，旨在以 100% 可追溯性交付 “Honey No. 9” 甜度风味。",
+    "pillars": [
+      {
+        "eyebrow": "日本根基",
+        "title": "精品投入品",
+        "body": "我们从日本进口充分发酵并经热处理的鸡粪，确保土壤活力与高氮营养，为高糖度果实奠定基础。"
+      },
+      {
+        "eyebrow": "20 公顷卓越产区",
+        "title": "精准种植",
+        "body": "覆盖同奈、隆安与坚江，我们的农场采用高精度生物方案，确保一致性、规格以及标志性的 17–19 Brix 甜度。"
+      },
+      {
+        "eyebrow": "通往全球的护照",
+        "title": "全面合规",
+        "body": "内部认证专家负责 USDA、EU Organic、GlobalG.A.P. 与 HACCP 的严格审核，清除进入市场的监管障碍。"
+      },
+      {
+        "eyebrow": "从果园到餐桌的物流",
+        "title": "无缝出口",
+        "body": "一体化物流基础设施覆盖采后冷却、国际货运与单证，确保产品以最佳新鲜度抵达。"
+      }
+    ]
+  },
+  "footer": {
+    "needHelp": "有问题？",
+    "needSupport": "需要支持？",
+    "infoAbout": "信息",
+    "aboutUs": "关于我们",
+    "newUpdates": "最新",
+    "fromUs": "动态",
+    "contact": "联系",
+    "withUs": "我们",
+    "aboutTitle": "关于我们",
+    "servicesTitle": "服务",
+    "blogsTitle": "博客",
+    "companyTitle": "Flora Global 有限公司",
+    "address": "越南胡志明市 Xom Chieu 坊 Doan Van Bo 路 692/31 号",
+    "facebook": "Facebook：Flora Global – Ms. Hoa",
+    "copyright": "版权所有 {year} © Flora Global"
+  },
+  "floating": {
+    "contact": "联系"
+  },
+  "common": {
+    "readMore": "阅读更多 →",
+    "home": "首页",
+    "all": "全部",
+    "relatedPosts": "相关文章",
+    "otherServices": "其他服务",
+    "readyPartner": "准备好融入我们的生态系统了吗？",
+    "initiatePartnership": "开启合作",
+    "backProducts": "← 返回产品",
+    "inStock": "有货",
+    "outOfStock": "缺货",
+    "organic": "有机",
+    "priceOnRequest": "价格面议",
+    "requestQuote": "索取报价",
+    "addToCart": "加入购物车",
+    "addedToCart": "已加入购物车"
+  },
+  "about": {
+    "eyebrow": "“生态系统”引领者",
+    "title": "关于我们"
+  },
+  "servicesPage": {
+    "eyebrow": "垂直整合。垂直可信。",
+    "title": "服务"
+  },
+  "newsPage": {
+    "eyebrow": "博客",
+    "title": "新闻"
+  },
+  "productsPage": {
+    "eyebrow": "目录",
+    "title": "产品",
+    "intro": "有机农产品与进口农资 — 越南盾计价，支持在线订购。",
+    "all": "全部",
+    "empty": "该分类暂无产品。"
+  },
+  "contact": {
+    "eyebrow": "让我们超越单纯交易",
+    "title": "联系我们",
+    "sent": "谢谢。您的询盘已收到 — 我们的团队将尽快回复。",
+    "error": "请填写所有标有 * 的必填项。",
+    "name": "姓名与职位 *",
+    "email": "企业邮箱 *",
+    "company": "公司名称 *",
+    "location": "总部所在地 *",
+    "phone": "电话",
+    "inquiry": "询盘类型 *",
+    "message": "项目详情 / 留言",
+    "timeline": "时间安排 *",
+    "submit": "开启合作",
+    "companyName": "FLORA GLOBAL 有限公司",
+    "intro1": "Flora Global 不仅是供应商，更是连接越南农业潜力与全球最严苛市场的战略桥梁。无论您是寻求单一责任主体的全球企业、希望获得全球认证的农场，还是需要稳定供应 Honey No. 9 百香果的零售商，我们的生态系统都已准备好与您对接。",
+    "intro2": "让我们超越单纯交易，共同打造以诚信、精准与卓越定义的供应链。",
+    "emailLabel": "邮箱",
+    "phoneLabel": "电话",
+    "addressLabel": "地址",
+    "hoursLabel": "营业时间",
+    "hours": "周一至周五：08:30 – 17:30（ICT / GMT+7）",
+    "hoursNote": "我们的全球供应链团队可按预约在主要时区提供咨询。",
+    "inquiries": [
+      "战略采购与供应链",
+      "Honey No. 9 出口与供应",
+      "有机认证托管（审核/咨询）",
+      "日本农业投入品（分销/试验）",
+      "投资者与利益相关方关系"
+    ],
+    "timelines": ["立即", "下一季", "研究阶段"]
+  }
+}

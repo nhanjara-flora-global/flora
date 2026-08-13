@@ -1,0 +1,156 @@
+{
+  "meta": {
+    "title": "Flora Global Corporate",
+    "description": "The Integrated Supply Chain Agriculture Ecosystem — Vertically Integrated. Vertically Trusted."
+  },
+  "topbar": {
+    "tagline": "Vertically Integrated. Vertically Trusted."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "news": "News",
+    "products": "Products",
+    "contact": "Contact",
+    "getInTouch": "Get in touch",
+    "cart": "Cart"
+  },
+  "services": {
+    "premium-agricultural-inputs-the-japanese-foundation": "Agriculture Inputs",
+    "strategic-sourcing-procurement-your-bridge-to-vietnam": "Product Sourcing",
+    "the-export-logistic-chain-precision-velocity-thermal-integrity": "Export",
+    "farming-precision-cultivation-the-honey-no-9-legacy": "Precision Farming",
+    "organic-certification-global-compliance-solutions": "Certification"
+  },
+  "newsCategories": {
+    "news": "News",
+    "press": "Press",
+    "market-information": "Market information"
+  },
+  "home": {
+    "learnMore": "Learn more",
+    "aboutCta": "About Us",
+    "catalogEyebrow": "Catalog",
+    "productsTitle": "Products",
+    "allProducts": "All products",
+    "blogEyebrow": "Blog",
+    "newsTitle": "News",
+    "allNews": "All news",
+    "ceoCaption": "Ms Lê Thị Thúy Hoa – CEO Flora Global",
+    "ecosystemTitle": "The Integrated Supply Chain Agriculture Ecosystem",
+    "ecosystemSubtitle": "Vertically Integrated. Vertically Trusted.",
+    "ecosystemP1": "At Flora Global, we believe that the world’s most demanding markets require more than just a product—they require a proven, transparent journey. Our business is built on a closed-loop ecosystem that manages every critical touchpoint of the agricultural value chain.",
+    "ecosystemP2": "By importing our own Japanese-standard inputs, managing 20 hectares of premium yellow passion fruit across Vietnam’s most fertile provinces, and leading the technical audit for global certifications, we eliminate the risks associated with third-party sourcing. This is not just farming; it is a meticulously managed supply chain designed to deliver the “Honey No. 9” sweet profile with 100% traceability.",
+    "pillars": [
+      {
+        "eyebrow": "The Japanese Foundation",
+        "title": "ELITE INPUTS",
+        "body": "We import fully fermented, heat-treated chicken dung from Japan to ensure soil vitality and high-nitrogen nutrition, laying the groundwork for high-brix fruit."
+      },
+      {
+        "eyebrow": "20 Hectares of Excellence",
+        "title": "PRECISION GROWING",
+        "body": "Spanning Dong Nai, Long An, and Kien Giang, our farms utilize high-precision biological protocols to ensure consistency, sizing, and the signature 17-19 Brix sweetness."
+      },
+      {
+        "eyebrow": "Your Global Passport",
+        "title": "TOTAL COMPLIANCE",
+        "body": "Our in-house certification experts manage the rigorous auditing for USDA, EU Organic, GlobalG.A.P., and HACCP, removing the regulatory barriers to entry."
+      },
+      {
+        "eyebrow": "Tree-to-Table Logistics",
+        "title": "SEAMLESS EXPORT",
+        "body": "Our integrated logistics infrastructure manages everything from post-harvest cooling to international freight and documentation, ensuring arrival at peak freshness."
+      }
+    ]
+  },
+  "footer": {
+    "needHelp": "HAVE QUESTIONS,",
+    "needSupport": "NEED OUR SUPPORT?",
+    "infoAbout": "Information",
+    "aboutUs": "About Us",
+    "newUpdates": "New updates",
+    "fromUs": "from us",
+    "contact": "Contact",
+    "withUs": "with us",
+    "aboutTitle": "About Us",
+    "servicesTitle": "Services",
+    "blogsTitle": "Blogs",
+    "companyTitle": "Flora Global Company Limited",
+    "address": "692/31 Doan Van Bo Street, Xom Chieu Ward, Ho Chi Minh City, Vietnam",
+    "facebook": "Facebook: Flora Global – Ms. Hoa",
+    "copyright": "Copyright {year} © Flora Global"
+  },
+  "floating": {
+    "contact": "Contact"
+  },
+  "common": {
+    "readMore": "Read more →",
+    "home": "Home",
+    "all": "All",
+    "relatedPosts": "Related posts",
+    "otherServices": "Other services",
+    "readyPartner": "Ready to integrate with our ecosystem?",
+    "initiatePartnership": "Initiate partnership",
+    "backProducts": "← Back to products",
+    "inStock": "In stock",
+    "outOfStock": "Out of stock",
+    "organic": "Organic",
+    "priceOnRequest": "Contact for price",
+    "requestQuote": "Request a quote",
+    "addToCart": "Add to cart",
+    "addedToCart": "Added to cart"
+  },
+  "about": {
+    "eyebrow": "The “Ecosystem” Leader",
+    "title": "About Us"
+  },
+  "servicesPage": {
+    "eyebrow": "Vertically Integrated. Vertically Trusted.",
+    "title": "Services"
+  },
+  "newsPage": {
+    "eyebrow": "Blog",
+    "title": "News"
+  },
+  "productsPage": {
+    "eyebrow": "Catalog",
+    "title": "Products",
+    "intro": "Organic produce and imported agricultural inputs — VND pricing, online ordering.",
+    "all": "All",
+    "empty": "No products in this category."
+  },
+  "contact": {
+    "eyebrow": "Let’s move beyond the transaction",
+    "title": "Contact Us",
+    "sent": "Thank you. Your inquiry has been received — our team will respond shortly.",
+    "error": "Please complete all required fields marked with *.",
+    "name": "Full Name & Professional Title *",
+    "email": "Corporate Email Address *",
+    "company": "Company Name *",
+    "location": "Headquarters Location *",
+    "phone": "Phone",
+    "inquiry": "Nature of Inquiry *",
+    "message": "Project Details / Message",
+    "timeline": "Timeline *",
+    "submit": "Initiate Partnership",
+    "companyName": "FLORA GLOBAL COMPANY LIMITED",
+    "intro1": "Flora Global is more than a supplier; we are a strategic bridge between Vietnam’s agricultural potential and the world’s most demanding markets. Whether you are a global corporation seeking a Single Point of Accountability for sourcing, a farm looking to unlock Global Certification, or a retailer requiring a consistent supply of Honey No. 9 Passion Fruit, our ecosystem is ready to integrate with your ambitions.",
+    "intro2": "Let’s move beyond the transaction. Let’s build a supply chain defined by integrity, precision, and excellence.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "addressLabel": "Address",
+    "hoursLabel": "Hours",
+    "hours": "Monday – Friday: 08:30 – 17:30 (ICT / GMT+7)",
+    "hoursNote": "Our global supply chain team is available for scheduled consultations across all major time zones.",
+    "inquiries": [
+      "Strategic Sourcing & Procurement",
+      "Honey No. 9 Export & Supply",
+      "Organic Certification Stewardship (Auditing/Consultancy)",
+      "Japanese Agricultural Inputs (Distribution/Trials)",
+      "Investor & Stakeholder Relations"
+    ],
+    "timelines": ["Immediate", "Next Season", "Research Phase"]
+  }
+}
