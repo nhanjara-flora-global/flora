@@ -7,6 +7,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { formatDate } from "@/lib/legacy";
 import { getLocalizedPosts } from "@/lib/i18n/localized-content";
+import { localizeProducts } from "@/lib/i18n/localized-catalog";
 
 const SLIDES = [
   {
@@ -40,10 +41,11 @@ export default async function HomePage({ params }: Props) {
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
   const h = dict.home;
-  const [products, posts] = await Promise.all([
+  const [rawProducts, posts] = await Promise.all([
     getProducts(),
     Promise.resolve(getLocalizedPosts(lang)),
   ]);
+  const products = localizeProducts(rawProducts, lang);
 
   return (
     <>

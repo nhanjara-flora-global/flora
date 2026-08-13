@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { getProductBySlug, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { localizeProduct } from "@/lib/i18n/localized-catalog";
 import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
 import { formatPrice } from "@/lib/format";
 
@@ -16,9 +17,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
-  const product = await getProductBySlug(slug);
-  if (!product) return { title: "Not found" };
+  const { lang: raw, slug } = await params;
+  const lang = resolveLocale(raw);
+  const base = await getProductBySlug(slug);
+  if (!base) return { title: "Not found" };
+  const product = localizeProduct(base, lang);
   return {
     title: product.name,
     description: product.short_description ?? undefined,
@@ -29,8 +32,9 @@ export default async function ProductDetailPage({ params }: Props) {
   const { lang: raw, slug } = await params;
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
-  const product = await getProductBySlug(slug);
-  if (!product) notFound();
+  const base = await getProductBySlug(slug);
+  if (!base) notFound();
+  const product = localizeProduct(base, lang);
 
   return (
     <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-2 md:px-6">

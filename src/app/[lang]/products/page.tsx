@@ -4,6 +4,7 @@ import { PageHero } from "@/components/page-hero";
 import { ProductCard } from "@/components/product-card";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
+import { localizeCategories, localizeProducts } from "@/lib/i18n/localized-catalog";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 
 type Props = {
@@ -22,10 +23,12 @@ export default async function ProductsPage({ params, searchParams }: Props) {
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
   const { category } = await searchParams;
-  const [products, categories] = await Promise.all([
+  const [rawProducts, rawCategories] = await Promise.all([
     getProducts({ category }),
     getCategories(),
   ]);
+  const products = localizeProducts(rawProducts, lang);
+  const categories = localizeCategories(rawCategories, lang);
 
   return (
     <>
