@@ -15,7 +15,7 @@ export function CartBadge({
   return (
     <Link
       href={href}
-      className="relative border border-[var(--line)] px-3 py-2 text-sm text-[var(--ink)] transition hover:border-[var(--brand)]"
+      className="relative rounded-[var(--radius-control)] border border-[var(--line)] px-3 py-2 text-sm text-[var(--ink)] transition hover:border-[var(--brand)]"
     >
       {label}
       {count > 0 && (

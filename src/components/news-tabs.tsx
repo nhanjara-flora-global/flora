@@ -13,10 +13,11 @@ export function NewsTabs({
   locale: Locale;
   dict: Dictionary;
 }) {
-  const base = "px-4 py-2 text-sm font-semibold uppercase tracking-wide transition";
-  const on = "bg-[var(--brand)] text-white";
+  const base =
+    "body-sm rounded-[var(--radius-control)] border px-4 py-2 font-semibold uppercase tracking-wide transition";
+  const on = "border-[var(--brand)] bg-[var(--brand)] text-white";
   const off =
-    "border border-[var(--line)] text-[var(--muted)] hover:border-[var(--brand)] hover:text-[var(--brand)]";
+    "border-[var(--line)] text-[var(--muted)] hover:border-[var(--brand)] hover:text-[var(--brand)]";
 
   return (
     <div className="flex flex-wrap gap-2 border-b border-[var(--line)] pb-4">

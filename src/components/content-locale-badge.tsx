@@ -31,7 +31,7 @@ export function ContentLocaleBadge({
 
   return (
     <p
-      className={`mb-6 border px-3 py-2 text-xs leading-relaxed ${tone}`}
+      className={`meta mb-6 rounded-[var(--radius-control)] border px-3 py-2 leading-relaxed ${tone}`}
       role="status"
     >
       {text}

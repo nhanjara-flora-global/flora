@@ -40,7 +40,7 @@ export function SiteHeader({
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--line)] bg-white/95 backdrop-blur">
       <div className="hidden bg-[var(--brand)] text-white md:block">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-1.5 text-xs md:px-6">
+        <div className="container-page meta flex items-center justify-between py-1.5">
           <p className="tracking-wide">{tagline}</p>
           <div className="flex items-center gap-5">
             <a href="mailto:info@flora-global.vn" className="hover:underline">
@@ -53,7 +53,7 @@ export function SiteHeader({
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3 md:px-6">
+      <div className="container-page flex items-center justify-between gap-6 py-3">
         <Link href={withLocale(locale, "/")} className="flex items-center gap-3">
           <Image
             src="/images/wp/2025_08_logo.png"
@@ -104,7 +104,7 @@ export function SiteHeader({
           <CartBadge label={cartLabel} href={withLocale(locale, "/cart")} />
           <Link
             href={withLocale(locale, "/contact")}
-            className="hidden bg-[var(--brand)] px-4 py-2 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:bg-[var(--brand-2)] sm:inline-block"
+            className="hidden rounded-[var(--radius-control)] bg-[var(--brand)] px-4 py-2 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:bg-[var(--brand-2)] sm:inline-block"
           >
             {getInTouch}
           </Link>
@@ -113,7 +113,7 @@ export function SiteHeader({
             aria-label="Menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 border border-[var(--line)] lg:hidden"
+            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--line)] lg:hidden"
           >
             <span className="h-0.5 w-5 bg-[var(--ink)]" />
             <span className="h-0.5 w-5 bg-[var(--ink)]" />

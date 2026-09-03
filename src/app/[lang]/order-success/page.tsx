@@ -15,11 +15,11 @@ export default async function OrderSuccessPage({ params, searchParams }: Props) 
   const vi = lang === "vi";
 
   return (
-    <div className="mx-auto max-w-xl px-4 py-20 text-center">
+    <div className="section-y mx-auto max-w-xl px-4 text-center">
       <p className="text-xs uppercase tracking-[0.22em] text-[var(--muted)]">
         {vi ? "Thành công" : "Success"}
       </p>
-      <h1 className="mt-3 font-[family-name:var(--font-display)] text-4xl text-[var(--brand)]">
+      <h1 className="display-lg mt-3 text-[var(--brand)]">
         {vi ? "Đặt hàng thành công" : "Order placed successfully"}
       </h1>
       {order && (
@@ -34,7 +34,7 @@ export default async function OrderSuccessPage({ params, searchParams }: Props) 
       </p>
       <Link
         href={withLocale(lang, "/products")}
-        className="mt-8 inline-block bg-[var(--brand)] px-5 py-3 text-sm font-medium text-white"
+        className="mt-8 inline-block rounded-[var(--radius-control)] bg-[var(--brand)] px-5 py-3 text-sm font-medium text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
       >
         {vi ? "Tiếp tục mua hàng" : "Continue shopping"}
       </Link>

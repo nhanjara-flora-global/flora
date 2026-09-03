@@ -47,7 +47,7 @@ export default async function NewsCategoryPage({ params }: Props) {
           { href: withLocale(lang, `/news/category/${found.slug}`), label },
         ]}
       />
-      <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
+      <div className="container-page section-y">
         <NewsTabs active={found.slug} locale={lang} dict={dict} />
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (

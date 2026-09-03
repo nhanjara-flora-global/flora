@@ -29,7 +29,7 @@ export default async function NewsPage({ params }: Props) {
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/news"), label: dict.newsPage.title }]}
       />
-      <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
+      <div className="container-page section-y">
         <NewsTabs active={null} locale={lang} dict={dict} />
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (

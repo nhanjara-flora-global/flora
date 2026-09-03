@@ -23,7 +23,7 @@ const MAP_SRC =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.705716053586!2d106.70960757355158!3d10.757148459552042!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f655d851335%3A0xbe41f3b0e056fb87!2zNjkyLzMxIMSQb8OgbiBWxINuIELGoSwgUGjGsOG7nW5nIDE2LCBRdeG6rW4gNCwgSOG7kyBDaMOtIE1pbmggMDcwMDAsIFZp4buHdCBOYW0!5e0!3m2!1svi!2sus!4v1757321932129!5m2!1svi!2sus";
 
 const inputClass =
-  "w-full border border-[var(--line)] bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)]";
+  "w-full rounded-[var(--radius-control)] border border-[var(--line)] bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)]";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
@@ -48,15 +48,15 @@ export default async function ContactPage({ params, searchParams }: Props) {
         crumbs={[{ href: withLocale(lang, "/contact"), label: c.title }]}
       />
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 md:grid-cols-2 md:px-6">
+      <div className="container-page section-y grid gap-12 md:grid-cols-2">
         <div id="contact-form" className="scroll-mt-28">
           {sent === "1" && (
-            <p className="mb-6 border border-[var(--brand)]/30 bg-[var(--brand)]/5 px-4 py-3 text-sm text-[var(--brand)]">
+            <p className="mb-6 rounded-[var(--radius-control)] border border-[var(--brand)]/30 bg-[var(--brand)]/5 px-4 py-3 text-sm text-[var(--brand)]">
               {c.sent}
             </p>
           )}
           {error === "1" && (
-            <p className="mb-6 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <p className="mb-6 rounded-[var(--radius-control)] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {c.error}
             </p>
           )}
@@ -117,7 +117,7 @@ export default async function ContactPage({ params, searchParams }: Props) {
 
             <button
               type="submit"
-              className="bg-[var(--brand)] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[var(--brand-2)]"
+              className="rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
             >
               {c.submit}
             </button>
@@ -125,7 +125,7 @@ export default async function ContactPage({ params, searchParams }: Props) {
         </div>
 
         <div>
-          <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold">
+          <h2 className="display-md">
             {c.companyName}
           </h2>
           <p className="mt-4 leading-relaxed text-[var(--muted)]">{c.intro1}</p>

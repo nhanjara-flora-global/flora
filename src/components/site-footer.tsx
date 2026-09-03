@@ -27,8 +27,8 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
   return (
     <footer className="mt-auto">
       <div className="bg-[var(--brand)] text-white">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-3 md:px-6">
-          <p className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight">
+        <div className="container-page grid items-center gap-8 py-10 md:grid-cols-3">
+          <p className="display-md">
             {f.needHelp}
             <br />
             {f.needSupport}
@@ -55,7 +55,7 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
       </div>
 
       <div className="bg-[var(--bg-soft)] text-[var(--ink)]">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 md:grid-cols-4 md:px-6">
+        <div className="container-page grid gap-8 py-12 md:grid-cols-4">
           <div>
             <FooterTitle>{f.aboutTitle}</FooterTitle>
             <ul className="space-y-2 text-sm text-[var(--muted)]">

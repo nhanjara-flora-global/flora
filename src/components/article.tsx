@@ -20,7 +20,7 @@ export function ArticleCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col border border-[var(--line)] bg-white transition hover:border-[var(--brand)]"
+      className="card card-interactive group flex flex-col"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-[var(--bg-soft)]">
         {article.cover && (
@@ -34,14 +34,14 @@ export function ArticleCard({
         )}
       </div>
       <div className="flex flex-1 flex-col p-5">
-        <span className="text-xs uppercase tracking-wide text-[var(--muted)]">
+        <span className="meta uppercase text-[var(--muted)]">
           {meta ?? formatDate(article.date)}
         </span>
-        <h2 className="mt-2 font-[family-name:var(--font-display)] text-lg font-semibold leading-snug group-hover:text-[var(--brand)]">
+        <h2 className="display-sm mt-2 transition-colors group-hover:text-[var(--brand)]">
           {article.title}
         </h2>
-        <p className="mt-3 line-clamp-3 text-sm text-[var(--muted)]">{article.excerpt}</p>
-        <span className="mt-4 text-sm font-semibold text-[var(--brand)]">{readMore}</span>
+        <p className="body-sm mt-3 line-clamp-3 text-[var(--muted)]">{article.excerpt}</p>
+        <span className="body-sm mt-4 font-semibold text-[var(--brand)]">{readMore}</span>
       </div>
     </Link>
   );

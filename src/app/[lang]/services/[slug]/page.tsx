@@ -49,17 +49,15 @@ export default async function ServiceDetailPage({ params }: Props) {
         crumbs={[{ href: withLocale(lang, "/services"), label: dict.servicesPage.title }]}
       />
 
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 py-14 md:grid-cols-[1fr_280px] md:px-6">
+      <div className="container-page section-y grid gap-12 md:grid-cols-[1fr_280px]">
         <article>
           <ContentLocaleBadge article={service} uiLocale={lang} />
           <ArticleBody html={service.content} />
           <div className="mt-12 border-t border-[var(--line)] pt-8">
-            <p className="font-[family-name:var(--font-display)] text-xl font-semibold">
-              {dict.common.readyPartner}
-            </p>
+            <p className="display-sm">{dict.common.readyPartner}</p>
             <Link
               href={withLocale(lang, "/contact")}
-              className="mt-4 inline-block bg-[var(--brand)] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[var(--brand-2)]"
+              className="body-sm mt-4 inline-block rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
             >
               {dict.common.initiatePartnership}
             </Link>
@@ -67,11 +65,11 @@ export default async function ServiceDetailPage({ params }: Props) {
         </article>
 
         <aside>
-          <p className="text-sm font-semibold uppercase tracking-wide">
+          <p className="body-sm font-semibold uppercase tracking-wide">
             {dict.common.otherServices}
           </p>
           <div className="mb-4 mt-2 h-0.5 w-10 bg-[var(--brand)]" />
-          <ul className="space-y-3 text-sm">
+          <ul className="body-sm space-y-3">
             {others.map((s) => (
               <li key={s.slug}>
                 <Link

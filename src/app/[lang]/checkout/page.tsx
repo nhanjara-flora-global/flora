@@ -36,7 +36,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="mx-auto max-w-xl px-4 py-16 text-center">
+      <div className="section-y mx-auto max-w-xl px-4 text-center">
         <p className="text-[var(--muted)]">
           {vi ? "Giỏ hàng đang trống." : "Your cart is empty."}
         </p>
@@ -51,9 +51,9 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1.2fr_0.8fr] md:px-6">
+    <div className="container-page section-y grid gap-10 md:grid-cols-[1.2fr_0.8fr]">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-4xl">
+        <h1 className="display-lg">
           {vi ? "Thanh toán" : "Checkout"}
         </h1>
         <form
@@ -102,7 +102,7 @@ export default function CheckoutPage() {
             <textarea
               name="note"
               rows={3}
-              className="w-full border border-[var(--line)] bg-white px-3 py-2"
+              className="w-full rounded-[var(--radius-control)] border border-[var(--line)] bg-white px-3 py-2 outline-none transition focus:border-[var(--brand)]"
             />
           </label>
           <fieldset className="space-y-2">
@@ -120,7 +120,7 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={pending}
-            className="bg-[var(--brand)] px-6 py-3 text-sm font-medium text-white hover:bg-[var(--brand-2)] disabled:opacity-60"
+            className="rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 text-sm font-medium text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)] disabled:opacity-60"
           >
             {pending
               ? vi
@@ -132,7 +132,7 @@ export default function CheckoutPage() {
           </button>
         </form>
       </div>
-      <aside className="h-fit border border-[var(--line)] bg-white p-5">
+      <aside className="card h-fit p-5">
         <h2 className="font-semibold">{vi ? "Đơn hàng" : "Order"}</h2>
         <ul className="mt-4 space-y-3 text-sm">
           {items.map((i) => (

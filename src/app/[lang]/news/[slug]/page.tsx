@@ -54,14 +54,14 @@ export default async function NewsPostPage({ params }: Props) {
         crumbs={[{ href: withLocale(lang, "/news"), label: dict.newsPage.title }]}
       />
 
-      <article className="mx-auto max-w-3xl px-4 py-14 md:px-6">
+      <article className="section-y mx-auto max-w-3xl px-4 md:px-6">
         {cats.length > 0 && (
           <div className="mb-6 flex flex-wrap gap-2">
             {cats.map((c) => (
               <Link
                 key={c.slug}
                 href={withLocale(lang, `/news/category/${c.slug}`)}
-                className="border border-[var(--line)] px-3 py-1 text-xs uppercase tracking-wide text-[var(--muted)] hover:border-[var(--brand)] hover:text-[var(--brand)]"
+                className="meta rounded-[var(--radius-control)] border border-[var(--line)] px-3 py-1.5 uppercase text-[var(--muted)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
               >
                 {dict.newsCategories[c.slug]}
               </Link>
@@ -73,11 +73,9 @@ export default async function NewsPostPage({ params }: Props) {
       </article>
 
       {related.length > 0 && (
-        <section className="border-t border-[var(--line)] bg-[var(--bg-soft)]">
-          <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
-            <h2 className="mb-8 font-[family-name:var(--font-display)] text-2xl font-semibold">
-              {dict.common.relatedPosts}
-            </h2>
+        <section className="bg-[var(--bg-soft)]">
+          <div className="container-page section-y">
+            <h2 className="display-lg mb-8">{dict.common.relatedPosts}</h2>
             <div className="grid gap-6 md:grid-cols-3">
               {related.map((p) => (
                 <ArticleCard

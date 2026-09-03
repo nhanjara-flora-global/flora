@@ -37,8 +37,8 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = localizeProduct(base, lang);
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-2 md:px-6">
-      <div className="relative aspect-square overflow-hidden border border-[var(--line)] bg-[var(--bg-soft)]">
+    <div className="container-page section-y grid gap-10 md:grid-cols-2">
+      <div className="card relative aspect-square bg-[var(--bg-soft)]">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -55,22 +55,20 @@ export default async function ProductDetailPage({ params }: Props) {
       <div>
         <Link
           href={withLocale(lang, "/products")}
-          className="text-sm text-[var(--muted)] hover:text-[var(--brand)]"
+          className="body-sm text-[var(--muted)] hover:text-[var(--brand)]"
         >
           {dict.common.backProducts}
         </Link>
-        <h1 className="mt-4 font-[family-name:var(--font-display)] text-4xl leading-tight text-[var(--ink)]">
-          {product.name}
-        </h1>
-        <p className="mt-4 text-2xl font-semibold text-[var(--brand)]">
+        <h1 className="display-lg mt-4 text-[var(--ink)]">{product.name}</h1>
+        <p className="display-md mt-4 text-[var(--brand)]">
           {formatPrice(product.price, product.currency, dict.common.priceOnRequest)}
         </p>
-        <p className="mt-2 text-sm text-[var(--muted)]">
+        <p className="body-sm mt-2 text-[var(--muted)]">
           {product.stock_status === "instock"
             ? dict.common.inStock
             : dict.common.outOfStock}
         </p>
-        <p className="mt-6 leading-relaxed text-[var(--ink)]/85">{product.description}</p>
+        <p className="body-base mt-6 text-[var(--ink)]/85">{product.description}</p>
         <div className="mt-8">
           <AddToCartButton
             product={product}

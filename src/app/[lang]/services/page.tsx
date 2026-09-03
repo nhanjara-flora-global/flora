@@ -37,13 +37,13 @@ export default async function ServicesPage({ params }: Props) {
         crumbs={[{ href: withLocale(lang, "/services"), label: dict.servicesPage.title }]}
       />
 
-      <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
+      <div className="container-page section-y">
         <div className="grid gap-8 md:grid-cols-2">
           {services.map((service, i) => (
             <Link
               key={service.slug}
               href={withLocale(lang, `/services/${service.slug}`)}
-              className="group flex flex-col border border-[var(--line)] transition hover:border-[var(--brand)]"
+              className="card card-interactive group flex flex-col"
             >
               <div className="relative aspect-[16/9] overflow-hidden bg-[var(--bg-soft)]">
                 {service.cover && (
@@ -57,14 +57,14 @@ export default async function ServicesPage({ params }: Props) {
                 )}
               </div>
               <div className="flex flex-1 flex-col p-6">
-                <p className="text-xs uppercase tracking-[0.28em] text-[var(--brand)]">
+                <p className="eyebrow text-[var(--brand)]">
                   {String(i + 1).padStart(2, "0")} · {serviceLabel(dict, service.slug)}
                 </p>
-                <h2 className="mt-3 font-[family-name:var(--font-display)] text-2xl font-semibold leading-snug group-hover:text-[var(--brand)]">
+                <h2 className="display-md mt-3 transition-colors group-hover:text-[var(--brand)]">
                   {service.title}
                 </h2>
-                <p className="mt-3 line-clamp-4 text-sm text-[var(--muted)]">{service.excerpt}</p>
-                <span className="mt-5 text-sm font-semibold text-[var(--brand)]">
+                <p className="body-sm mt-3 line-clamp-4 text-[var(--muted)]">{service.excerpt}</p>
+                <span className="body-sm mt-5 font-semibold text-[var(--brand)]">
                   {dict.common.readMore}
                 </span>
               </div>

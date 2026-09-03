@@ -39,13 +39,13 @@ export default async function ProductsPage({ params, searchParams }: Props) {
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/products"), label: dict.productsPage.title }]}
       />
-      <div className="mx-auto max-w-6xl px-4 py-12 md:px-6">
-        <p className="max-w-2xl text-[var(--muted)]">{dict.productsPage.intro}</p>
+      <div className="container-page section-y">
+        <p className="lead max-w-2xl text-[var(--muted)]">{dict.productsPage.intro}</p>
 
         <div className="mt-8 flex flex-wrap gap-2">
           <Link
             href={withLocale(lang, "/products")}
-            className={`border px-4 py-2 text-sm ${
+            className={`body-sm rounded-[var(--radius-control)] border px-4 py-2 transition ${
               !category
                 ? "border-[var(--brand)] bg-[var(--brand)] text-white"
                 : "border-[var(--line)] text-[var(--ink)] hover:border-[var(--brand)]"
@@ -57,7 +57,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
             <Link
               key={c.id}
               href={`${withLocale(lang, "/products")}?category=${c.slug}`}
-              className={`border px-4 py-2 text-sm ${
+              className={`body-sm rounded-[var(--radius-control)] border px-4 py-2 transition ${
                 category === c.slug
                   ? "border-[var(--brand)] bg-[var(--brand)] text-white"
                   : "border-[var(--line)] text-[var(--ink)] hover:border-[var(--brand)]"
@@ -80,7 +80,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
           ))}
         </div>
         {products.length === 0 && (
-          <p className="mt-10 text-[var(--muted)]">{dict.productsPage.empty}</p>
+          <p className="body-base mt-10 text-[var(--muted)]">{dict.productsPage.empty}</p>
         )}
       </div>
     </>

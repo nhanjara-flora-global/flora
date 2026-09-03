@@ -21,7 +21,7 @@ export function PageHero({
   return (
     <>
       <div className="border-b border-[var(--line)] bg-[var(--bg-soft)]">
-        <nav className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-2.5 text-xs text-[var(--muted)] md:px-6">
+        <nav className="container-page meta flex flex-wrap items-center justify-between gap-2 py-2.5 text-[var(--muted)]">
           <span className="flex flex-wrap items-center gap-2">
             <Link href={homeHref} className="hover:text-[var(--brand)]">
               Flora Global Corporate
@@ -45,13 +45,9 @@ export function PageHero({
         </div>
       )}
 
-      <div className="mx-auto max-w-4xl px-4 pb-2 pt-10 text-center md:px-6">
-        {eyebrow && (
-          <p className="mb-3 text-xs uppercase tracking-[0.28em] text-[var(--muted)]">{eyebrow}</p>
-        )}
-        <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight text-[var(--brand)] md:text-4xl">
-          {title}
-        </h1>
+      <div className="mx-auto max-w-4xl px-4 pb-2 pt-[var(--section-y-sm)] text-center md:px-6">
+        {eyebrow && <p className="eyebrow mb-3 text-[var(--muted)]">{eyebrow}</p>}
+        <h1 className="display-lg text-[var(--brand)]">{title}</h1>
       </div>
     </>
   );

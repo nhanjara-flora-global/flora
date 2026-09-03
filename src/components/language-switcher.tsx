@@ -46,7 +46,7 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={localeLabels[locale]}
-        className="flex items-center gap-1.5 border border-[var(--line)] px-2.5 py-2 text-[12px] font-semibold text-[var(--ink)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
+        className="flex items-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--line)] px-2.5 py-2 text-[12px] font-semibold text-[var(--ink)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
       >
         <span className="text-base leading-none">{localeFlags[locale]}</span>
         <span className="tracking-wide">{localeShort[locale]}</span>

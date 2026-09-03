@@ -19,13 +19,13 @@ export default function CartPage() {
   const vi = locale === "vi";
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 md:px-6">
-      <h1 className="font-[family-name:var(--font-display)] text-4xl text-[var(--ink)]">
+    <div className="section-y mx-auto max-w-3xl px-4 md:px-6">
+      <h1 className="display-lg text-[var(--ink)]">
         {vi ? "Giỏ hàng" : "Cart"}
       </h1>
 
       {items.length === 0 ? (
-        <div className="mt-10 border border-[var(--line)] bg-white p-8 text-center">
+        <div className="card mt-10 p-8 text-center">
           <p className="text-[var(--muted)]">
             {vi ? "Giỏ hàng đang trống." : "Your cart is empty."}
           </p>
@@ -38,7 +38,7 @@ export default function CartPage() {
         </div>
       ) : (
         <>
-          <ul className="mt-8 divide-y divide-[var(--line)] border border-[var(--line)] bg-white">
+          <ul className="card mt-8 divide-y divide-[var(--line)]">
             {items.map((item) => (
               <li
                 key={item.productId}
@@ -61,7 +61,7 @@ export default function CartPage() {
                     onChange={(e) =>
                       setQuantity(item.productId, Number(e.target.value) || 1)
                     }
-                    className="w-16 border border-[var(--line)] px-2 py-1.5 text-sm"
+                    className="w-16 rounded-[var(--radius-control)] border border-[var(--line)] px-2 py-1.5 text-sm"
                   />
                   <button
                     type="button"
@@ -80,7 +80,7 @@ export default function CartPage() {
             </p>
             <Link
               href={withLocale(locale, "/checkout")}
-              className="bg-[var(--brand)] px-5 py-3 text-sm font-medium text-white hover:bg-[var(--brand-2)]"
+              className="rounded-[var(--radius-control)] bg-[var(--brand)] px-5 py-3 text-sm font-medium text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
             >
               {vi ? "Thanh toán" : "Checkout"}
             </Link>
