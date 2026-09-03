@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
@@ -38,7 +39,7 @@ export default async function ServicesPage({ params }: Props) {
       />
 
       <div className="container-page section-y">
-        <div className="grid gap-8 md:grid-cols-2">
+        <Reveal className="grid gap-8 md:grid-cols-2">
           {services.map((service, i) => (
             <Link
               key={service.slug}
@@ -70,7 +71,7 @@ export default async function ServicesPage({ params }: Props) {
               </div>
             </Link>
           ))}
-        </div>
+        </Reveal>
       </div>
     </>
   );

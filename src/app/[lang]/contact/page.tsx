@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { submitContact } from "@/app/actions/contact";
+import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
@@ -48,7 +49,7 @@ export default async function ContactPage({ params, searchParams }: Props) {
         crumbs={[{ href: withLocale(lang, "/contact"), label: c.title }]}
       />
 
-      <div className="container-page section-y grid gap-12 md:grid-cols-2">
+      <Reveal className="container-page section-y grid gap-12 md:grid-cols-2">
         <div id="contact-form" className="scroll-mt-28">
           {sent === "1" && (
             <p className="mb-6 rounded-[var(--radius-control)] border border-[var(--brand)]/30 bg-[var(--brand)]/5 px-4 py-3 text-sm text-[var(--brand)]">
@@ -170,7 +171,7 @@ export default async function ContactPage({ params, searchParams }: Props) {
             </div>
           </dl>
         </div>
-      </div>
+      </Reveal>
 
       <iframe
         title="Flora Global head office map"

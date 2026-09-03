@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Reveal } from "@/components/reveal";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { getProductBySlug, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -37,7 +38,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = localizeProduct(base, lang);
 
   return (
-    <div className="container-page section-y grid gap-10 md:grid-cols-2">
+    <Reveal className="container-page section-y grid gap-10 md:grid-cols-2">
       <div className="card relative aspect-square bg-[var(--bg-soft)]">
         {product.image_url ? (
           <Image
@@ -79,6 +80,6 @@ export default async function ProductDetailPage({ params }: Props) {
           />
         </div>
       </div>
-    </div>
+    </Reveal>
   );
 }

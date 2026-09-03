@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
 import { ProductCard } from "@/components/product-card";
 import { getCategories, getProducts } from "@/lib/catalog";
@@ -68,7 +69,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
           ))}
         </div>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <Reveal className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (
             <ProductCard
               key={p.id}
@@ -78,7 +79,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
               priceOnRequestLabel={dict.common.priceOnRequest}
             />
           ))}
-        </div>
+        </Reveal>
         {products.length === 0 && (
           <p className="body-base mt-10 text-[var(--muted)]">{dict.productsPage.empty}</p>
         )}

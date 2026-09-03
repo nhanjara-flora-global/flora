@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Reveal } from "@/components/reveal";
 import { ArticleCard } from "@/components/article";
 import { NewsTabs } from "@/components/news-tabs";
 import { PageHero } from "@/components/page-hero";
@@ -49,7 +50,7 @@ export default async function NewsCategoryPage({ params }: Props) {
       />
       <div className="container-page section-y">
         <NewsTabs active={found.slug} locale={lang} dict={dict} />
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Reveal className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <ArticleCard
               key={post.slug}
@@ -58,7 +59,7 @@ export default async function NewsCategoryPage({ params }: Props) {
               readMore={dict.common.readMore}
             />
           ))}
-        </div>
+        </Reveal>
       </div>
     </>
   );

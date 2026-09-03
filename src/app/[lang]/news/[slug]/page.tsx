@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Reveal } from "@/components/reveal";
 import { ArticleBody, ArticleCard } from "@/components/article";
 import { ContentLocaleBadge } from "@/components/content-locale-badge";
 import { PageHero } from "@/components/page-hero";
@@ -76,7 +77,7 @@ export default async function NewsPostPage({ params }: Props) {
         <section className="bg-[var(--bg-soft)]">
           <div className="container-page section-y">
             <h2 className="display-lg mb-8">{dict.common.relatedPosts}</h2>
-            <div className="grid gap-6 md:grid-cols-3">
+            <Reveal className="grid gap-6 md:grid-cols-3">
               {related.map((p) => (
                 <ArticleCard
                   key={p.slug}
@@ -85,7 +86,7 @@ export default async function NewsPostPage({ params }: Props) {
                   readMore={dict.common.readMore}
                 />
               ))}
-            </div>
+            </Reveal>
           </div>
         </section>
       )}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Reveal } from "@/components/reveal";
 import { HeroSlider } from "@/components/hero-slider";
 import { ProductCard } from "@/components/product-card";
 import { getProducts } from "@/lib/catalog";
@@ -52,7 +53,7 @@ export default async function HomePage({ params }: Props) {
       <HeroSlider slides={SLIDES} />
 
       <section className="container-page section-y">
-        <div className="space-y-16 md:space-y-20">
+        <Reveal className="space-y-16 md:space-y-20">
           {h.pillars.map((pillar, i) => (
             <div
               key={pillar.title}
@@ -85,11 +86,11 @@ export default async function HomePage({ params }: Props) {
               </Link>
             </div>
           ))}
-        </div>
+        </Reveal>
       </section>
 
       <section className="bg-[var(--bg-soft)]">
-        <div className="section-y mx-auto max-w-3xl px-4 text-center md:px-6">
+        <Reveal className="section-y mx-auto max-w-3xl px-4 text-center md:px-6">
           <h2 className="display-md text-[var(--brand)]">
             {h.ecosystemTitle}
             <br />
@@ -116,7 +117,7 @@ export default async function HomePage({ params }: Props) {
             </div>
             <figcaption className="body-sm mt-4 text-[var(--muted)]">{h.ceoCaption}</figcaption>
           </figure>
-        </div>
+        </Reveal>
       </section>
 
       {products.length > 0 && (
@@ -127,7 +128,7 @@ export default async function HomePage({ params }: Props) {
             href={withLocale(lang, "/products")}
             cta={h.allProducts}
           />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <Reveal className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {products.slice(0, 4).map((p) => (
               <ProductCard
                 key={p.id}
@@ -137,7 +138,7 @@ export default async function HomePage({ params }: Props) {
                 priceOnRequestLabel={dict.common.priceOnRequest}
               />
             ))}
-          </div>
+          </Reveal>
         </section>
       )}
 
@@ -149,7 +150,7 @@ export default async function HomePage({ params }: Props) {
             href={withLocale(lang, "/news")}
             cta={h.allNews}
           />
-          <div className="grid gap-6 md:grid-cols-3">
+          <Reveal className="grid gap-6 md:grid-cols-3">
             {posts.slice(0, 3).map((post) => (
               <Link
                 key={post.slug}
@@ -178,7 +179,7 @@ export default async function HomePage({ params }: Props) {
                 </div>
               </Link>
             ))}
-          </div>
+          </Reveal>
         </div>
       </section>
     </>

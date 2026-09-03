@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FloatingContact } from "@/components/floating-contact";
+import { RevealScript } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -65,6 +66,7 @@ export default async function LocaleLayout({ children, params }: Props) {
           __html: `document.documentElement.lang=${JSON.stringify(lang)};`,
         }}
       />
+      <RevealScript />
       <SiteHeader
         nav={nav}
         locale={lang}
