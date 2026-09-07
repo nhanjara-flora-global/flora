@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
       { source: "/dich-vu/:slug", destination: "/services/:slug", permanent: true },
       { source: "/category/blog", destination: "/news", permanent: true },
       { source: "/category/blog/:category", destination: "/news/category/:category", permanent: true },
+      // Old news category slugs (renamed to topic-based groups)
+      { source: "/news/category/news", destination: "/news/category/thi-truong-xu-huong", permanent: true },
+      { source: "/news/category/press", destination: "/news/category/goc-nhin-flora", permanent: true },
+      { source: "/news/category/market-information", destination: "/news/category/thi-truong-xu-huong", permanent: true },
+      { source: "/:lang(en|vi|zh|ko|hi|si)/news/category/news", destination: "/:lang/news/category/thi-truong-xu-huong", permanent: true },
+      { source: "/:lang(en|vi|zh|ko|hi|si)/news/category/press", destination: "/:lang/news/category/goc-nhin-flora", permanent: true },
+      { source: "/:lang(en|vi|zh|ko|hi|si)/news/category/market-information", destination: "/:lang/news/category/thi-truong-xu-huong", permanent: true },
       { source: "/category/services", destination: "/services", permanent: true },
       { source: "/gioi-thieu", destination: "/about-us", permanent: true },
       // WordPress served posts and service pages at the site root.

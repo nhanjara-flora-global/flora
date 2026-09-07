@@ -31,7 +31,14 @@ const MODEL = process.env.NEWS_MODEL || "claude-opus-5";
 const DRY_RUN = process.env.DRY_RUN === "1";
 const SOURCE_LOCALE = "vi";
 const TARGET_LOCALES = ["en", "zh", "ko", "hi", "si"];
-const CATEGORIES = ["news", "market-information", "press"];
+/** Đồng bộ với NEWS_CATEGORIES trong src/lib/legacy.ts (5 nhóm chủ đề). */
+const CATEGORIES = [
+  "canh-tac-huu-co",
+  "chung-nhan-tieu-chuan",
+  "xuat-khau-logistics",
+  "thi-truong-xu-huong",
+  "goc-nhin-flora",
+];
 
 /** Ảnh cover evergreen đã có sẵn trong /public — xoay vòng theo ngày. */
 const COVERS = [
@@ -225,7 +232,9 @@ async function main() {
     slug = `${slug}-${Date.now().toString(36).slice(-4)}`;
   }
 
-  const category = CATEGORIES.includes(article.category) ? article.category : "news";
+  const category = CATEGORIES.includes(article.category)
+    ? article.category
+    : "thi-truong-xu-huong";
   const date = todayISOInVN();
   const dayIndex = Math.floor(Date.parse(date) / 86400000);
   const cover = COVERS[dayIndex % COVERS.length];

@@ -24,9 +24,11 @@
     "organic-certification-global-compliance-solutions": "Chứng nhận"
   },
   "newsCategories": {
-    "news": "Tin tức",
-    "press": "Báo chí",
-    "market-information": "Thông tin thị trường"
+    "canh-tac-huu-co": "Canh tác hữu cơ",
+    "chung-nhan-tieu-chuan": "Chứng nhận & Tiêu chuẩn",
+    "xuat-khau-logistics": "Xuất khẩu & Logistics",
+    "thi-truong-xu-huong": "Thị trường & Xu hướng",
+    "goc-nhin-flora": "Góc nhìn Flora"
   },
   "home": {
     "learnMore": "Tìm hiểu thêm",

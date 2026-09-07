@@ -24,9 +24,11 @@
     "organic-certification-global-compliance-solutions": "인증 준수"
   },
   "newsCategories": {
-    "news": "뉴스",
-    "press": "보도자료",
-    "market-information": "시장 정보"
+    "canh-tac-huu-co": "유기농 재배",
+    "chung-nhan-tieu-chuan": "인증 및 표준",
+    "xuat-khau-logistics": "수출 및 물류",
+    "thi-truong-xu-huong": "시장 및 동향",
+    "goc-nhin-flora": "Flora 관점"
   },
   "home": {
     "learnMore": "자세히 보기",

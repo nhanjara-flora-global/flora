@@ -24,9 +24,11 @@
     "organic-certification-global-compliance-solutions": "प्रमाणन"
   },
   "newsCategories": {
-    "news": "समाचार",
-    "press": "प्रेस",
-    "market-information": "बाज़ार जानकारी"
+    "canh-tac-huu-co": "जैविक खेती",
+    "chung-nhan-tieu-chuan": "प्रमाणन और मानक",
+    "xuat-khau-logistics": "निर्यात और लॉजिस्टिक्स",
+    "thi-truong-xu-huong": "बाज़ार और रुझान",
+    "goc-nhin-flora": "फ्लोरा का दृष्टिकोण"
   },
   "home": {
     "learnMore": "और जानें",

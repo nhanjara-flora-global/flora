@@ -51,6 +51,34 @@ DATA_SOURCE=supabase
 | `/about-us` | Giới thiệu |
 | `/contact` | Form liên hệ |
 
+## Bài viết mục News
+
+Tin tức đến từ 2 nguồn, gộp lại (Supabase ghi đè seed nếu trùng slug):
+
+- **Seed** (luôn có): `src/lib/data/wp-content.json` (`posts` + `categories`)
+  + `src/lib/i18n/content/news-cache.json` (bản dịch en/zh/ko/hi/si).
+- **Supabase** (khi `DATA_SOURCE=supabase`): bảng `posts`, quản lý qua `/admin`.
+
+5 category: `canh-tac-huu-co`, `chung-nhan-tieu-chuan`, `xuat-khau-logistics`,
+`thi-truong-xu-huong`, `goc-nhin-flora` (trong `src/lib/legacy.ts` + 6 file dictionary).
+Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin thì revalidate ngay).
+
+### Đăng bài từ admin
+
+1. Chạy `supabase/schema.sql` rồi `supabase/migrations/0001_news_posts.sql` trên Supabase.
+2. Đặt `DATA_SOURCE=supabase` + các key Supabase trong env (Vercel).
+3. `/admin` → **Bài viết** → **Viết bài mới**. Viết tiếng Việt; bấm **Đăng bài** →
+   hệ thống tự dịch sang 5 ngôn ngữ (Google Translate free) rồi publish.
+   **Lưu nháp** để lưu mà chưa hiện ra web. Trang sửa có nút **Dịch lại**.
+
+### Thêm bài hàng loạt (seed, không cần Supabase)
+
+1. Soạn bài trong `scripts/data/seed-articles.mjs` (`{ category, title, excerpt, content }`).
+2. `node scripts/seed-news.mjs` — trộn vào `wp-content.json`, tự tạo slug, rải ngày
+   đăng cách nhau 2 ngày (bài mới nhất = hôm nay), `cover: null`.
+3. `node scripts/translate-news.mjs` — dịch bài mới sang 5 thứ tiếng (idempotent).
+4. Ảnh cover: sửa `"cover"` của bài trong `wp-content.json` thành đường dẫn `/images/...`.
+
 ## Tự động đăng bài News mỗi ngày
 
 GitHub Action [`daily-news.yml`](.github/workflows/daily-news.yml) chạy 07:00 (giờ VN) mỗi ngày:

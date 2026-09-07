@@ -11,12 +11,9 @@ import {
   getLocalizedPost,
   getLocalizedPosts,
 } from "@/lib/i18n/localized-content";
-import {
-  categoriesOf,
-  formatDate,
-  getPosts,
-  NEWS_CATEGORIES,
-} from "@/lib/legacy";
+import { formatDate, getPosts, NEWS_CATEGORIES } from "@/lib/legacy";
+
+export const revalidate = 300;
 
 type Props = { params: Promise<{ lang: string; slug: string }> };
 
@@ -26,7 +23,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, slug } = await params;
-  const post = getLocalizedPost(slug, resolveLocale(lang));
+  const post = await getLocalizedPost(slug, resolveLocale(lang));
   if (!post) return { title: "Not found" };
   return { title: post.title, description: post.excerpt };
 }
@@ -35,13 +32,13 @@ export default async function NewsPostPage({ params }: Props) {
   const { lang: raw, slug } = await params;
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
-  const post = getLocalizedPost(slug, lang);
+  const post = await getLocalizedPost(slug, lang);
   if (!post) notFound();
 
-  const cats = categoriesOf(slug)
+  const cats = (post.categories ?? [])
     .map((c) => NEWS_CATEGORIES.find((n) => n.slug === c))
     .filter((c) => c !== undefined);
-  const related = getLocalizedPosts(lang)
+  const related = (await getLocalizedPosts(lang))
     .filter((p) => p.slug !== slug)
     .slice(0, 3);
 
