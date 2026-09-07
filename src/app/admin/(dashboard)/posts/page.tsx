@@ -16,19 +16,23 @@ type Row = {
   translations: Record<string, unknown> | null;
 };
 
-async function listPosts(): Promise<Row[] | null> {
+/** null = chưa bật Supabase. Lỗi truy vấn trả về kèm message để hiện ra, chứ
+ *  không lặng lẽ thành danh sách rỗng — dễ tưởng nhầm là "chưa có bài nào". */
+async function listPosts(): Promise<{ rows: Row[]; error: string | null } | null> {
   if ((process.env.DATA_SOURCE ?? "local") !== "supabase") return null;
   const { createServiceClient } = await import("@/lib/supabase/service");
   const supabase = createServiceClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("posts")
     .select("id, title, slug, category, status, published_at, translations")
     .order("published_at", { ascending: false });
-  return (data ?? []) as Row[];
+  if (error) console.error("[admin] listPosts:", error);
+  return { rows: (data ?? []) as Row[], error: error?.message ?? null };
 }
 
 export default async function AdminPostsPage() {
-  const rows = await listPosts();
+  const result = await listPosts();
+  const rows = result?.rows ?? null;
 
   return (
     <>
@@ -58,7 +62,16 @@ export default async function AdminPostsPage() {
             30 bài mẫu vẫn hiển thị từ file JSON.
           </p>
         </div>
-      ) : rows.length === 0 ? (
+      ) : result?.error ? (
+        <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+          <p className="font-medium">Không đọc được bảng posts.</p>
+          <p className="mt-1">{result.error}</p>
+          <p className="mt-1">
+            Thiếu cột <code>category</code>/<code>translations</code> thì chạy{" "}
+            <code>supabase/migrations/0001_news_posts.sql</code> trong Supabase SQL Editor.
+          </p>
+        </div>
+      ) : rows!.length === 0 ? (
         <p className="text-sm text-[var(--muted)]">
           Chưa có bài nào. Bấm “Viết bài mới” để bắt đầu.
         </p>
@@ -76,7 +89,7 @@ export default async function AdminPostsPage() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
+              {rows!.map((r) => (
                 <tr key={r.id} className="border-b border-[var(--line)] align-top">
                   <td className="px-3 py-2">
                     <Link

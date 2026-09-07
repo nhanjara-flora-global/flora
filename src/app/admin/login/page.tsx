@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { adminLogin } from "@/app/actions/admin";
+import { redirect } from "next/navigation";
+import { adminLogin, isAdminAuthed } from "@/app/actions/admin";
 
 export const metadata: Metadata = {
   title: "Admin Login",
   robots: { index: false, follow: false },
+};
+
+const ERRORS: Record<string, string> = {
+  "1": "Tên đăng nhập hoặc mật khẩu không đúng.",
+  rate: "Sai quá nhiều lần. Vui lòng thử lại sau ít phút.",
+  config: "Chưa cấu hình ADMIN_PASSWORD trên máy chủ.",
 };
 
 export default async function AdminLoginPage({
@@ -11,7 +18,12 @@ export default async function AdminLoginPage({
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
+  if (await isAdminAuthed()) redirect("/admin");
   const { error } = await searchParams;
+  const message = error ? ERRORS[error] : undefined;
+
+  const field =
+    "w-full rounded-md border border-[var(--line)] bg-white px-3 py-2.5 text-sm outline-none focus:border-[var(--brand)]";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[var(--bg-soft)] px-4">
@@ -23,9 +35,12 @@ export default async function AdminLoginPage({
           Đăng nhập quản trị
         </h1>
 
-        {error === "1" && (
-          <p className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-            Tên đăng nhập hoặc mật khẩu không đúng.
+        {message && (
+          <p
+            role="alert"
+            className="mt-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          >
+            {message}
           </p>
         )}
 
@@ -34,9 +49,11 @@ export default async function AdminLoginPage({
             type="text"
             name="username"
             required
+            autoFocus
             autoComplete="username"
             placeholder="Tên đăng nhập"
-            className="w-full rounded-md border border-[var(--line)] bg-white px-3 py-2.5 text-sm outline-none focus:border-[var(--brand)]"
+            aria-label="Tên đăng nhập"
+            className={field}
           />
           <input
             type="password"
@@ -44,7 +61,8 @@ export default async function AdminLoginPage({
             required
             autoComplete="current-password"
             placeholder="Mật khẩu"
-            className="w-full rounded-md border border-[var(--line)] bg-white px-3 py-2.5 text-sm outline-none focus:border-[var(--brand)]"
+            aria-label="Mật khẩu"
+            className={field}
           />
           <button
             type="submit"
@@ -53,6 +71,10 @@ export default async function AdminLoginPage({
             Đăng nhập
           </button>
         </form>
+
+        <p className="mt-6 text-center text-xs text-[var(--muted)]">
+          Phiên đăng nhập tự hết hạn sau 7 ngày.
+        </p>
       </div>
     </div>
   );

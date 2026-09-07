@@ -1,17 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AdminNav } from "@/components/admin/admin-nav";
 import { adminLogout, isAdminAuthed } from "@/app/actions/admin";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: { default: "Admin", template: "%s · Admin" },
   robots: { index: false, follow: false },
 };
-
-const NAV = [
-  { href: "/admin", label: "Tổng quan" },
-  { href: "/admin/posts", label: "Bài viết" },
-];
 
 export default async function AdminLayout({
   children,
@@ -29,42 +25,41 @@ export default async function AdminLayout({
           </p>
           <p className="font-[family-name:var(--font-display)] text-lg">Admin</p>
         </div>
-        <nav className="flex-1 p-3">
-          {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-[var(--ink)] hover:bg-[var(--bg-soft)] hover:text-[var(--brand)]"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-        <form action={adminLogout} className="border-t border-[var(--line)] p-3">
-          <button
-            type="submit"
-            className="w-full rounded-md px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50"
+        <div className="flex-1 p-3">
+          <AdminNav orientation="sidebar" />
+        </div>
+        <div className="border-t border-[var(--line)] p-3">
+          <Link
+            href="/vi"
+            target="_blank"
+            className="block rounded-md px-3 py-2 text-sm text-[var(--muted)] hover:bg-[var(--bg-soft)] hover:text-[var(--brand)]"
           >
-            Đăng xuất
-          </button>
-        </form>
+            Xem website ↗
+          </Link>
+          <form action={adminLogout}>
+            <button
+              type="submit"
+              className="w-full rounded-md px-3 py-2 text-left text-sm text-red-700 hover:bg-red-50"
+            >
+              Đăng xuất
+            </button>
+          </form>
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between border-b border-[var(--line)] bg-white px-5 py-3 md:hidden">
-          <span className="font-[family-name:var(--font-display)] text-lg">Admin</span>
-          <nav className="flex gap-3 text-sm">
-            {NAV.map((item) => (
-              <Link key={item.href} href={item.href} className="text-[var(--brand)]">
-                {item.label}
-              </Link>
-            ))}
+        <header className="border-b border-[var(--line)] bg-white px-5 py-3 md:hidden">
+          <div className="flex items-center justify-between">
+            <span className="font-[family-name:var(--font-display)] text-lg">Admin</span>
             <form action={adminLogout}>
-              <button type="submit" className="text-red-700">
+              <button type="submit" className="text-sm text-red-700">
                 Thoát
               </button>
             </form>
-          </nav>
+          </div>
+          <div className="mt-2">
+            <AdminNav orientation="bar" />
+          </div>
         </header>
         <main className="flex-1 p-5 md:p-8">{children}</main>
       </div>
