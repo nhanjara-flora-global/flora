@@ -7,6 +7,8 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getLocalizedPosts } from "@/lib/i18n/localized-content";
 
+export const revalidate = 300;
+
 type Props = { params: Promise<{ lang: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -19,7 +21,7 @@ export default async function NewsPage({ params }: Props) {
   const { lang: raw } = await params;
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
-  const posts = getLocalizedPosts(lang);
+  const posts = await getLocalizedPosts(lang);
 
   return (
     <>

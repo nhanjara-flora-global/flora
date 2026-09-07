@@ -53,23 +53,31 @@ DATA_SOURCE=supabase
 
 ## Bài viết mục News
 
-Nội dung news nằm trong 2 file (chế độ `local`, không cần Supabase):
+Tin tức đến từ 2 nguồn, gộp lại (Supabase ghi đè seed nếu trùng slug):
 
-- `src/lib/data/wp-content.json` — bài gốc tiếng Việt (`posts` + `categories`)
-- `src/lib/i18n/content/news-cache.json` — bản dịch en/zh/ko/hi/si (badge "bản dịch máy")
+- **Seed** (luôn có): `src/lib/data/wp-content.json` (`posts` + `categories`)
+  + `src/lib/i18n/content/news-cache.json` (bản dịch en/zh/ko/hi/si).
+- **Supabase** (khi `DATA_SOURCE=supabase`): bảng `posts`, quản lý qua `/admin`.
 
 5 category: `canh-tac-huu-co`, `chung-nhan-tieu-chuan`, `xuat-khau-logistics`,
-`thi-truong-xu-huong`, `goc-nhin-flora` (đặt trong `src/lib/legacy.ts` + 6 file dictionary).
+`thi-truong-xu-huong`, `goc-nhin-flora` (trong `src/lib/legacy.ts` + 6 file dictionary).
+Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin thì revalidate ngay).
 
-**Thêm bài hàng loạt:**
+### Đăng bài từ admin
+
+1. Chạy `supabase/schema.sql` rồi `supabase/migrations/0001_news_posts.sql` trên Supabase.
+2. Đặt `DATA_SOURCE=supabase` + các key Supabase trong env (Vercel).
+3. `/admin` → **Bài viết** → **Viết bài mới**. Viết tiếng Việt; bấm **Đăng bài** →
+   hệ thống tự dịch sang 5 ngôn ngữ (Google Translate free) rồi publish.
+   **Lưu nháp** để lưu mà chưa hiện ra web. Trang sửa có nút **Dịch lại**.
+
+### Thêm bài hàng loạt (seed, không cần Supabase)
 
 1. Soạn bài trong `scripts/data/seed-articles.mjs` (`{ category, title, excerpt, content }`).
 2. `node scripts/seed-news.mjs` — trộn vào `wp-content.json`, tự tạo slug, rải ngày
-   đăng cách nhau 2 ngày (bài mới nhất = hôm nay), `cover: null` (thêm ảnh sau).
-3. `node scripts/translate-news.mjs` — dịch các bài mới sang 5 thứ tiếng qua Google
-   Translate (miễn phí, idempotent — chạy lại chỉ dịch phần còn thiếu).
-4. Ảnh cover: sửa trực tiếp `"cover"` của bài trong `wp-content.json` thành đường dẫn
-   trong `/public/images/...` khi có ảnh.
+   đăng cách nhau 2 ngày (bài mới nhất = hôm nay), `cover: null`.
+3. `node scripts/translate-news.mjs` — dịch bài mới sang 5 thứ tiếng (idempotent).
+4. Ảnh cover: sửa `"cover"` của bài trong `wp-content.json` thành đường dẫn `/images/...`.
 
 ## Việc tiếp theo
 

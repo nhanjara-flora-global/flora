@@ -9,6 +9,8 @@ import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getLocalizedPosts } from "@/lib/i18n/localized-content";
 import { NEWS_CATEGORIES } from "@/lib/legacy";
 
+export const revalidate = 300;
+
 type Props = { params: Promise<{ lang: string; category: string }> };
 
 export function generateStaticParams() {
@@ -33,7 +35,7 @@ export default async function NewsCategoryPage({ params }: Props) {
   const found = NEWS_CATEGORIES.find((c) => c.slug === category);
   if (!found) notFound();
 
-  const posts = getLocalizedPosts(lang, category);
+  const posts = await getLocalizedPosts(lang, category);
   const label = dict.newsCategories[found.slug];
 
   return (

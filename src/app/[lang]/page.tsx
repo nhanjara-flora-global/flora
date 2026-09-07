@@ -44,7 +44,7 @@ export default async function HomePage({ params }: Props) {
   const h = dict.home;
   const [rawProducts, posts] = await Promise.all([
     getProducts(),
-    Promise.resolve(getLocalizedPosts(lang)),
+    getLocalizedPosts(lang),
   ]);
   const products = localizeProducts(rawProducts, lang);
 

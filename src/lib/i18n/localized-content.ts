@@ -3,9 +3,14 @@
  */
 import type { Locale } from "@/lib/i18n/config";
 import type { LegacyArticle } from "@/lib/legacy";
-import { getPage, getPost, getPosts, getService, getServices } from "@/lib/legacy";
+import { getPage, getService, getServices } from "@/lib/legacy";
+import {
+  allArticles,
+  articleBySlug,
+  articlesByCategory,
+  type NewsArticle,
+} from "@/lib/news";
 import manualBundle from "@/lib/i18n/content/manual-bundle.json";
-import newsCache from "@/lib/i18n/content/news-cache.json";
 
 export type LocalizedArticle = LegacyArticle & {
   isTranslated: boolean;
@@ -13,6 +18,8 @@ export type LocalizedArticle = LegacyArticle & {
   method: "original" | "manual" | "machine" | "fallback";
   displayLocale: Locale;
   sourceLocale: Locale;
+  category?: string | null;
+  categories?: string[];
 };
 
 type ManualEntry = {
@@ -23,17 +30,10 @@ type ManualEntry = {
 };
 
 type ManualBundle = Record<string, Partial<Record<Locale, ManualEntry>>>;
-type NewsCache = Record<string, Partial<Record<Locale, ManualEntry>>>;
 
 const manual = manualBundle as ManualBundle;
-const cachedNews = newsCache as NewsCache;
 
 const SOURCE_LOCALE: Locale = "en";
-
-function detectSourceLocale(text: string): Locale {
-  if (/[ăâêôơưđĂÂÊÔƠƯĐ]/.test(text)) return "vi";
-  return "en";
-}
 
 export function getManualPage(
   slug: string,
@@ -84,30 +84,36 @@ export function getManualServices(locale: Locale): LocalizedArticle[] {
     .filter((s): s is LocalizedArticle => s !== null);
 }
 
-export function getLocalizedPost(
-  slug: string,
+function localizeArticle(
+  article: NewsArticle,
   locale: Locale,
-): LocalizedArticle | null {
-  const base = getPost(slug);
-  if (!base) return null;
+): LocalizedArticle {
+  const common = {
+    cover: article.cover,
+    date: article.date,
+    slug: article.slug,
+    category: article.category,
+    categories: article.categories,
+    sourceLocale: article.sourceLocale,
+  };
 
-  const sourceLocale = detectSourceLocale(`${base.title}\n${base.content}`);
-
-  if (locale === sourceLocale) {
+  if (locale === article.sourceLocale) {
     return {
-      ...base,
+      ...common,
+      title: article.title,
+      excerpt: article.excerpt,
+      content: article.content,
       isTranslated: false,
       isFallback: false,
       method: "original",
-      displayLocale: sourceLocale,
-      sourceLocale,
+      displayLocale: article.sourceLocale,
     };
   }
 
-  const entry = cachedNews[slug]?.[locale];
+  const entry = article.translations[locale];
   if (entry) {
     return {
-      ...base,
+      ...common,
       title: entry.title,
       excerpt: entry.excerpt,
       content: entry.content,
@@ -115,27 +121,37 @@ export function getLocalizedPost(
       isFallback: false,
       method: "machine",
       displayLocale: locale,
-      sourceLocale: (entry.sourceLocale as Locale) || sourceLocale,
     };
   }
 
   return {
-    ...base,
+    ...common,
+    title: article.title,
+    excerpt: article.excerpt,
+    content: article.content,
     isTranslated: false,
     isFallback: true,
     method: "fallback",
-    displayLocale: sourceLocale,
-    sourceLocale,
+    displayLocale: article.sourceLocale,
   };
 }
 
-export function getLocalizedPosts(
+export async function getLocalizedPost(
+  slug: string,
+  locale: Locale,
+): Promise<LocalizedArticle | null> {
+  const article = await articleBySlug(slug);
+  return article ? localizeArticle(article, locale) : null;
+}
+
+export async function getLocalizedPosts(
   locale: Locale,
   category?: string,
-): LocalizedArticle[] {
-  return getPosts(category)
-    .map((p) => getLocalizedPost(p.slug, locale))
-    .filter((p): p is LocalizedArticle => p !== null);
+): Promise<LocalizedArticle[]> {
+  const articles = category
+    ? await articlesByCategory(category)
+    : await allArticles();
+  return articles.map((a) => localizeArticle(a, locale));
 }
 
 export function fallbackBadgeLabel(locale: Locale, sourceLocale: Locale): string {

@@ -3,9 +3,9 @@
  * src/lib/data/wp-content.json (posts + categories).
  *
  * - Tự tạo slug (bỏ dấu tiếng Việt), bỏ qua bài đã tồn tại.
- * - Rải ngày đăng lùi về quá khứ (cách nhau ~3–4 ngày) và xen kẽ các category
+ * - Rải ngày đăng lùi về quá khứ (cách nhau 2 ngày) và xen kẽ các category
  *   để feed /news trông tự nhiên. Tất cả ngày đều <= hôm nay -> đăng liền.
- * - Xoay vòng ảnh cover có sẵn trong /public.
+ * - cover để null; bổ sung ảnh sau bằng cách sửa "cover" trong wp-content.json.
  *
  * Chạy:  node scripts/seed-news.mjs        (ghi file)
  *        DRY_RUN=1 node scripts/seed-news.mjs
@@ -15,6 +15,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { SEED_ARTICLES } from "./data/seed-articles.mjs";
+import { slugify } from "../src/lib/slug.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const WP_PATH = path.join(ROOT, "src/lib/data/wp-content.json");
@@ -33,22 +34,6 @@ const RESERVED_SLUGS = new Set([
   "contact", "cart", "checkout", "admin", "order-success", "api", "images",
   "en", "vi", "zh", "ko", "hi", "si", "blog", "dich-vu", "gioi-thieu", "category",
 ]);
-
-function slugify(input) {
-  const full = input
-    .replace(/đ/g, "d")
-    .replace(/Đ/g, "D")
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-  if (full.length <= 80) return full;
-  // Cắt ở ranh giới từ gần nhất trước mốc 80 ký tự, không cắt giữa từ.
-  const cut = full.slice(0, 80);
-  const lastDash = cut.lastIndexOf("-");
-  return (lastDash > 40 ? cut.slice(0, lastDash) : cut).replace(/-+$/g, "");
-}
 
 function isoDate(d) {
   const y = d.getFullYear();
