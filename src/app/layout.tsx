@@ -1,3 +1,4 @@
+import Script from "next/script";
 import {
   Be_Vietnam_Pro,
   Literata,
@@ -7,6 +8,8 @@ import {
   Noto_Sans_Sinhala,
 } from "next/font/google";
 import "./globals.css";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-T6XBRYJGWJ";
 
 const body = Be_Vietnam_Pro({
   variable: "--font-body",
@@ -53,7 +56,25 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${body.variable} ${display.variable} ${notoSc.variable} ${notoKr.variable} ${notoHi.variable} ${notoSi.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col antialiased">{children}</body>
+      <body className="min-h-full flex flex-col antialiased">
+        {children}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
+      </body>
     </html>
   );
 }
