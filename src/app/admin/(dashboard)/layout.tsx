@@ -66,9 +66,7 @@ export default async function AdminLayout({
             </form>
           </nav>
         </header>
-        <main className="flex-1 p-5 md:p-8">
-          <div className="mx-auto max-w-5xl">{children}</div>
-        </main>
+        <main className="flex-1 p-5 md:p-8">{children}</main>
       </div>
     </div>
   );

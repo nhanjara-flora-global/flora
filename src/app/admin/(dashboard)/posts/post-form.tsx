@@ -43,7 +43,7 @@ export function PostForm({ initial }: Props) {
 
   return (
     <form
-      className="space-y-5"
+      className="max-w-3xl space-y-5"
       onSubmit={(e) => {
         e.preventDefault();
         submit("published", e.currentTarget);
