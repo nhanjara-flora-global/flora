@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatDate, NEWS_CATEGORIES } from "@/lib/legacy";
+import { getServiceClientResult } from "@/lib/admin/data";
 import { PostActions } from "./post-actions";
 
 const CATEGORY_LABEL = Object.fromEntries(
@@ -19,10 +20,10 @@ type Row = {
 /** null = chưa bật Supabase. Lỗi truy vấn trả về kèm message để hiện ra, chứ
  *  không lặng lẽ thành danh sách rỗng — dễ tưởng nhầm là "chưa có bài nào". */
 async function listPosts(): Promise<{ rows: Row[]; error: string | null } | null> {
-  if ((process.env.DATA_SOURCE ?? "local") !== "supabase") return null;
-  const { createServiceClient } = await import("@/lib/supabase/service");
-  const supabase = createServiceClient();
-  const { data, error } = await supabase
+  const service = await getServiceClientResult();
+  if (service.reason === "local") return null;
+  if (service.reason === "config") return { rows: [], error: service.message };
+  const { data, error } = await service.client
     .from("posts")
     .select("id, title, slug, category, status, published_at, translations")
     .order("published_at", { ascending: false });
@@ -67,8 +68,18 @@ export default async function AdminPostsPage() {
           <p className="font-medium">Không đọc được bảng posts.</p>
           <p className="mt-1">{result.error}</p>
           <p className="mt-1">
-            Thiếu cột <code>category</code>/<code>translations</code> thì chạy{" "}
-            <code>supabase/migrations/0001_news_posts.sql</code> trong Supabase SQL Editor.
+            {result.error.includes("column") ? (
+              <>
+                Thiếu cột <code>category</code>/<code>translations</code> — chạy{" "}
+                <code>supabase/migrations/0001_news_posts.sql</code> trong Supabase SQL Editor
+                của đúng project mà site đang trỏ tới.
+              </>
+            ) : (
+              <>
+                Kiểm tra biến môi trường <code>NEXT_PUBLIC_SUPABASE_URL</code> và{" "}
+                <code>SUPABASE_SERVICE_ROLE_KEY</code> trên Vercel, rồi redeploy.
+              </>
+            )}
           </p>
         </div>
       ) : rows!.length === 0 ? (

@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { isAdminAuthed } from "@/app/actions/admin";
-import { createServiceClient } from "@/lib/supabase/service";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { getServiceClientResult } from "@/lib/admin/data";
 import { locales } from "@/lib/i18n/config";
 import { slugify, textToHtml } from "@/lib/slug.mjs";
 import { translateArticle } from "@/lib/gt-translate.mjs";
@@ -26,17 +27,25 @@ export type PostResult =
   | { ok: true; id: string; slug: string }
   | { ok: false; error: string };
 
-function assertSupabase() {
-  if ((process.env.DATA_SOURCE ?? "local") !== "supabase") {
-    throw new Error(
-      "Cần DATA_SOURCE=supabase để dùng chức năng đăng bài. Xem README.",
-    );
+/** Trả lỗi cho UI thay vì ném ra ngoài — action ném là client nhận rejection trần. */
+async function supabaseFor(): Promise<
+  { ok: true; client: SupabaseClient } | { ok: false; error: string }
+> {
+  const service = await getServiceClientResult();
+  if (service.reason === "local") {
+    return {
+      ok: false,
+      error: "Cần DATA_SOURCE=supabase để dùng chức năng đăng bài. Xem README.",
+    };
   }
+  if (service.reason === "config") {
+    return { ok: false, error: `Supabase chưa cấu hình: ${service.message}` };
+  }
+  return { ok: true, client: service.client };
 }
 
 export async function savePost(input: PostInput): Promise<PostResult> {
   if (!(await isAdminAuthed())) return { ok: false, error: "Chưa đăng nhập." };
-  assertSupabase();
 
   const title = input.title.trim();
   const excerpt = input.excerpt.trim();
@@ -48,7 +57,9 @@ export async function savePost(input: PostInput): Promise<PostResult> {
   }
   if (!contentHtml) return { ok: false, error: "Thiếu nội dung." };
 
-  const supabase = createServiceClient();
+  const service = await supabaseFor();
+  if (!service.ok) return { ok: false, error: service.error };
+  const supabase = service.client;
   const slug = input.id ? undefined : slugify(title);
 
   if (slug !== undefined) {
@@ -116,8 +127,9 @@ export async function setPostStatus(
   status: "draft" | "published" | "archived",
 ): Promise<{ ok: boolean; error?: string }> {
   if (!(await isAdminAuthed())) return { ok: false, error: "Chưa đăng nhập." };
-  assertSupabase();
-  const supabase = createServiceClient();
+  const service = await supabaseFor();
+  if (!service.ok) return { ok: false, error: service.error };
+  const supabase = service.client;
 
   // Publish lần đầu mà chưa có bản dịch → dịch luôn.
   if (status === "published") {
@@ -148,8 +160,9 @@ export async function deletePost(
   id: string,
 ): Promise<{ ok: boolean; error?: string }> {
   if (!(await isAdminAuthed())) return { ok: false, error: "Chưa đăng nhập." };
-  assertSupabase();
-  const supabase = createServiceClient();
+  const service = await supabaseFor();
+  if (!service.ok) return { ok: false, error: service.error };
+  const supabase = service.client;
   const { error } = await supabase.from("posts").delete().eq("id", id);
   revalidateNews();
   return error ? { ok: false, error: error.message } : { ok: true };
@@ -160,8 +173,9 @@ export async function retranslatePost(
   id: string,
 ): Promise<{ ok: boolean; error?: string }> {
   if (!(await isAdminAuthed())) return { ok: false, error: "Chưa đăng nhập." };
-  assertSupabase();
-  const supabase = createServiceClient();
+  const service = await supabaseFor();
+  if (!service.ok) return { ok: false, error: service.error };
+  const supabase = service.client;
   const { data, error } = await supabase
     .from("posts")
     .select("title,excerpt,content")

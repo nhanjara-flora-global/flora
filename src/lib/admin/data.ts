@@ -98,19 +98,32 @@ export function isLocalMode(): boolean {
   return (process.env.DATA_SOURCE ?? "local") === "local";
 }
 
+export type ServiceClientResult =
+  | { client: SupabaseClient; reason: "ok" }
+  | { client: null; reason: "local" }
+  | { client: null; reason: "config"; message: string };
+
 /**
- * Never let a missing service-role key crash the dashboard — the pages render a
- * configuration warning instead.
+ * Thiếu SUPABASE_SERVICE_ROLE_KEY không được phép làm sập trang admin — trả về
+ * lý do để trang hiện thông báo cấu hình thay vì ném lỗi 500.
  */
-export async function getServiceClient(): Promise<SupabaseClient | null> {
-  if (isLocalMode()) return null;
+export async function getServiceClientResult(): Promise<ServiceClientResult> {
+  if (isLocalMode()) return { client: null, reason: "local" };
   try {
     const { createServiceClient } = await import("@/lib/supabase/service");
-    return createServiceClient();
+    return { client: createServiceClient(), reason: "ok" };
   } catch (error) {
     console.error("[admin] Supabase service client unavailable:", error);
-    return null;
+    return {
+      client: null,
+      reason: "config",
+      message: error instanceof Error ? error.message : String(error),
+    };
   }
+}
+
+export async function getServiceClient(): Promise<SupabaseClient | null> {
+  return (await getServiceClientResult()).client;
 }
 
 /** PostgREST reads `,` and `%` as syntax inside `.or()`, so strip them out. */

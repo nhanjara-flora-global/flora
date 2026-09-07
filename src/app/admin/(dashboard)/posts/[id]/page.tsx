@@ -2,13 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostForm } from "../post-form";
 import { RetranslateButton } from "./retranslate-button";
+import { getServiceClient } from "@/lib/admin/data";
 
 type Props = { params: Promise<{ id: string }> };
 
 async function getPost(id: string) {
-  if ((process.env.DATA_SOURCE ?? "local") !== "supabase") return null;
-  const { createServiceClient } = await import("@/lib/supabase/service");
-  const supabase = createServiceClient();
+  const supabase = await getServiceClient();
+  if (!supabase) return null;
   const { data } = await supabase
     .from("posts")
     .select(
