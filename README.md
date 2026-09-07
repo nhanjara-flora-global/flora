@@ -51,6 +51,26 @@ DATA_SOURCE=supabase
 | `/about-us` | Giới thiệu |
 | `/contact` | Form liên hệ |
 
+## Bài viết mục News
+
+Nội dung news nằm trong 2 file (chế độ `local`, không cần Supabase):
+
+- `src/lib/data/wp-content.json` — bài gốc tiếng Việt (`posts` + `categories`)
+- `src/lib/i18n/content/news-cache.json` — bản dịch en/zh/ko/hi/si (badge "bản dịch máy")
+
+5 category: `canh-tac-huu-co`, `chung-nhan-tieu-chuan`, `xuat-khau-logistics`,
+`thi-truong-xu-huong`, `goc-nhin-flora` (đặt trong `src/lib/legacy.ts` + 6 file dictionary).
+
+**Thêm bài hàng loạt:**
+
+1. Soạn bài trong `scripts/data/seed-articles.mjs` (`{ category, title, excerpt, content }`).
+2. `node scripts/seed-news.mjs` — trộn vào `wp-content.json`, tự tạo slug, rải ngày
+   đăng cách nhau 2 ngày (bài mới nhất = hôm nay), `cover: null` (thêm ảnh sau).
+3. `node scripts/translate-news.mjs` — dịch các bài mới sang 5 thứ tiếng qua Google
+   Translate (miễn phí, idempotent — chạy lại chỉ dịch phần còn thiếu).
+4. Ảnh cover: sửa trực tiếp `"cover"` của bài trong `wp-content.json` thành đường dẫn
+   trong `/public/images/...` khi có ảnh.
+
 ## Việc tiếp theo
 
 - [ ] Admin CMS (Supabase Studio hoặc admin Next.js)

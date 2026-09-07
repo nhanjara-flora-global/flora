@@ -158,7 +158,7 @@ export default async function HomePage({ params }: Props) {
                 className="card card-interactive group flex flex-col"
               >
                 <div className="relative aspect-[16/10] overflow-hidden bg-[var(--bg-soft)]">
-                  {post.cover && (
+                  {post.cover ? (
                     <Image
                       src={post.cover}
                       alt={post.title}
@@ -166,6 +166,8 @@ export default async function HomePage({ params }: Props) {
                       sizes="(max-width:768px) 100vw, 33vw"
                       className="object-cover transition duration-700 group-hover:scale-105"
                     />
+                  ) : (
+                    <div className="absolute inset-0 bg-[linear-gradient(145deg,#dce8d4_0%,#b7c9a5_45%,#6f8f5a_100%)]" />
                   )}
                 </div>
                 <div className="flex flex-1 flex-col p-5">
