@@ -30,7 +30,8 @@ const cachedNews = newsCache as NewsCache;
 
 const SOURCE_LOCALE: Locale = "en";
 
-function detectSourceLocale(text: string): Locale {
+/** Vietnamese diacritics mark a VN-authored article; everything else is English. */
+export function detectSourceLocale(text: string): Locale {
   if (/[ăâêôơưđĂÂÊÔƠƯĐ]/.test(text)) return "vi";
   return "en";
 }

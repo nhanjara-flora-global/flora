@@ -68,9 +68,36 @@ Tuỳ chọn: biến `NEWS_MODEL` (mặc định `claude-opus-5`, có thể đ�
 Chạy tay / thử: Actions → *Daily auto news* → Run workflow (tích *dry_run* để không commit),
 hoặc local: `ANTHROPIC_API_KEY=... npm run news:generate` (thêm `DRY_RUN=1` để xem trước).
 
+## Trang quản trị `/admin`
+
+Đăng nhập bằng `ADMIN_PASSWORD`; phiên lưu trong cookie ký HMAC (`ADMIN_SESSION_SECRET`,
+mặc định dùng chính `ADMIN_PASSWORD` làm khoá ký) và tự hết hạn sau 7 ngày. Đổi
+`ADMIN_SESSION_SECRET` là đăng xuất toàn bộ phiên đang mở.
+
+| Path | Nội dung |
+|------|----------|
+| `/admin` | KPI doanh thu 30 ngày, đơn theo trạng thái, đơn & liên hệ mới nhất |
+| `/admin/orders` | Lọc theo trạng thái, tìm theo mã/tên/email/SĐT, phân trang 20 dòng |
+| `/admin/orders/[id]` | Dòng hàng, thông tin khách, địa chỉ, ghi chú + cập nhật trạng thái đơn/thanh toán |
+| `/admin/products` | Toàn bộ sản phẩm gồm cả `draft`/`archived` (storefront chỉ thấy `published`) |
+| `/admin/posts` | Bài viết + ngôn ngữ gốc, tình trạng bản dịch, tình trạng đồng bộ Supabase |
+| `/admin/contacts` | Submission form liên hệ, tìm kiếm + phân trang |
+
+Đơn hàng và liên hệ chỉ có dữ liệu khi `DATA_SOURCE=supabase`; ở chế độ `local`
+mỗi trang hiện banner nhắc bật Supabase.
+
+## Đồng bộ bài viết lên Supabase
+
+`src/lib/data/wp-content.json` là nguồn bài viết của website. Để đẩy chúng vào bảng
+`posts` trên Supabase (upsert theo `slug`, chạy lại nhiều lần vô hại):
+
+```bash
+npm run posts:sync          # DRY_RUN=1 npm run posts:sync để xem trước
+```
+
 ## Việc tiếp theo
 
-- [ ] Admin CMS (Supabase Studio hoặc admin Next.js)
+- [x] Admin CMS (dashboard Next.js tại `/admin`)
 - [ ] VNPay / MoMo webhook
 - [ ] Upload ảnh lên Supabase Storage
 - [ ] Migrate blog posts từ SQL/Yoast

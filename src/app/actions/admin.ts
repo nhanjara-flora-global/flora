@@ -1,36 +1,109 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { refresh } from "next/cache";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import {
+  ADMIN_COOKIE,
+  MAX_AGE_SECONDS,
+  checkPassword,
+  clearAttempts,
+  createSessionToken,
+  isAdminAuthed as readSession,
+  isPasswordConfigured,
+  recordFailedAttempt,
+  tooManyAttempts,
+} from "@/lib/admin/auth";
+import {
+  ORDER_STATUSES,
+  PAYMENT_STATUSES,
+  getServiceClient,
+  type OrderStatus,
+  type PaymentStatus,
+} from "@/lib/admin/data";
 
-const COOKIE = "flora_admin";
+export async function isAdminAuthed(): Promise<boolean> {
+  return readSession();
+}
 
-export async function isAdminAuthed() {
-  const jar = await cookies();
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) return false;
-  return jar.get(COOKIE)?.value === expected;
+async function clientKey(): Promise<string> {
+  const list = await headers();
+  return (
+    list.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    list.get("x-real-ip") ??
+    "unknown"
+  );
 }
 
 export async function adminLogin(formData: FormData) {
   const password = String(formData.get("password") || "");
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected || password !== expected) {
+
+  if (!isPasswordConfigured()) {
+    redirect("/admin/login?error=config");
+  }
+
+  const key = await clientKey();
+  if (tooManyAttempts(key)) {
+    redirect("/admin/login?error=rate");
+  }
+
+  if (!checkPassword(password)) {
+    recordFailedAttempt(key);
     redirect("/admin/login?error=1");
   }
+
+  clearAttempts(key);
   const jar = await cookies();
-  jar.set(COOKIE, expected, {
+  jar.set(ADMIN_COOKIE, createSessionToken(), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: MAX_AGE_SECONDS,
   });
   redirect("/admin");
 }
 
 export async function adminLogout() {
   const jar = await cookies();
-  jar.delete(COOKIE);
+  jar.delete(ADMIN_COOKIE);
   redirect("/admin/login");
+}
+
+export type UpdateOrderResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * Server Actions are reachable by direct POST, so the session is re-checked
+ * here rather than trusting the layout guard that rendered the form.
+ */
+export async function updateOrder(formData: FormData): Promise<UpdateOrderResult> {
+  if (!(await readSession())) return { ok: false, error: "Phiên đăng nhập đã hết hạn." };
+
+  const id = String(formData.get("id") || "");
+  const status = String(formData.get("status") || "") as OrderStatus;
+  const paymentStatus = String(formData.get("payment_status") || "") as PaymentStatus;
+
+  if (!id) return { ok: false, error: "Thiếu mã đơn hàng." };
+  if (!(ORDER_STATUSES as readonly string[]).includes(status)) {
+    return { ok: false, error: "Trạng thái đơn không hợp lệ." };
+  }
+  if (!(PAYMENT_STATUSES as readonly string[]).includes(paymentStatus)) {
+    return { ok: false, error: "Trạng thái thanh toán không hợp lệ." };
+  }
+
+  const supabase = await getServiceClient();
+  if (!supabase) return { ok: false, error: "Chưa kết nối Supabase — không thể cập nhật." };
+
+  const { error } = await supabase
+    .from("orders")
+    .update({ status, payment_status: paymentStatus, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (error) {
+    console.error("[admin] updateOrder:", error);
+    return { ok: false, error: "Cập nhật thất bại. Thử lại sau." };
+  }
+
+  refresh();
+  return { ok: true };
 }
