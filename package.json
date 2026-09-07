@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "news:generate": "node scripts/generate-daily-post.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
@@ -17,6 +18,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.124.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -51,6 +51,23 @@ DATA_SOURCE=supabase
 | `/about-us` | Giới thiệu |
 | `/contact` | Form liên hệ |
 
+## Tự động đăng bài News mỗi ngày
+
+GitHub Action [`daily-news.yml`](.github/workflows/daily-news.yml) chạy 07:00 (giờ VN) mỗi ngày:
+
+1. `scripts/generate-daily-post.mjs` gọi Claude viết 1 bài tiếng Việt (kiến thức/phân tích,
+   evergreen — không phải tin thời sự, có ràng buộc không bịa số liệu/ngày tháng/nhân vật).
+2. Dịch bài sang `en/zh/ko/hi/si`.
+3. Ghi vào `src/lib/data/wp-content.json` + `src/lib/i18n/content/news-cache.json`
+   + log `scripts/data/auto-post-log.json`.
+4. Commit & push → Vercel tự build lại → bài lên sóng.
+
+**Cần bật:** thêm secret `ANTHROPIC_API_KEY` trong repo Settings → Secrets → Actions.
+Tuỳ chọn: biến `NEWS_MODEL` (mặc định `claude-opus-5`, có thể để `claude-sonnet-5` cho rẻ hơn).
+
+Chạy tay / thử: Actions → *Daily auto news* → Run workflow (tích *dry_run* để không commit),
+hoặc local: `ANTHROPIC_API_KEY=... npm run news:generate` (thêm `DRY_RUN=1` để xem trước).
+
 ## Việc tiếp theo
 
 - [ ] Admin CMS (Supabase Studio hoặc admin Next.js)
