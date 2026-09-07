@@ -24,9 +24,11 @@
     "organic-certification-global-compliance-solutions": "Certification"
   },
   "newsCategories": {
-    "news": "News",
-    "press": "Press",
-    "market-information": "Market information"
+    "canh-tac-huu-co": "Organic Farming",
+    "chung-nhan-tieu-chuan": "Certification & Standards",
+    "xuat-khau-logistics": "Export & Logistics",
+    "thi-truong-xu-huong": "Market & Trends",
+    "goc-nhin-flora": "Flora Perspective"
   },
   "home": {
     "learnMore": "Learn more",

@@ -24,9 +24,11 @@
     "organic-certification-global-compliance-solutions": "සහතිකකරණය"
   },
   "newsCategories": {
-    "news": "පුවත්",
-    "press": "මාධ්‍ය",
-    "market-information": "වෙළඳපොළ තොරතුරු"
+    "canh-tac-huu-co": "කාබනික ගොවිතැන",
+    "chung-nhan-tieu-chuan": "සහතික හා ප්‍රමිති",
+    "xuat-khau-logistics": "අපනයනය හා සැපයුම්",
+    "thi-truong-xu-huong": "වෙළඳපොළ හා ප්‍රවණතා",
+    "goc-nhin-flora": "Flora දෘෂ්ටිය"
   },
   "home": {
     "learnMore": "තව දැනගන්න",

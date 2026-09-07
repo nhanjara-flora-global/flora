@@ -49,9 +49,11 @@ export const SERVICE_NAV_LABEL: Record<string, string> = {
 };
 
 export const NEWS_CATEGORIES = [
-  { slug: "news", label: "News" },
-  { slug: "press", label: "Press" },
-  { slug: "market-information", label: "Market information" },
+  { slug: "canh-tac-huu-co", label: "Organic Farming" },
+  { slug: "chung-nhan-tieu-chuan", label: "Certification & Standards" },
+  { slug: "xuat-khau-logistics", label: "Export & Logistics" },
+  { slug: "thi-truong-xu-huong", label: "Market & Trends" },
+  { slug: "goc-nhin-flora", label: "Flora Perspective" },
 ] as const;
 
 export function getServices(): LegacyArticle[] {

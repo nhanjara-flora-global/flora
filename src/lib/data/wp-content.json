@@ -141,21 +141,24 @@
     }
   },
   "categories": {
-    "news": [
+    "canh-tac-huu-co": [
+      "viet-nam-day-manh-phat-trien-nong-nghiep-huu-co"
+    ],
+    "chung-nhan-tieu-chuan": [],
+    "xuat-khau-logistics": [
+      "xuat-khau-nong-san-huu-co-xu-the-co-hoi-va-thach-thuc-nhin-tu-mat-hang-dieu-huu-co"
+    ],
+    "thi-truong-xu-huong": [
       "viet-nam-thuc-day-nong-nghiep-huu-co-tu-hoi-nghi-isop-2025",
       "dien-tich-nong-nghiep-huu-co-toan-cau-dat-gan-99-trieu-ha",
       "5-xu-huong-nong-nghiep-moi-2025",
       "thi-truong-thuc-pham-huu-co-toan-cau-tang-truong-manh",
-      "bat-kip-xu-huong-huu-co-huong-di-ben-vung-cho-nen-nong-nghiep-viet-nam"
-    ],
-    "press": [
-      "ceo-le-thi-thuy-hoa-va-khat-vong-cung-nong-dan-hien-thuc-hoa-nong-nghiep-organic"
-    ],
-    "market-information": [
       "thong-ke-thuc-trang-nong-nghiep-huu-co-tren-the-gioi",
-      "nong-san-huu-co-chiem-uu-the-vuot-troi",
-      "viet-nam-day-manh-phat-trien-nong-nghiep-huu-co",
-      "xuat-khau-nong-san-huu-co-xu-the-co-hoi-va-thach-thuc-nhin-tu-mat-hang-dieu-huu-co"
+      "nong-san-huu-co-chiem-uu-the-vuot-troi"
+    ],
+    "goc-nhin-flora": [
+      "bat-kip-xu-huong-huu-co-huong-di-ben-vung-cho-nen-nong-nghiep-viet-nam",
+      "ceo-le-thi-thuy-hoa-va-khat-vong-cung-nong-dan-hien-thuc-hoa-nong-nghiep-organic"
     ]
   }
 }
