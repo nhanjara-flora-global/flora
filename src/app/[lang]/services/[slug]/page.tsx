@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArticleBody } from "@/components/article";
-import { ContentLocaleBadge } from "@/components/content-locale-badge";
-import { PageHero } from "@/components/page-hero";
+import { ServiceDetail } from "@/components/service/service-detail";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
-import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
+import { locales, resolveLocale } from "@/lib/i18n/config";
 import { getManualPage, getManualServices } from "@/lib/i18n/localized-content";
 import { getServices, SERVICE_ORDER } from "@/lib/legacy";
+import { parseService } from "@/lib/services/parse-service";
+import { getServiceTheme } from "@/lib/services/service-theme";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
 
@@ -37,52 +36,26 @@ export default async function ServiceDetailPage({ params }: Props) {
   const service = getManualPage(slug, lang);
   if (!service) notFound();
 
-  const others = getManualServices(lang).filter((s) => s.slug !== slug);
+  const theme = getServiceTheme(slug);
+  const model = parseService(service.content);
+  const label = serviceLabel(dict, slug);
+
+  const sameGroup = getManualServices(lang).filter(
+    (svc) => svc.slug !== slug && getServiceTheme(svc.slug).group === theme.group,
+  );
+  const others = (sameGroup.length >= 3 ? sameGroup : getManualServices(lang).filter((svc) => svc.slug !== slug))
+    .slice(0, 6)
+    .map((svc) => ({ slug: svc.slug, title: svc.title, label: serviceLabel(dict, svc.slug) }));
 
   return (
-    <>
-      <PageHero
-        eyebrow={serviceLabel(dict, service.slug)}
-        title={service.title}
-        image={service.cover}
-        homeHref={withLocale(lang, "/")}
-        crumbs={[{ href: withLocale(lang, "/services"), label: dict.servicesPage.title }]}
-      />
-
-      <div className="container-page section-y grid gap-12 md:grid-cols-[1fr_280px]">
-        <article>
-          <ContentLocaleBadge article={service} uiLocale={lang} />
-          <ArticleBody html={service.content} />
-          <div className="mt-12 border-t border-[var(--line)] pt-8">
-            <p className="display-sm">{dict.common.readyPartner}</p>
-            <Link
-              href={withLocale(lang, "/contact")}
-              className="body-sm mt-4 inline-block rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
-            >
-              {dict.common.initiatePartnership}
-            </Link>
-          </div>
-        </article>
-
-        <aside>
-          <p className="body-sm font-semibold uppercase tracking-wide">
-            {dict.common.otherServices}
-          </p>
-          <div className="mb-4 mt-2 h-0.5 w-10 bg-[var(--brand)]" />
-          <ul className="body-sm space-y-3">
-            {others.map((s) => (
-              <li key={s.slug}>
-                <Link
-                  href={withLocale(lang, `/services/${s.slug}`)}
-                  className="text-[var(--muted)] hover:text-[var(--brand)]"
-                >
-                  {s.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      </div>
-    </>
+    <ServiceDetail
+      service={service}
+      model={model}
+      theme={theme}
+      label={label}
+      lang={lang}
+      dict={dict}
+      others={others}
+    />
   );
 }

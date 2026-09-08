@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
+import { ServiceCardLarge, ServiceCardTile } from "@/components/service/service-card";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getManualServices } from "@/lib/i18n/localized-content";
 import { SERVICE_ORDER } from "@/lib/legacy";
+import { getServiceStrings } from "@/lib/services/service-i18n";
+import { getServiceTheme, serviceIndex } from "@/lib/services/service-theme";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
 
@@ -26,7 +27,11 @@ export default async function ServicesPage({ params }: Props) {
   const { lang: raw } = await params;
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
+  const s = getServiceStrings(lang);
   const services = getManualServices(lang);
+
+  const flora = services.filter((svc) => getServiceTheme(svc.slug).group === "flora");
+  const voac = services.filter((svc) => getServiceTheme(svc.slug).group === "voac");
 
   return (
     <>
@@ -38,40 +43,55 @@ export default async function ServicesPage({ params }: Props) {
         crumbs={[{ href: withLocale(lang, "/services"), label: dict.servicesPage.title }]}
       />
 
-      <div className="container-page section-y">
-        <Reveal className="grid gap-8 md:grid-cols-2">
-          {services.map((service, i) => (
-            <Link
-              key={service.slug}
-              href={withLocale(lang, `/services/${service.slug}`)}
-              className="card card-interactive group flex flex-col"
-            >
-              <div className="relative aspect-[16/9] overflow-hidden bg-[var(--bg-soft)]">
-                {service.cover && (
-                  <Image
-                    src={service.cover}
-                    alt={service.title}
-                    fill
-                    sizes="(max-width:768px) 100vw, 50vw"
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                  />
-                )}
-              </div>
-              <div className="flex flex-1 flex-col p-6">
-                <p className="eyebrow text-[var(--brand)]">
-                  {String(i + 1).padStart(2, "0")} · {serviceLabel(dict, service.slug)}
-                </p>
-                <h2 className="display-md mt-3 transition-colors group-hover:text-[var(--brand)]">
-                  {service.title}
-                </h2>
-                <p className="body-sm mt-3 line-clamp-4 text-[var(--muted)]">{service.excerpt}</p>
-                <span className="body-sm mt-5 font-semibold text-[var(--brand)]">
-                  {dict.common.readMore}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </Reveal>
+      <div className="container-page section-y space-y-16">
+        <p className="mx-auto max-w-3xl text-center text-[1.15rem] leading-relaxed text-[var(--muted)]">
+          {s.intro}
+        </p>
+
+        <section>
+          <header className="mb-8 max-w-3xl">
+            <p className="eyebrow text-[var(--brand)]">01</p>
+            <h2 className="display-md mt-2">{s.divisionFlora}</h2>
+            <p className="body-base mt-3 text-[var(--muted)]">{s.divisionFloraNote}</p>
+          </header>
+          <Reveal className="grid gap-8 md:grid-cols-2">
+            {flora.map((svc) => (
+              <ServiceCardLarge
+                key={svc.slug}
+                slug={svc.slug}
+                title={svc.title}
+                excerpt={getServiceTheme(svc.slug).tagline ?? svc.excerpt}
+                label={serviceLabel(dict, svc.slug)}
+                index={serviceIndex(svc.slug)}
+                lang={lang}
+                cover={svc.cover}
+                readMore={dict.common.readMore}
+              />
+            ))}
+          </Reveal>
+        </section>
+
+        <section>
+          <header className="mb-8 max-w-3xl">
+            <p className="eyebrow text-[var(--brand)]">02</p>
+            <h2 className="display-md mt-2">{s.divisionVoac}</h2>
+            <p className="body-base mt-3 text-[var(--muted)]">{s.divisionVoacNote}</p>
+          </header>
+          <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {voac.map((svc) => (
+              <ServiceCardTile
+                key={svc.slug}
+                slug={svc.slug}
+                title={svc.title}
+                excerpt={getServiceTheme(svc.slug).tagline ?? svc.excerpt}
+                label={serviceLabel(dict, svc.slug)}
+                index={serviceIndex(svc.slug)}
+                lang={lang}
+                readMore={dict.common.readMore}
+              />
+            ))}
+          </Reveal>
+        </section>
       </div>
     </>
   );

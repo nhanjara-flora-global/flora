@@ -485,3 +485,57 @@ body {
 .prose-legacy [style*="text-align:justify"] {
   text-align: justify;
 }
+
+/* ── Service pages ─────────────────────────────────────────────────
+   Every service page sets --sv (its accent) on a `.svc` wrapper; the
+   soft / line / ink variants are derived here so components only ever
+   reference the tokens, never a raw colour. */
+
+.svc {
+  --sv: var(--brand);
+  --sv-soft: color-mix(in srgb, var(--sv) 8%, #fff);
+  --sv-softer: color-mix(in srgb, var(--sv) 5%, #fff);
+  --sv-line: color-mix(in srgb, var(--sv) 24%, var(--line));
+  --sv-ink: color-mix(in srgb, var(--sv) 72%, #1c1c1c);
+  --sv-deep: color-mix(in srgb, var(--sv) 82%, #000);
+}
+
+.svc-rich {
+  color: var(--ink);
+  font-size: 1.0625rem;
+  line-height: 1.78;
+}
+
+.svc-rich > * + * {
+  margin-top: 1em;
+}
+
+.svc-rich strong {
+  font-weight: 600;
+  color: var(--sv-ink);
+}
+
+.svc-rich em {
+  font-style: italic;
+}
+
+.svc-rich a {
+  color: var(--sv-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Oversized decorative index number sitting behind a hero / section. */
+.svc-watermark {
+  font-family: var(--font-display), serif;
+  font-weight: 600;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--sv) 26%, transparent);
+  user-select: none;
+}
+
+@supports not (color: color-mix(in srgb, red, blue)) {
+  .svc { --sv-soft: #f6f4f2; --sv-line: var(--line); --sv-ink: var(--brand); --sv-deep: var(--brand); }
+}
