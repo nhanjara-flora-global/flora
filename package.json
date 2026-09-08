@@ -11,16 +11,20 @@
     "posts:sync": "node scripts/sync-posts-to-supabase.mjs"
   },
   "dependencies": {
+    "@platejs/basic-nodes": "53.0.0",
+    "@platejs/basic-styles": "53.0.0",
+    "@platejs/link": "53.3.5",
+    "@platejs/list-classic": "53.0.0",
+    "@platejs/media": "53.1.4",
+    "@platejs/table": "53.0.9",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
-    "@tiptap/extension-image": "3.31.3",
-    "@tiptap/extensions": "3.31.3",
-    "@tiptap/pm": "3.31.3",
-    "@tiptap/react": "3.31.3",
-    "@tiptap/starter-kit": "3.31.3",
     "next": "16.3.0",
+    "platejs": "53.3.11",
     "react": "19.2.8",
+    "react-compiler-runtime": "1.0.0",
     "react-dom": "19.2.8",
+    "use-sync-external-store": "1.5.0",
     "zustand": "^5.0.14"
   },
   "devDependencies": {

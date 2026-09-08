@@ -1,399 +1,333 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
-  EditorContent,
-  useEditor,
-  useEditorState,
-  type Editor,
-} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
-import { Placeholder } from "@tiptap/extensions";
+  useCallback,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
+import {
+  Plate,
+  PlateContent,
+  useEditorSelector,
+  usePlateEditor,
+  type PlateEditor,
+} from "platejs/react";
+import { RangeApi } from "platejs";
+import {
+  BasicBlocksPlugin,
+  BasicMarksPlugin,
+  HighlightPlugin,
+  HorizontalRulePlugin,
+} from "@platejs/basic-nodes/react";
+import {
+  FontBackgroundColorPlugin,
+  FontColorPlugin,
+  FontFamilyPlugin,
+  FontSizePlugin,
+  TextAlignPlugin,
+} from "@platejs/basic-styles/react";
+import { setAlign } from "@platejs/basic-styles";
+import { ListPlugin } from "@platejs/list-classic/react";
+import { toggleBulletedList, toggleNumberedList } from "@platejs/list-classic";
+import { LinkPlugin } from "@platejs/link/react";
+import { insertLink, unwrapLink } from "@platejs/link";
+import { ImagePlugin } from "@platejs/media/react";
+import { insertImage } from "@platejs/media";
+import { TablePlugin } from "@platejs/table/react";
+import {
+  deleteColumn,
+  deleteRow,
+  deleteTable,
+  insertTable,
+  insertTableColumn,
+  insertTableRow,
+} from "@platejs/table";
+import { slateToHtml } from "@/lib/admin/plate-serialize";
 import { uploadPostImage } from "@/app/actions/upload";
 
-type Props = {
-  value: string;
-  onChange: (html: string) => void;
-};
-
-/** Chuỗi thô (bài cũ) → HTML, giống textToHtml phía server. */
-function toInitialHtml(value: string): string {
-  const t = (value || "").trim();
-  if (!t) return "";
-  if (t.startsWith("<")) return t;
-  return t
-    .split(/\n{2,}/)
-    .map((p) => `<p>${p.trim().replace(/\n/g, "<br />")}</p>`)
-    .join("\n");
-}
+type Props = { value: string; onChange: (html: string) => void };
 
 const IMG_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,image/avif";
 
-// Khai báo extension một lần ở cấp module — mảng phải ổn định qua các lần render,
-// nếu tạo mới mỗi render thì useEditor liên tục gọi setOptions.
-const EXTENSIONS = [
-  StarterKit.configure({
-    heading: { levels: [2, 3] },
-    codeBlock: false,
-    link: {
-      openOnClick: false,
-      defaultProtocol: "https",
-      HTMLAttributes: { rel: "noopener nofollow", target: "_blank" },
+const PLUGINS = [
+  BasicBlocksPlugin,
+  BasicMarksPlugin,
+  HighlightPlugin,
+  HorizontalRulePlugin,
+  FontColorPlugin,
+  FontBackgroundColorPlugin,
+  FontSizePlugin,
+  FontFamilyPlugin,
+  TextAlignPlugin.configure({
+    inject: {
+      targetPlugins: ["p", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote"],
     },
   }),
-  Image.configure({ HTMLAttributes: { loading: "lazy" } }),
-  Placeholder.configure({
-    placeholder:
-      "Dán nội dung từ Word / Google Docs vào đây — định dạng được giữ nguyên. Hoặc gõ trực tiếp rồi bôi đen để định dạng.",
-  }),
+  ListPlugin,
+  LinkPlugin,
+  ImagePlugin,
+  TablePlugin,
 ];
 
-type Flags = {
-  bold: boolean;
-  italic: boolean;
-  underline: boolean;
-  strike: boolean;
-  h2: boolean;
-  h3: boolean;
-  bullet: boolean;
-  ordered: boolean;
-  quote: boolean;
-  link: boolean;
-  canUndo: boolean;
-  canRedo: boolean;
-};
+const FONTS = [
+  { label: "Mặc định", value: "" },
+  { label: "Serif", value: "Georgia, 'Times New Roman', serif" },
+  { label: "Sans", value: "system-ui, -apple-system, 'Segoe UI', sans-serif" },
+  { label: "Mono", value: "ui-monospace, 'Courier New', monospace" },
+];
+const SIZES = [
+  { label: "Cỡ chữ", value: "" },
+  { label: "Nhỏ", value: "0.875em" },
+  { label: "Thường", value: "1em" },
+  { label: "Lớn", value: "1.25em" },
+  { label: "Rất lớn", value: "1.5em" },
+];
 
-const NO_FLAGS: Flags = {
-  bold: false,
-  italic: false,
-  underline: false,
-  strike: false,
-  h2: false,
-  h3: false,
-  bullet: false,
-  ordered: false,
-  quote: false,
-  link: false,
-  canUndo: false,
-  canRedo: false,
-};
+const subscribeNoop = () => () => {};
 
-export function RichEditor({ value, onChange }: Props) {
-  const editorRef = useRef<Editor | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
-  const [imgMenu, setImgMenu] = useState(false);
-
-  // Nội dung ban đầu chỉ tính một lần; sau đó editor tự quản lý, form nhận qua onChange.
-  const [initialHtml] = useState(() => toInitialHtml(value));
-
-  const uploadAndInsert = useCallback(async (file: File) => {
-    setUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      const res = await uploadPostImage(fd);
-      if (!res.ok) {
-        alert(res.error);
-        return;
-      }
-      editorRef.current
-        ?.chain()
-        .focus()
-        .setImage({ src: res.url, alt: file.name.replace(/\.[a-z0-9]+$/i, "") })
-        .run();
-    } finally {
-      setUploading(false);
-    }
-  }, []);
-
-  // editorProps phải ổn định qua các lần render (xem chú thích EXTENSIONS).
-  const [editorProps] = useState(() => ({
-    attributes: { class: "prose-legacy rich-editor__content" },
-    handlePaste: (_view: unknown, event: ClipboardEvent) => {
-      const imgs = [...(event.clipboardData?.files ?? [])].filter((f) =>
-        f.type.startsWith("image/"),
-      );
-      if (imgs.length === 0) return false;
-      event.preventDefault();
-      imgs.forEach(uploadAndInsert);
-      return true;
-    },
-    handleDrop: (_view: unknown, event: DragEvent) => {
-      const imgs = [...(event.dataTransfer?.files ?? [])].filter((f) =>
-        f.type.startsWith("image/"),
-      );
-      if (imgs.length === 0) return false;
-      event.preventDefault();
-      imgs.forEach(uploadAndInsert);
-      return true;
-    },
-  }));
-
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions: EXTENSIONS,
-    content: initialHtml,
-    editorProps,
-    onUpdate: ({ editor }) => onChange(editor.getHTML()),
-  });
-
-  useEffect(() => {
-    editorRef.current = editor;
-  }, [editor]);
-
-  // Chỉ để ép re-render toolbar khi selection / nội dung đổi. Có thể là null cho
-  // tới transaction đầu tiên — khi đó dùng NO_FLAGS (toolbar mặc định không bật).
-  const flags =
-    useEditorState({
-      editor,
-      selector: ({ editor }): Flags =>
-        editor
-          ? {
-              bold: editor.isActive("bold"),
-              italic: editor.isActive("italic"),
-              underline: editor.isActive("underline"),
-              strike: editor.isActive("strike"),
-              h2: editor.isActive("heading", { level: 2 }),
-              h3: editor.isActive("heading", { level: 3 }),
-              bullet: editor.isActive("bulletList"),
-              ordered: editor.isActive("orderedList"),
-              quote: editor.isActive("blockquote"),
-              link: editor.isActive("link"),
-              canUndo: editor.can().undo(),
-              canRedo: editor.can().redo(),
-            }
-          : NO_FLAGS,
-    }) ?? NO_FLAGS;
-
-  const changeCase = useCallback(
-    (mode: "upper" | "lower") => {
-      const editor = editorRef.current;
-      if (!editor) return;
-      editor
-        .chain()
-        .focus()
-        .command(({ tr, state, dispatch }) => {
-          const { from, to, empty } = state.selection;
-          if (empty) return false;
-          const edits: { from: number; to: number; text: string }[] = [];
-          state.doc.nodesBetween(from, to, (node, pos) => {
-            if (!node.isText || !node.text) return;
-            const start = Math.max(pos, from);
-            const end = Math.min(pos + node.text.length, to);
-            if (end <= start) return;
-            const slice = node.text.slice(start - pos, end - pos);
-            const next =
-              mode === "upper"
-                ? slice.toLocaleUpperCase("vi")
-                : slice.toLocaleLowerCase("vi");
-            if (next !== slice) edits.push({ from: start, to: end, text: next });
-          });
-          if (edits.length === 0) return false;
-          if (dispatch) {
-            for (let i = edits.length - 1; i >= 0; i--) {
-              tr.insertText(edits[i].text, edits[i].from, edits[i].to);
-            }
-          }
-          return true;
-        })
-        .run();
-    },
-    [],
+/** Chỉ dựng Plate phía client — deserialize HTML cần DOMParser (không có ở SSR). */
+export function RichEditor(props: Props) {
+  const isClient = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
   );
-
-  const setLink = useCallback(() => {
-    const editor = editorRef.current;
-    if (!editor) return;
-    if (editor.isActive("link")) {
-      editor.chain().focus().extendMarkRange("link").unsetLink().run();
-      return;
-    }
-    const url = window.prompt("Dán URL liên kết:");
-    if (!url) return;
-    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-  }, []);
-
-  const insertImageUrl = useCallback(() => {
-    setImgMenu(false);
-    const editor = editorRef.current;
-    if (!editor) return;
-    const url = window.prompt("Dán URL ảnh (https://…):");
-    if (!url) return;
-    editor.chain().focus().setImage({ src: url }).run();
-  }, []);
-
-  const onPickFile = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      e.target.value = "";
-      if (file) uploadAndInsert(file);
-    },
-    [uploadAndInsert],
-  );
-
-  if (!editor) {
+  if (!isClient) {
     return (
       <div className="rich-editor rich-editor--loading">
         Đang tải trình soạn thảo…
       </div>
     );
   }
+  return <PlateRichEditor {...props} />;
+}
+
+function PlateRichEditor({ value, onChange }: Props) {
+  const [initialHtml] = useState(() => value?.trim() || "<p></p>");
+  const editor = usePlateEditor({ plugins: PLUGINS, value: initialHtml });
+
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const emit = useCallback(
+    (v: unknown) => {
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(() => onChange(slateToHtml(v)), 300);
+    },
+    [onChange],
+  );
 
   return (
     <div className="rich-editor">
-      <div className="rich-editor__toolbar">
-        <Btn
-          label="B"
-          title="Đậm (Ctrl+B)"
-          active={flags.bold}
-          style={{ fontWeight: 800 }}
-          onClick={() => editor.chain().focus().toggleBold().run()}
+      <Plate editor={editor} onChange={({ value }) => emit(value)}>
+        <Toolbar editor={editor} />
+        <PlateContent
+          className="prose-legacy rich-editor__content"
+          placeholder="Dán nội dung từ Word / Google Docs vào đây — định dạng được giữ nguyên."
         />
-        <Btn
-          label="I"
-          title="Nghiêng (Ctrl+I)"
-          active={flags.italic}
-          style={{ fontStyle: "italic" }}
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-        />
-        <Btn
-          label="U"
-          title="Gạch chân (Ctrl+U)"
-          active={flags.underline}
-          style={{ textDecoration: "underline" }}
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-        />
-        <Btn
-          label="S"
-          title="Gạch ngang"
-          active={flags.strike}
-          style={{ textDecoration: "line-through" }}
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-        />
+      </Plate>
+    </div>
+  );
+}
 
-        <span className="rich-editor__sep" />
+// ── Toolbar ────────────────────────────────────────────────────────
 
-        <Btn
-          label="H2"
-          title="Tiêu đề mục"
-          active={flags.h2}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        />
-        <Btn
-          label="H3"
-          title="Tiêu đề phụ"
-          active={flags.h3}
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        />
-        <Btn
-          label="¶"
-          title="Đoạn văn thường"
-          onClick={() => editor.chain().focus().setParagraph().run()}
-        />
+function Toolbar({ editor }: { editor: PlateEditor }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const [imgMenu, setImgMenu] = useState(false);
 
-        <span className="rich-editor__sep" />
+  const s = useEditorSelector((e) => {
+    const m = (e.api.marks() ?? {}) as Record<string, unknown>;
+    const block = e.api.block()?.[0] as
+      | { type?: string; align?: string }
+      | undefined;
+    return {
+      bold: !!m.bold,
+      italic: !!m.italic,
+      underline: !!m.underline,
+      strikethrough: !!m.strikethrough,
+      subscript: !!m.subscript,
+      superscript: !!m.superscript,
+      highlight: !!m.highlight,
+      color: (m.color as string) || "#000000",
+      backgroundColor: (m.backgroundColor as string) || "#ffff00",
+      fontFamily: (m.fontFamily as string) || "",
+      fontSize: (m.fontSize as string) || "",
+      blockType: block?.type || "p",
+      align: block?.align || "left",
+    };
+  }, []);
 
-        <Btn
-          label="•—"
-          title="Danh sách gạch đầu dòng"
-          active={flags.bullet}
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-        />
-        <Btn
-          label="1."
-          title="Danh sách đánh số"
-          active={flags.ordered}
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        />
-        <Btn
-          label="❝"
-          title="Trích dẫn"
-          active={flags.quote}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        />
-        <Btn
-          label="🔗"
-          title={flags.link ? "Bỏ liên kết" : "Chèn liên kết"}
-          active={flags.link}
-          onClick={setLink}
-        />
+  const focus = () => editor.tf.focus();
+  const mark = (key: string, opts?: { remove?: string }) => {
+    editor.tf.toggleMark(key, opts);
+    focus();
+  };
+  const setMarkValue = (key: string, val: string) => {
+    if (val) editor.tf.addMark(key, val);
+    else editor.tf.removeMark(key);
+    focus();
+  };
+  const block = (type: string) => {
+    editor.tf.toggleBlock(type);
+    focus();
+  };
 
-        <span className="rich-editor__sep" />
+  const uploadAndInsert = useCallback(
+    async (file: File) => {
+      setUploading(true);
+      try {
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await uploadPostImage(fd);
+        if (!res.ok) {
+          alert(res.error);
+          return;
+        }
+        insertImage(editor, res.url);
+      } finally {
+        setUploading(false);
+      }
+    },
+    [editor],
+  );
 
-        <Btn
-          label="AA"
-          title="IN HOA đoạn đang bôi đen"
-          onClick={() => changeCase("upper")}
-        />
-        <Btn
-          label="aa"
-          title="in thường đoạn đang bôi đen"
-          onClick={() => changeCase("lower")}
-        />
+  const changeCase = (mode: "upper" | "lower") => {
+    const sel = editor.selection;
+    if (!sel || RangeApi.isCollapsed(sel)) return;
+    const entries = [
+      ...editor.api.nodes<{ text: string }>({
+        at: sel,
+        match: (n) => editor.api.isText(n),
+      }),
+    ];
+    editor.tf.withoutNormalizing(() => {
+      for (const [, path] of entries) {
+        const nodeRange = editor.api.range(path);
+        if (!nodeRange) continue;
+        const range = RangeApi.intersection(sel, nodeRange);
+        if (!range) continue;
+        const text = editor.api.string(range);
+        const next =
+          mode === "upper"
+            ? text.toLocaleUpperCase("vi")
+            : text.toLocaleLowerCase("vi");
+        if (next !== text) editor.tf.insertText(next, { at: range });
+      }
+    });
+    focus();
+  };
 
-        <span className="rich-editor__sep" />
+  const link = () => {
+    if (editor.api.some({ match: { type: "a" } })) {
+      unwrapLink(editor);
+      focus();
+      return;
+    }
+    const url = window.prompt("Dán URL liên kết:");
+    if (!url) return;
+    insertLink(editor, { url });
+    focus();
+  };
 
-        <div className="rich-editor__menu">
-          <Btn
-            label="🖼 Ảnh"
-            title="Chèn ảnh"
-            active={imgMenu}
-            disabled={uploading}
-            onClick={() => setImgMenu((v) => !v)}
-          />
-          {imgMenu && (
-            <div className="rich-editor__menu-pop">
-              <button
-                type="button"
-                className="rich-editor__menu-item"
-                onClick={() => {
-                  setImgMenu(false);
-                  fileInputRef.current?.click();
-                }}
-              >
-                Tải ảnh lên…
-              </button>
-              <button
-                type="button"
-                className="rich-editor__menu-item"
-                onClick={insertImageUrl}
-              >
-                Dán URL ảnh ngoài…
-              </button>
-            </div>
-          )}
-        </div>
+  return (
+    <div className="rich-editor__toolbar">
+      <Btn label="B" title="Đậm" active={s.bold} style={{ fontWeight: 800 }} onClick={() => mark("bold")} />
+      <Btn label="I" title="Nghiêng" active={s.italic} style={{ fontStyle: "italic" }} onClick={() => mark("italic")} />
+      <Btn label="U" title="Gạch chân" active={s.underline} style={{ textDecoration: "underline" }} onClick={() => mark("underline")} />
+      <Btn label="S" title="Gạch ngang" active={s.strikethrough} style={{ textDecoration: "line-through" }} onClick={() => mark("strikethrough")} />
+      <Btn label="x²" title="Chỉ số trên" active={s.superscript} onClick={() => mark("superscript", { remove: "subscript" })} />
+      <Btn label="x₂" title="Chỉ số dưới" active={s.subscript} onClick={() => mark("subscript", { remove: "superscript" })} />
 
-        <span className="rich-editor__sep" />
+      <span className="rich-editor__sep" />
 
-        <Btn
-          label="↶"
-          title="Hoàn tác"
-          disabled={!flags.canUndo}
-          onClick={() => editor.chain().focus().undo().run()}
-        />
-        <Btn
-          label="↷"
-          title="Làm lại"
-          disabled={!flags.canRedo}
-          onClick={() => editor.chain().focus().redo().run()}
-        />
+      <Btn label="H2" title="Tiêu đề mục" active={s.blockType === "h2"} onClick={() => block("h2")} />
+      <Btn label="H3" title="Tiêu đề phụ" active={s.blockType === "h3"} onClick={() => block("h3")} />
+      <Btn label="¶" title="Đoạn thường" onClick={() => block("p")} />
+      <Btn label="•—" title="Danh sách chấm" active={s.blockType === "li"} onClick={() => { toggleBulletedList(editor); focus(); }} />
+      <Btn label="1." title="Danh sách số" onClick={() => { toggleNumberedList(editor); focus(); }} />
+      <Btn label="❝" title="Trích dẫn" active={s.blockType === "blockquote"} onClick={() => block("blockquote")} />
+      <Btn label="🔗" title="Liên kết" onClick={link} />
+
+      <span className="rich-editor__sep" />
+
+      <label className="rich-editor__color" title="Màu chữ">
+        <span aria-hidden>A</span>
+        <input type="color" value={s.color} onChange={(e) => setMarkValue("color", e.target.value)} />
+      </label>
+      <Btn label="✕" title="Xoá màu chữ" onClick={() => setMarkValue("color", "")} />
+      <Btn label="🖍" title="Bút dạ (vàng)" active={s.highlight} onClick={() => mark("highlight")} />
+
+      <span className="rich-editor__sep" />
+
+      <Btn label="⯇" title="Canh trái" active={s.align === "left"} onClick={() => { setAlign(editor, "left"); focus(); }} />
+      <Btn label="≡" title="Canh giữa" active={s.align === "center"} onClick={() => { setAlign(editor, "center"); focus(); }} />
+      <Btn label="⯈" title="Canh phải" active={s.align === "right"} onClick={() => { setAlign(editor, "right"); focus(); }} />
+
+      <span className="rich-editor__sep" />
+
+      <select className="rich-editor__select" title="Font chữ" value={s.fontFamily} onChange={(e) => setMarkValue("fontFamily", e.target.value)}>
+        {FONTS.map((f) => (
+          <option key={f.label} value={f.value}>{f.label}</option>
+        ))}
+      </select>
+      <select className="rich-editor__select" title="Cỡ chữ" value={s.fontSize} onChange={(e) => setMarkValue("fontSize", e.target.value)}>
+        {SIZES.map((z) => (
+          <option key={z.label} value={z.value}>{z.label}</option>
+        ))}
+      </select>
+
+      <span className="rich-editor__sep" />
+
+      <Btn label="IN HOA" title="Bôi đen rồi bấm" onClick={() => changeCase("upper")} />
+      <Btn label="thường" title="Bôi đen rồi bấm" onClick={() => changeCase("lower")} />
+
+      <span className="rich-editor__sep" />
+
+      <Btn label="⊞ Bảng" title="Chèn bảng 2×2" onClick={() => { insertTable(editor, { colCount: 2, rowCount: 2 }); focus(); }} />
+      <Btn label="+hàng" title="Thêm hàng" onClick={() => { insertTableRow(editor); focus(); }} />
+      <Btn label="+cột" title="Thêm cột" onClick={() => { insertTableColumn(editor); focus(); }} />
+      <Btn label="−hàng" title="Xoá hàng" onClick={() => { deleteRow(editor); focus(); }} />
+      <Btn label="−cột" title="Xoá cột" onClick={() => { deleteColumn(editor); focus(); }} />
+      <Btn label="⌫bảng" title="Xoá bảng" onClick={() => { deleteTable(editor); focus(); }} />
+
+      <span className="rich-editor__sep" />
+
+      <div className="rich-editor__menu">
+        <Btn label="🖼 Ảnh" title="Chèn ảnh" active={imgMenu} disabled={uploading} onClick={() => setImgMenu((v) => !v)} />
+        {imgMenu && (
+          <div className="rich-editor__menu-pop">
+            <button type="button" className="rich-editor__menu-item" onClick={() => { setImgMenu(false); fileRef.current?.click(); }}>
+              Tải ảnh lên…
+            </button>
+            <button
+              type="button"
+              className="rich-editor__menu-item"
+              onClick={() => {
+                setImgMenu(false);
+                const url = window.prompt("Dán URL ảnh (https://…):");
+                if (url) insertImage(editor, url);
+              }}
+            >
+              Dán URL ảnh ngoài…
+            </button>
+          </div>
+        )}
       </div>
 
-      <EditorContent editor={editor} />
-
-      {uploading && (
-        <p className="rich-editor__status">Đang tải ảnh lên Supabase…</p>
-      )}
+      {uploading && <span className="rich-editor__uploading">Đang tải ảnh…</span>}
 
       <input
-        ref={fileInputRef}
+        ref={fileRef}
         type="file"
         accept={IMG_ACCEPT}
         hidden
-        onChange={onPickFile}
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = "";
+          if (f) uploadAndInsert(f);
+        }}
       />
     </div>
   );
@@ -411,7 +345,7 @@ function Btn({
   title: string;
   active?: boolean;
   disabled?: boolean;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   onClick: () => void;
 }) {
   return (
@@ -423,6 +357,7 @@ function Btn({
       disabled={disabled}
       style={style}
       className="rich-editor__btn"
+      onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
     >
       {label}

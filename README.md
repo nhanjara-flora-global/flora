@@ -72,11 +72,14 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
 3. `/admin` → **Bài viết** → **Viết bài mới**. Viết tiếng Việt; bấm **Đăng bài** →
    hệ thống tự dịch sang 5 ngôn ngữ (Google Translate free) rồi publish.
    **Lưu nháp** để lưu mà chưa hiện ra web. Trang sửa có nút **Dịch lại**.
-4. Ô **Nội dung** là trình soạn thảo trực quan (TipTap): dán thẳng từ Word /
-   Google Docs giữ nguyên định dạng; thanh công cụ có đậm/nghiêng/IN HOA/H2-H3/
-   danh sách/trích dẫn/liên kết. Nút 🖼 chèn ảnh: **tải lên** (lưu vào Supabase
-   Storage) hoặc **dán URL ngoài**; kéo-thả hoặc dán ảnh vào editor cũng tự upload.
+4. Ô **Nội dung** là trình soạn thảo trực quan **Plate.js** (Slate): dán thẳng từ
+   Word / Google Docs giữ nguyên định dạng. Thanh công cụ: đậm/nghiêng/gạch chân/
+   gạch ngang, sub/sup, H2-H3, danh sách, trích dẫn, liên kết, **màu chữ + bút
+   dạ**, **canh lề**, **font + cỡ chữ**, **bảng**, IN HOA. Nút 🖼 chèn ảnh: **tải
+   lên** (lưu vào Supabase Storage) hoặc **dán URL ngoài**.
    Nút **Tải lên** ở ô Ảnh bìa dùng chung kho ảnh đó.
+   Nội dung vẫn lưu dạng HTML (`posts.content`) — Plate serialize khi lưu,
+   deserialize khi mở lại (xem `src/lib/admin/plate-serialize.ts`).
 
 ### Thêm bài hàng loạt (seed, không cần Supabase)
 
