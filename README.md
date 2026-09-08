@@ -65,11 +65,18 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
 
 ### Đăng bài từ admin
 
-1. Chạy `supabase/schema.sql` rồi `supabase/migrations/0001_news_posts.sql` trên Supabase.
+1. Chạy `supabase/schema.sql` → `supabase/migrations/0001_news_posts.sql` →
+   `supabase/migrations/0002_post_images_storage.sql` trên Supabase.
+   (0002 tạo bucket công khai `post-images` để upload ảnh.)
 2. Đặt `DATA_SOURCE=supabase` + các key Supabase trong env (Vercel).
 3. `/admin` → **Bài viết** → **Viết bài mới**. Viết tiếng Việt; bấm **Đăng bài** →
    hệ thống tự dịch sang 5 ngôn ngữ (Google Translate free) rồi publish.
    **Lưu nháp** để lưu mà chưa hiện ra web. Trang sửa có nút **Dịch lại**.
+4. Ô **Nội dung** là trình soạn thảo trực quan (TipTap): dán thẳng từ Word /
+   Google Docs giữ nguyên định dạng; thanh công cụ có đậm/nghiêng/IN HOA/H2-H3/
+   danh sách/trích dẫn/liên kết. Nút 🖼 chèn ảnh: **tải lên** (lưu vào Supabase
+   Storage) hoặc **dán URL ngoài**; kéo-thả hoặc dán ảnh vào editor cũng tự upload.
+   Nút **Tải lên** ở ô Ảnh bìa dùng chung kho ảnh đó.
 
 ### Thêm bài hàng loạt (seed, không cần Supabase)
 
@@ -81,8 +88,8 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
 
 ## Việc tiếp theo
 
-- [ ] Admin CMS (Supabase Studio hoặc admin Next.js)
+- [x] Admin CMS (Supabase Studio hoặc admin Next.js)
 - [ ] VNPay / MoMo webhook
-- [ ] Upload ảnh lên Supabase Storage
+- [x] Upload ảnh lên Supabase Storage
 - [ ] Migrate blog posts từ SQL/Yoast
 - [ ] Redirect 301 URL cũ

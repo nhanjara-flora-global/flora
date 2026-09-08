@@ -1,8 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { savePost, type PostInput } from "@/app/actions/posts";
+import { uploadPostImage } from "@/app/actions/upload";
+import { RichEditor } from "@/components/admin/rich-editor";
 import { NEWS_CATEGORIES } from "@/lib/legacy";
 
 type Props = {
@@ -12,14 +14,24 @@ type Props = {
 const field =
   "w-full rounded-md border border-[var(--line)] bg-white px-3 py-2 text-sm outline-none focus:border-[var(--brand)]";
 
+const EMPTY_HTML = /^\s*(<p>(\s|&nbsp;|<br\s*\/?>)*<\/p>\s*)?$/i;
+
 export function PostForm({ initial }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [content, setContent] = useState(initial?.content ?? "");
+  const [coverUrl, setCoverUrl] = useState(initial?.coverUrl ?? "");
+  const [coverUploading, setCoverUploading] = useState(false);
+  const coverInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!initial?.id;
 
   function submit(status: "draft" | "published", form: HTMLFormElement) {
     setError(null);
+    if (EMPTY_HTML.test(content)) {
+      setError("Thiếu nội dung.");
+      return;
+    }
     const fd = new FormData(form);
     startTransition(async () => {
       const res = await savePost({
@@ -27,8 +39,8 @@ export function PostForm({ initial }: Props) {
         title: String(fd.get("title") || ""),
         category: String(fd.get("category") || ""),
         excerpt: String(fd.get("excerpt") || ""),
-        content: String(fd.get("content") || ""),
-        coverUrl: String(fd.get("coverUrl") || ""),
+        content,
+        coverUrl,
         date: String(fd.get("date") || ""),
         status,
       });
@@ -39,6 +51,25 @@ export function PostForm({ initial }: Props) {
       router.push("/admin/posts");
       router.refresh();
     });
+  }
+
+  async function onPickCover(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setCoverUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await uploadPostImage(fd);
+      if (!res.ok) {
+        alert(res.error);
+        return;
+      }
+      setCoverUrl(res.url);
+    } finally {
+      setCoverUploading(false);
+    }
   }
 
   return (
@@ -81,17 +112,41 @@ export function PostForm({ initial }: Props) {
         </label>
       </div>
 
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium">
-          Ảnh bìa (URL, để trống nếu chưa có)
-        </span>
-        <input
-          name="coverUrl"
-          placeholder="/images/wp/..."
-          defaultValue={initial?.coverUrl ?? ""}
-          className={field}
-        />
-      </label>
+      <div className="block">
+        <span className="mb-1 block text-sm font-medium">Ảnh bìa</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            name="coverUrl"
+            placeholder="/images/wp/… hoặc dán URL"
+            value={coverUrl}
+            onChange={(e) => setCoverUrl(e.target.value)}
+            className={`${field} flex-1`}
+          />
+          <button
+            type="button"
+            disabled={coverUploading}
+            onClick={() => coverInputRef.current?.click()}
+            className="shrink-0 rounded-md border border-[var(--line)] bg-white px-3 py-2 text-sm font-medium hover:border-[var(--brand)] disabled:opacity-60"
+          >
+            {coverUploading ? "Đang tải…" : "Tải lên"}
+          </button>
+          <input
+            ref={coverInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
+            hidden
+            onChange={onPickCover}
+          />
+        </div>
+        {coverUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={coverUrl}
+            alt=""
+            className="mt-2 max-h-40 rounded-md border border-[var(--line)] object-cover"
+          />
+        )}
+      </div>
 
       <label className="block">
         <span className="mb-1 block text-sm font-medium">Tóm tắt</span>
@@ -104,20 +159,14 @@ export function PostForm({ initial }: Props) {
         />
       </label>
 
-      <label className="block">
+      <div className="block">
         <span className="mb-1 block text-sm font-medium">Nội dung</span>
-        <textarea
-          name="content"
-          rows={16}
-          required
-          defaultValue={initial?.content}
-          className={`${field} font-mono`}
-        />
+        <RichEditor value={content} onChange={setContent} />
         <span className="mt-1 block text-xs text-[var(--muted)]">
-          Viết văn bản thường — cách nhau một dòng trống để xuống đoạn. Hoặc dán HTML
-          (bắt đầu bằng &lt;p&gt;, &lt;h2&gt;…).
+          Dán thẳng từ Word / Google Docs — đậm, nghiêng, tiêu đề, danh sách được
+          giữ nguyên. Chèn ảnh bằng nút 🖼 (tải lên hoặc dán URL).
         </span>
-      </label>
+      </div>
 
       {error && (
         <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">

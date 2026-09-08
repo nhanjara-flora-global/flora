@@ -4,7 +4,34 @@ import legacy from "./src/lib/data/wp-content.json";
 const postSlugs = Object.keys((legacy as { posts: Record<string, unknown> }).posts);
 const serviceSlugs = Object.keys((legacy as { services: Record<string, unknown> }).services);
 
+// Cho phép next/image tải ảnh bìa từ Supabase Storage (bucket post-images).
+const supabaseHost = (() => {
+  try {
+    return process.env.NEXT_PUBLIC_SUPABASE_URL
+      ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
+      : null;
+  } catch {
+    return null;
+  }
+})();
+
 const nextConfig: NextConfig = {
+  experimental: {
+    // Ảnh tải lên qua server action đi kèm multipart — mặc định 1MB không đủ.
+    // Giới hạn thật của ảnh là 8MB (kiểm trong uploadPostImage); chừa dư cho phần bao multipart.
+    serverActions: { bodySizeLimit: "12mb" },
+  },
+  images: supabaseHost
+    ? {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: supabaseHost,
+            pathname: "/storage/v1/object/public/**",
+          },
+        ],
+      }
+    : undefined,
   async redirects() {
     return [
       { source: "/blog", destination: "/news", permanent: true },
