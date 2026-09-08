@@ -10,6 +10,7 @@ import type { LocalizedArticle } from "@/lib/i18n/localized-content";
 import type { ServiceModel } from "@/lib/services/parse-service";
 import { getServiceStrings } from "@/lib/services/service-i18n";
 import { getServiceTagline } from "@/lib/services/service-tagline";
+import { getVoacImageByStep, getVoacImages } from "@/lib/services/voac-media";
 import {
   getServiceTheme,
   serviceIndex,
@@ -198,6 +199,15 @@ function Body({ model, lang, service }: Props) {
       (sec) => sec.blocks.length > 0 && sec.blocks.every((b) => b.kind === "specs"),
     );
 
+  const captionSlugs = new Set(
+    getVoacImages(service.slug)
+      .map((m) => m.caption?.trim().toLowerCase())
+      .filter(Boolean),
+  );
+  const tagsNotShownAsImages = model.tags.filter(
+    (t) => !captionSlugs.has(t.trim().toLowerCase()),
+  );
+
   return (
     <div className="container-page section-y">
       <div className="mx-auto max-w-3xl">
@@ -226,19 +236,23 @@ function Body({ model, lang, service }: Props) {
         </div>
       ) : model.numbered ? (
         <div className="mx-auto mt-12 max-w-4xl space-y-10">
-          {model.sections.map((sec) => (
-            <div key={sec.id} className="grid gap-3 md:grid-cols-[auto_1fr] md:gap-7">
-              <span className="font-[family-name:var(--font-display)] text-4xl font-semibold leading-none text-[var(--sv-line)] md:text-5xl">
-                {nn(sec.step ?? 0)}
-              </span>
-              <div>
-                <h2 className="display-sm text-[var(--sv-deep)]">{sec.title}</h2>
-                <div className="mt-3">
-                  <ServiceBlocks blocks={sec.blocks} />
+          {model.sections.map((sec) => {
+            const img = getVoacImageByStep(service.slug, sec.step);
+            return (
+              <div key={sec.id} className="grid gap-3 md:grid-cols-[auto_1fr] md:gap-7">
+                <span className="font-[family-name:var(--font-display)] text-4xl font-semibold leading-none text-[var(--sv-line)] md:text-5xl">
+                  {nn(sec.step ?? 0)}
+                </span>
+                <div>
+                  <h2 className="display-sm text-[var(--sv-deep)]">{sec.title}</h2>
+                  {img && <VoacFigure src={img.src} alt={img.caption ?? sec.title} className="mt-4" />}
+                  <div className="mt-3">
+                    <ServiceBlocks blocks={sec.blocks} />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="mx-auto mt-12 max-w-3xl space-y-14">
@@ -253,11 +267,15 @@ function Body({ model, lang, service }: Props) {
         </div>
       )}
 
-      {model.tags.length > 0 && (
+      <VoacCaptionGrid slug={service.slug} />
+
+      {/* Bỏ chip trùng với chú thích ảnh — nếu không, "Gạo · Cà phê · Hạt điều"
+          hiện hai lần liền nhau: một lần dưới ảnh, một lần dưới dạng chip. */}
+      {tagsNotShownAsImages.length > 0 && (
         <div className="mx-auto mt-12 max-w-3xl rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-softer)] p-6">
           <p className="eyebrow text-[var(--sv-ink)]">{s.network}</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {model.tags.map((t) => (
+            {tagsNotShownAsImages.map((t) => (
               <span
                 key={t}
                 className="body-sm rounded-full border border-[var(--sv-line)] bg-[var(--surface)] px-4 py-1.5 text-[var(--ink)]"
@@ -340,6 +358,55 @@ export function ServiceDetail(props: Props) {
       <Body {...props} />
       <CtaPanel lang={props.lang} dict={props.dict} />
       <Explore lang={props.lang} others={props.others} />
+    </div>
+  );
+}
+
+/**
+ * Ảnh của voac.vn trỏ ra ~17 tên miền ngoài. Dùng <img> thay next/image để
+ * khỏi khai remotePatterns cho từng tên miền và không đẩy ảnh bên thứ ba qua
+ * bộ tối ưu ảnh của mình.
+ */
+function VoacFigure({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      className={`aspect-[16/9] w-full rounded-[var(--radius-card)] border border-[var(--sv-line)] object-cover ${className ?? ""}`}
+    />
+  );
+}
+
+/**
+ * Lưới ảnh có chú thích, giữ nguyên cách bố trí của voac.vn. Dùng flex thay
+ * grid để hàng cuối tự căn giữa — số ảnh là 3, 4 hay 5 đều không bị lẻ hàng.
+ */
+function VoacCaptionGrid({ slug }: { slug: string }) {
+  const items = getVoacImages(slug).filter((m) => m.step === null);
+  if (items.length === 0) return null;
+
+  return (
+    <div className="mx-auto mt-14 max-w-4xl">
+      <div className="flex flex-wrap justify-center gap-6">
+        {items.map((m) => (
+          <figure key={m.src} className="w-full max-w-[19rem] flex-1 basis-64">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={m.src}
+              alt={m.caption ?? ""}
+              loading="lazy"
+              className="aspect-square w-full rounded-[var(--radius-card)] border border-[var(--sv-line)] object-cover"
+            />
+            {m.caption && (
+              <figcaption className="mt-3 text-center font-semibold text-[var(--ink)]">
+                {m.caption}
+              </figcaption>
+            )}
+          </figure>
+        ))}
+      </div>
     </div>
   );
 }
