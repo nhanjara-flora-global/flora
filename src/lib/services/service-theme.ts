@@ -38,8 +38,6 @@ export type ServiceTheme = {
   accent: string;
   icon: ServiceIcon;
   hero: HeroVariant;
-  /** Short editorial line under the title. Falls back to the parsed tagline/lead. */
-  tagline?: string;
   /** Curated headline numbers shown as a stat strip. Kept manual for accuracy. */
   metrics?: ServiceMetric[];
 };
@@ -50,7 +48,6 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#8a5a2b",
     icon: "sprout",
     hero: "editorial",
-    tagline: "Japanese bio-technological precision, delivered to Vietnamese soil.",
     metrics: [
       { value: "100%", label: "Pathogen-free inputs" },
       { value: "3-tier", label: "Testing protocol" },
@@ -62,7 +59,6 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#2f4b7c",
     icon: "route",
     hero: "editorial",
-    tagline: "We don't just find products — we architect supply chains.",
     metrics: [
       { value: "25 ha", label: "Own farm foundation" },
       { value: "ISO · HACCP · BRC", label: "Partner factories" },
@@ -74,7 +70,6 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#0f6b6b",
     icon: "truck",
     hero: "spotlight",
-    tagline: "An unbroken cold chain from the vine to the world's most demanding tables.",
     metrics: [
       { value: "7-stage", label: "Export protocol" },
       { value: "17–19%", label: "Brix verified per batch" },
@@ -86,7 +81,6 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#b07d1a",
     icon: "leaf",
     hero: "spotlight",
-    tagline: "The gold standard of yellow passion fruit — Honey No. 9.",
     metrics: [
       { value: "17–19%", label: "Brix profile" },
       { value: "25 ha", label: "Across 4 agro-climatic zones" },
@@ -98,7 +92,6 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#3a6b35",
     icon: "badge",
     hero: "editorial",
-    tagline: "Your passport to the global market — from the first soil test to the final audit.",
     metrics: [
       { value: "4-stage", label: "Field engagement roadmap" },
       { value: "USDA · EU · JAS", label: "Global standards" },
@@ -128,7 +121,6 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#1f6f5c",
     icon: "shield",
     hero: "editorial",
-    tagline: "Cánh cổng dẫn đến niềm tin và tính xác thực toàn cầu.",
     metrics: [{ value: "USDA · EU · JAS", label: "Tiêu chuẩn quốc tế" }],
   },
   "voac-dich-vu-tim-nguon-san-pham": {
@@ -143,21 +135,18 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#256b4a",
     icon: "seal",
     hero: "editorial",
-    tagline: "Xây dựng trên các tiêu chuẩn toàn cầu, sự tin cậy và tính bền vững.",
   },
   "voac-chung-nhan-voac-khong-hoa-chat-chem-free": {
     group: "voac-portfolio",
     accent: "#5b8c2a",
     icon: "droplet",
     hero: "editorial",
-    tagline: "Bước khởi đầu vững chắc tiến tới canh tác hữu cơ quốc tế.",
   },
   "voac-mo-hinh-nong-trai-khong-hoa-chat-voac": {
     group: "voac-portfolio",
     accent: "#a2542f",
     icon: "pin",
     hero: "editorial",
-    tagline: "Canh tác tự nhiên, không hóa chất, đạt chuẩn hữu cơ VOAC.",
     metrics: [
       { value: "5", label: "Loại cây trồng" },
       { value: "5 tỉnh", label: "Bảo Lộc · Bình Thuận · Long An · Đồng Nai · Bình Phước" },
@@ -168,14 +157,12 @@ const THEME: Record<string, ServiceTheme> = {
     accent: "#4a7c59",
     icon: "handshake",
     hero: "editorial",
-    tagline: "Mạng lưới xuất sắc trong nông nghiệp hữu cơ Việt Nam.",
   },
   "voac-nguyen-lieu-nong-nghiep-huu-co-voac": {
     group: "voac-portfolio",
     accent: "#6b4f2a",
     icon: "flask",
     hero: "editorial",
-    tagline: "Nguyên liệu hữu cơ chất lượng cao cho canh tác bền vững và phục hồi đất.",
   },
 };
 

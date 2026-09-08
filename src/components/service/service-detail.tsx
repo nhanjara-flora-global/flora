@@ -9,6 +9,7 @@ import { withLocale, type Locale } from "@/lib/i18n/config";
 import type { LocalizedArticle } from "@/lib/i18n/localized-content";
 import type { ServiceModel } from "@/lib/services/parse-service";
 import { getServiceStrings } from "@/lib/services/service-i18n";
+import { getServiceTagline } from "@/lib/services/service-tagline";
 import {
   getServiceTheme,
   serviceIndex,
@@ -109,7 +110,11 @@ function HeroSpotlight({ service, theme, label, lang, dict }: Props) {
             </span>
           </div>
           <h1 className="display-lg mt-5 text-white">{service.title}</h1>
-          {theme.tagline && <p className="lead mt-4 max-w-2xl text-white/85">{theme.tagline}</p>}
+          {getServiceTagline(lang, service.slug) && (
+            <p className="lead mt-4 max-w-2xl text-white/85">
+              {getServiceTagline(lang, service.slug)}
+            </p>
+          )}
           <Metrics theme={theme} dark />
           <CtaButton lang={lang} dict={dict} dark />
         </div>
@@ -121,7 +126,7 @@ function HeroSpotlight({ service, theme, label, lang, dict }: Props) {
 function HeroEditorial({ service, model, theme, label, lang, dict }: Props) {
   const idx = serviceIndex(service.slug);
   const showImage = theme.group === "flora" && Boolean(service.cover);
-  const tagline = theme.tagline ?? model.tagline ?? service.excerpt;
+  const tagline = getServiceTagline(lang, service.slug) ?? model.tagline ?? service.excerpt;
 
   return (
     <header className="relative overflow-hidden border-b border-[var(--sv-line)] bg-[var(--sv-soft)]">

@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
-import { ServiceCardLarge, ServiceCardTile } from "@/components/service/service-card";
+import {
+  ServiceCardFeature,
+  ServiceCardLarge,
+  ServiceCardTile,
+  ServiceRow,
+} from "@/components/service/service-card";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getManualServices } from "@/lib/i18n/localized-content";
 import { SERVICE_ORDER } from "@/lib/legacy";
 import { getServiceStrings } from "@/lib/services/service-i18n";
+import { getServiceTagline } from "@/lib/services/service-tagline";
 import { getServiceTheme, serviceIndex } from "@/lib/services/service-theme";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
@@ -30,11 +36,24 @@ export default async function ServicesPage({ params }: Props) {
   const s = getServiceStrings(lang);
   const services = getManualServices(lang);
 
-  const flora = services.filter((svc) => getServiceTheme(svc.slug).group === "flora");
-  const voac = services.filter((svc) => getServiceTheme(svc.slug).group === "voac");
-  const portfolio = services.filter(
-    (svc) => getServiceTheme(svc.slug).group === "voac-portfolio",
-  );
+  const byGroup = (group: string) =>
+    services.filter((svc) => getServiceTheme(svc.slug).group === group);
+
+  // Năm dịch vụ Flora trong lưới 2 cột để lại một thẻ mồ côi ở hàng cuối, nên
+  // thẻ đầu chạy full-width dạng feature và bốn thẻ còn lại xếp 2×2.
+  const [floraLead, ...floraRest] = byGroup("flora");
+  const voac = byGroup("voac");
+  const portfolio = byGroup("voac-portfolio");
+
+  const shared = (svc: (typeof services)[number]) => ({
+    slug: svc.slug,
+    title: svc.title,
+    excerpt: getServiceTagline(lang, svc.slug) ?? svc.excerpt,
+    label: serviceLabel(dict, svc.slug),
+    index: serviceIndex(svc.slug),
+    lang,
+    readMore: dict.common.readMore,
+  });
 
   return (
     <>
@@ -46,78 +65,57 @@ export default async function ServicesPage({ params }: Props) {
         crumbs={[{ href: withLocale(lang, "/services"), label: dict.servicesPage.title }]}
       />
 
-      <div className="container-page section-y space-y-16">
+      <div className="container-page section-y space-y-20">
         <p className="mx-auto max-w-3xl text-center text-[1.15rem] leading-relaxed text-[var(--muted)]">
           {s.intro}
         </p>
 
         <section>
-          <header className="mb-8 max-w-3xl">
-            <p className="eyebrow text-[var(--brand)]">01</p>
-            <h2 className="display-md mt-2">{s.divisionFlora}</h2>
-            <p className="body-base mt-3 text-[var(--muted)]">{s.divisionFloraNote}</p>
-          </header>
-          <Reveal className="grid gap-8 md:grid-cols-2">
-            {flora.map((svc) => (
-              <ServiceCardLarge
-                key={svc.slug}
-                slug={svc.slug}
-                title={svc.title}
-                excerpt={getServiceTheme(svc.slug).tagline ?? svc.excerpt}
-                label={serviceLabel(dict, svc.slug)}
-                index={serviceIndex(svc.slug)}
-                lang={lang}
-                cover={svc.cover}
-                readMore={dict.common.readMore}
-              />
-            ))}
-          </Reveal>
+          <SectionHead n="01" title={s.divisionFlora} note={s.divisionFloraNote} />
+          <div className="space-y-8">
+            {floraLead && (
+              <Reveal>
+                <ServiceCardFeature {...shared(floraLead)} cover={floraLead.cover} />
+              </Reveal>
+            )}
+            <Reveal className="grid gap-8 md:grid-cols-2">
+              {floraRest.map((svc) => (
+                <ServiceCardLarge key={svc.slug} {...shared(svc)} cover={svc.cover} />
+              ))}
+            </Reveal>
+          </div>
         </section>
 
         <section>
-          <header className="mb-8 max-w-3xl">
-            <p className="eyebrow text-[var(--brand)]">02</p>
-            <h2 className="display-md mt-2">{s.divisionVoac}</h2>
-            <p className="body-base mt-3 text-[var(--muted)]">{s.divisionVoacNote}</p>
-          </header>
-          <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <SectionHead n="02" title={s.divisionVoac} note={s.divisionVoacNote} />
+          <Reveal className="grid gap-6 sm:grid-cols-2">
             {voac.map((svc) => (
-              <ServiceCardTile
-                key={svc.slug}
-                slug={svc.slug}
-                title={svc.title}
-                excerpt={getServiceTheme(svc.slug).tagline ?? svc.excerpt}
-                label={serviceLabel(dict, svc.slug)}
-                index={serviceIndex(svc.slug)}
-                lang={lang}
-                readMore={dict.common.readMore}
-              />
+              <ServiceCardTile key={svc.slug} {...shared(svc)} />
             ))}
           </Reveal>
         </section>
 
         <section>
-          <header className="mb-8 max-w-3xl">
-            <p className="eyebrow text-[var(--brand)]">03</p>
-            <h2 className="display-md mt-2">{s.divisionPortfolio}</h2>
-            <p className="body-base mt-3 text-[var(--muted)]">{s.divisionPortfolioNote}</p>
-          </header>
-          <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <SectionHead n="03" title={s.divisionPortfolio} note={s.divisionPortfolioNote} />
+          {/* Năm mục — lưới nào cũng lẻ hàng, nên xếp thành danh sách ngang.
+              Cũng phân biệt được đây là tài sản của VOAC, không phải dịch vụ bán. */}
+          <Reveal className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
             {portfolio.map((svc) => (
-              <ServiceCardTile
-                key={svc.slug}
-                slug={svc.slug}
-                title={svc.title}
-                excerpt={getServiceTheme(svc.slug).tagline ?? svc.excerpt}
-                label={serviceLabel(dict, svc.slug)}
-                index={serviceIndex(svc.slug)}
-                lang={lang}
-                readMore={dict.common.readMore}
-              />
+              <ServiceRow key={svc.slug} {...shared(svc)} />
             ))}
           </Reveal>
         </section>
       </div>
     </>
+  );
+}
+
+function SectionHead({ n, title, note }: { n: string; title: string; note: string }) {
+  return (
+    <header className="mb-8 max-w-3xl">
+      <p className="eyebrow text-[var(--brand)]">{n}</p>
+      <h2 className="display-md mt-2">{title}</h2>
+      <p className="body-base mt-3 text-[var(--muted)]">{note}</p>
+    </header>
   );
 }

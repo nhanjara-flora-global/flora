@@ -14,7 +14,10 @@ type Props = {
 
 export function Reveal({ children, className }: Props) {
   return (
-    <div className={className} data-reveal-group="">
+    // RevealScript gắn data-revealed lên chính div này trước khi React hydrate
+    // (nhóm nằm trên màn hình đầu tiên khớp observer ngay). Attribute do script
+    // sở hữu, không phải React — giống cách <html> xử lý data-reveal.
+    <div className={className} data-reveal-group="" suppressHydrationWarning>
       {children}
     </div>
   );
@@ -29,10 +32,9 @@ const SCRIPT = `(function(){
 var d=document,root=d.documentElement,w=window;
 if(!('IntersectionObserver' in w)||!('MutationObserver' in w))return;
 try{if(w.matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){return;}
-var STEP=100,CAP=5,io=null;
+var io=null;
 function arm(g){
 if(g.__rv)return;g.__rv=1;
-var k=g.children;for(var i=0;i<k.length;i++){k[i].style.transitionDelay=Math.min(i,CAP)*STEP+'ms';}
 io.observe(g);}
 function scan(n){
 if(!n||n.nodeType!==1)return;
