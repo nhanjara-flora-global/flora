@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "news:generate": "node scripts/generate-daily-post.mjs",
-    "posts:sync": "node scripts/sync-posts-to-supabase.mjs"
+    "posts:sync": "node scripts/sync-posts-to-supabase.mjs",
+    "import:voac": "node scripts/import-voac.mjs"
   },
   "dependencies": {
     "@platejs/basic-nodes": "53.0.0",
@@ -35,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.0",
+    "node-html-parser": "^7.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

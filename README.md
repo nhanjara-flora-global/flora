@@ -138,6 +138,26 @@ npm run posts:sync          # DRY_RUN=1 npm run posts:sync để xem trước
 Cần chạy `supabase/migrations/0001_news_posts.sql` trước. Lưu ý script lấy file JSON
 làm chuẩn — bài đã sửa trong `/admin` sẽ bị ghi đè nếu trùng slug.
 
+## Import nội dung từ voac.vn
+
+`voac.vn` (WordPress + Elementor) là site chị em cùng chủ. `scripts/import-voac.mjs`
+kéo nội dung **tiếng Việt làm gốc**:
+
+```bash
+npm run import:voac                     # staging: scripts/data/voac-import.json + tải ảnh public/images/voac/
+# sửa include / type / slug trong voac-import.json nếu cần
+node scripts/import-voac.mjs --apply    # 9 dịch vụ -> wp-content.json ; 3 sản phẩm -> Supabase (draft)
+node scripts/import-voac.mjs --translate  # dịch dịch vụ voac -> manual-bundle.json (5 ngôn ngữ)
+```
+
+- **Sản phẩm** (Phân gà, Vi sinh vật/Phân bón, Bio-SoilZ) vào `/admin/products` dạng
+  nháp, slug `voac-*` — cần `SUPABASE_SERVICE_ROLE_KEY` trong `.env.local`.
+- **Dịch vụ** (9 trang) thêm vào 5 dịch vụ hiện có. Gốc **tiếng Việt** →
+  `SERVICE_SOURCE_LOCALE` trong `src/lib/legacy.ts`; các ngôn ngữ khác dịch máy
+  (badge "machine"). Slug + nhãn đã khai trong `legacy.ts` + 6 file `dictionaries/*.json`.
+- `--apply` in ra danh sách slug cần thêm tay vào `SERVICE_ORDER` nếu chạy lại với
+  trang mới.
+
 ## Việc tiếp theo
 
 - [x] Admin CMS (dashboard Next.js tại `/admin`)

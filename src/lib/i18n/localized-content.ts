@@ -3,7 +3,12 @@
  */
 import type { Locale } from "@/lib/i18n/config";
 import type { LegacyArticle } from "@/lib/legacy";
-import { getPage, getService, getServices } from "@/lib/legacy";
+import {
+  getPage,
+  getService,
+  getServices,
+  SERVICE_SOURCE_LOCALE,
+} from "@/lib/legacy";
 import {
   allArticles,
   articleBySlug,
@@ -33,7 +38,7 @@ type ManualBundle = Record<string, Partial<Record<Locale, ManualEntry>>>;
 
 const manual = manualBundle as ManualBundle;
 
-const SOURCE_LOCALE: Locale = "en";
+const DEFAULT_SOURCE_LOCALE: Locale = "en";
 
 export function getManualPage(
   slug: string,
@@ -42,17 +47,21 @@ export function getManualPage(
   const base = slug === "about-us" ? getPage("about-us") : getService(slug);
   if (!base) return null;
 
-  if (locale === "en") {
+  const source = SERVICE_SOURCE_LOCALE[slug] ?? DEFAULT_SOURCE_LOCALE;
+
+  // Ngôn ngữ gốc: nội dung trong wp-content.json là bản thật.
+  if (locale === source) {
     return {
       ...base,
       isTranslated: false,
       isFallback: false,
       method: "original",
-      displayLocale: "en",
-      sourceLocale: SOURCE_LOCALE,
+      displayLocale: source,
+      sourceLocale: source,
     };
   }
 
+  // Bản dịch trong manual-bundle.json. Dịch vụ voac = dịch máy; còn lại = biên tập tay.
   const entry = manual[slug]?.[locale];
   if (entry) {
     return {
@@ -62,19 +71,20 @@ export function getManualPage(
       content: entry.content,
       isTranslated: true,
       isFallback: false,
-      method: "manual",
+      method: SERVICE_SOURCE_LOCALE[slug] ? "machine" : "manual",
       displayLocale: locale,
-      sourceLocale: SOURCE_LOCALE,
+      sourceLocale: source,
     };
   }
 
+  // Chưa có bản dịch → hiện bản gốc.
   return {
     ...base,
     isTranslated: false,
     isFallback: true,
     method: "fallback",
-    displayLocale: "en",
-    sourceLocale: SOURCE_LOCALE,
+    displayLocale: source,
+    sourceLocale: source,
   };
 }
 
