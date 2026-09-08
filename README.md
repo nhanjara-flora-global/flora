@@ -86,9 +86,58 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
 3. `node scripts/translate-news.mjs` — dịch bài mới sang 5 thứ tiếng (idempotent).
 4. Ảnh cover: sửa `"cover"` của bài trong `wp-content.json` thành đường dẫn `/images/...`.
 
+## Tự động đăng bài News mỗi ngày
+
+GitHub Action [`daily-news.yml`](.github/workflows/daily-news.yml) chạy 07:00 (giờ VN) mỗi ngày:
+
+1. `scripts/generate-daily-post.mjs` gọi Claude viết 1 bài tiếng Việt (kiến thức/phân tích,
+   evergreen — không phải tin thời sự, có ràng buộc không bịa số liệu/ngày tháng/nhân vật).
+2. Dịch bài sang `en/zh/ko/hi/si`.
+3. Ghi vào `src/lib/data/wp-content.json` + `src/lib/i18n/content/news-cache.json`
+   + log `scripts/data/auto-post-log.json`.
+4. Commit & push → Vercel tự build lại → bài lên sóng.
+
+**Cần bật:** thêm secret `ANTHROPIC_API_KEY` trong repo Settings → Secrets → Actions.
+Tuỳ chọn: biến `NEWS_MODEL` (mặc định `claude-opus-5`, có thể để `claude-sonnet-5` cho rẻ hơn).
+
+Chạy tay / thử: Actions → *Daily auto news* → Run workflow (tích *dry_run* để không commit),
+hoặc local: `ANTHROPIC_API_KEY=... npm run news:generate` (thêm `DRY_RUN=1` để xem trước).
+
+## Trang quản trị `/admin`
+
+Đăng nhập bằng `ADMIN_USERNAME` + `ADMIN_PASSWORD` (dev để trống thì mặc định
+`admin`/`admin`; **production bắt buộc đặt `ADMIN_PASSWORD`**, thiếu là khoá đăng
+nhập chứ không rơi về mặc định). Phiên là cookie ký HMAC bằng `ADMIN_SECRET`, tự
+hết hạn sau 7 ngày — đổi `ADMIN_SECRET` là đăng xuất toàn bộ phiên đang mở.
+
+| Path | Nội dung |
+|------|----------|
+| `/admin` | KPI doanh thu 30 ngày, đơn theo trạng thái, đơn & liên hệ mới nhất |
+| `/admin/posts` | CMS bài viết: viết, sửa, đăng/ẩn, xoá, dịch lại 5 ngôn ngữ |
+| `/admin/orders` | Lọc theo trạng thái, tìm theo mã/tên/email/SĐT, phân trang 20 dòng |
+| `/admin/orders/[id]` | Dòng hàng, thông tin khách, địa chỉ, ghi chú + cập nhật trạng thái đơn/thanh toán |
+| `/admin/products` | Toàn bộ sản phẩm gồm cả `draft`/`archived` (storefront chỉ thấy `published`) |
+| `/admin/contacts` | Submission form liên hệ, tìm kiếm + phân trang |
+
+Đơn hàng, liên hệ và CMS bài viết chỉ có dữ liệu khi `DATA_SOURCE=supabase`; ở chế
+độ `local` mỗi trang hiện banner nhắc bật Supabase.
+
+## Đồng bộ bài viết seed lên Supabase
+
+`src/lib/data/wp-content.json` + `news-cache.json` là nguồn bài seed. Để đẩy chúng
+vào bảng `posts` (kèm `category`, `source_locale`, `translations` — đúng shape
+`src/lib/news.ts` đọc), upsert theo `slug`:
+
+```bash
+npm run posts:sync          # DRY_RUN=1 npm run posts:sync để xem trước
+```
+
+Cần chạy `supabase/migrations/0001_news_posts.sql` trước. Lưu ý script lấy file JSON
+làm chuẩn — bài đã sửa trong `/admin` sẽ bị ghi đè nếu trùng slug.
+
 ## Việc tiếp theo
 
-- [x] Admin CMS (Supabase Studio hoặc admin Next.js)
+- [x] Admin CMS (dashboard Next.js tại `/admin`)
 - [ ] VNPay / MoMo webhook
 - [x] Upload ảnh lên Supabase Storage
 - [ ] Migrate blog posts từ SQL/Yoast
