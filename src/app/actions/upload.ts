@@ -1,7 +1,7 @@
 "use server";
 
 import { isAdminAuthed } from "@/app/actions/admin";
-import { createServiceClient } from "@/lib/supabase/service";
+import { getServiceClientResult } from "@/lib/admin/data";
 
 const BUCKET = "post-images";
 const MAX_BYTES = 8 * 1024 * 1024; // 8MB — khớp serverActions.bodySizeLimit
@@ -24,20 +24,11 @@ export type UploadResult =
   | { ok: true; url: string }
   | { ok: false; error: string };
 
-function assertSupabase() {
-  if ((process.env.DATA_SOURCE ?? "local") !== "supabase") {
-    throw new Error(
-      "Cần DATA_SOURCE=supabase để tải ảnh lên. Xem README.",
-    );
-  }
-}
-
 /** Tải một ảnh lên Supabase Storage (bucket công khai `post-images`). */
 export async function uploadPostImage(
   formData: FormData,
 ): Promise<UploadResult> {
   if (!(await isAdminAuthed())) return { ok: false, error: "Chưa đăng nhập." };
-  assertSupabase();
 
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
@@ -50,9 +41,19 @@ export async function uploadPostImage(
     return { ok: false, error: "Ảnh vượt quá 8MB — nén lại rồi thử lại." };
   }
 
+  const service = await getServiceClientResult();
+  if (service.reason === "local") {
+    return {
+      ok: false,
+      error: "Cần DATA_SOURCE=supabase để tải ảnh lên. Xem README.",
+    };
+  }
+  if (service.reason === "config") {
+    return { ok: false, error: `Supabase chưa cấu hình: ${service.message}` };
+  }
+
   const path = `${new Date().getFullYear()}/${crypto.randomUUID()}.${EXT[file.type]}`;
-  const supabase = createServiceClient();
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+  const { error } = await service.client.storage.from(BUCKET).upload(path, file, {
     contentType: file.type,
     cacheControl: "31536000",
     upsert: false,
@@ -64,6 +65,6 @@ export async function uploadPostImage(
     return { ok: false, error: error.message + hint };
   }
 
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  const { data } = service.client.storage.from(BUCKET).getPublicUrl(path);
   return { ok: true, url: data.publicUrl };
 }
