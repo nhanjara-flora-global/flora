@@ -8,6 +8,8 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localizeCategories, localizeProducts } from "@/lib/i18n/localized-catalog";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 
+export const revalidate = 300;
+
 type Props = {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ category?: string }>;

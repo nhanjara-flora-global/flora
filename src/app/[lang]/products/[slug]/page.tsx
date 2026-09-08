@@ -10,6 +10,8 @@ import { localizeProduct } from "@/lib/i18n/localized-catalog";
 import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
 import { formatPrice } from "@/lib/format";
 
+export const revalidate = 300;
+
 type Props = { params: Promise<{ lang: string; slug: string }> };
 
 export async function generateStaticParams() {
@@ -69,7 +71,11 @@ export default async function ProductDetailPage({ params }: Props) {
             ? dict.common.inStock
             : dict.common.outOfStock}
         </p>
-        <p className="body-base mt-6 text-[var(--ink)]/85">{product.description}</p>
+        {(product.description || product.short_description) && (
+          <p className="body-base mt-6 whitespace-pre-line text-[var(--ink)]/85">
+            {product.description || product.short_description}
+          </p>
+        )}
         <div className="mt-8">
           <AddToCartButton
             product={product}

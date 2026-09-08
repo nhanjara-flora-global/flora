@@ -6,11 +6,12 @@ insert into public.categories (id, name, slug, description, sort_order) values
   ('11111111-1111-1111-1111-111111111102', 'Nguyên liệu nhập khẩu hữu cơ', 'nguyen-lieu-nhap-khau-huu-co', 'Nguyên liệu hữu cơ nhập khẩu', 2)
 on conflict (slug) do nothing;
 
-insert into public.products (id, name, slug, short_description, price, currency, stock_status, status, seo_title, image_url) values
+insert into public.products (id, name, slug, description, short_description, price, currency, stock_status, status, seo_title, image_url) values
   (
     '22222222-2222-2222-2222-222222222201',
     'Phân gà hữu cơ Nhật Bản',
     'phan-ga-huu-co-nhat-ban',
+    'Phân gà hữu cơ nhập khẩu từ Nhật Bản, đã lên men và xử lý nhiệt để đảm bảo độ an toàn và dinh dưỡng cao cho đất.',
     'Phân gà hữu cơ nhập khẩu từ Nhật Bản, đã lên men và xử lý nhiệt.',
     250000,
     'VND',
@@ -23,6 +24,7 @@ insert into public.products (id, name, slug, short_description, price, currency,
     '22222222-2222-2222-2222-222222222202',
     'Phân bón hữu cơ từ tro phân gà nung',
     'phan-bon-huu-co-tu-tro-phan-ga-nung',
+    'Phân bón hỗn hợp PK hữu cơ từ tro phân gà nung — giải pháp bền vững cho nông nghiệp hữu cơ.',
     'Phân bón hỗn hợp PK hữu cơ từ tro phân gà nung.',
     125000,
     'VND',
@@ -35,6 +37,7 @@ insert into public.products (id, name, slug, short_description, price, currency,
     '22222222-2222-2222-2222-222222222203',
     'Bột Protein từ cá',
     'bot-protein-tu-ca',
+    'Bột protein từ cá — nguyên liệu hữu cơ chất lượng cao cho dinh dưỡng và sản xuất.',
     'Bột protein từ cá — nguyên liệu hữu cơ chất lượng cao.',
     125000,
     'VND',
@@ -47,6 +50,7 @@ insert into public.products (id, name, slug, short_description, price, currency,
     '22222222-2222-2222-2222-222222222204',
     'Bột hạt sen 100% nguyên chất',
     'bot-hat-sen-100-nguyen-chat',
+    'Bột hạt sen 100% nguyên chất. Liên hệ để được tư vấn và báo giá.',
     'Bột hạt sen nguyên chất — liên hệ để báo giá.',
     null,
     'VND',
@@ -57,6 +61,8 @@ insert into public.products (id, name, slug, short_description, price, currency,
   )
 on conflict (slug) do update set
   name = excluded.name,
+  description = excluded.description,
+  short_description = excluded.short_description,
   price = excluded.price,
   status = excluded.status,
   image_url = excluded.image_url;

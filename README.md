@@ -65,9 +65,9 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
 
 ### Đăng bài từ admin
 
-1. Chạy `supabase/schema.sql` → `supabase/migrations/0001_news_posts.sql` →
-   `supabase/migrations/0002_post_images_storage.sql` trên Supabase.
-   (0002 tạo bucket công khai `post-images` để upload ảnh.)
+1. Chạy `supabase/schema.sql` → `0001_news_posts.sql` → `0002_post_images_storage.sql`
+   → `0003_seed_product_descriptions.sql` (trong `supabase/migrations/`) trên Supabase.
+   (0002 tạo bucket công khai `post-images`; 0003 backfill mô tả 4 sản phẩm seed.)
 2. Đặt `DATA_SOURCE=supabase` + các key Supabase trong env (Vercel).
 3. `/admin` → **Bài viết** → **Viết bài mới**. Viết tiếng Việt; bấm **Đăng bài** →
    hệ thống tự dịch sang 5 ngôn ngữ (Google Translate free) rồi publish.
