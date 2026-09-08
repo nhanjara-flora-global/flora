@@ -30,6 +30,55 @@ function toInitialHtml(value: string): string {
 
 const IMG_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,image/avif";
 
+// Khai báo extension một lần ở cấp module — mảng phải ổn định qua các lần render,
+// nếu tạo mới mỗi render thì useEditor liên tục gọi setOptions.
+const EXTENSIONS = [
+  StarterKit.configure({
+    heading: { levels: [2, 3] },
+    codeBlock: false,
+    link: {
+      openOnClick: false,
+      defaultProtocol: "https",
+      HTMLAttributes: { rel: "noopener nofollow", target: "_blank" },
+    },
+  }),
+  Image.configure({ HTMLAttributes: { loading: "lazy" } }),
+  Placeholder.configure({
+    placeholder:
+      "Dán nội dung từ Word / Google Docs vào đây — định dạng được giữ nguyên. Hoặc gõ trực tiếp rồi bôi đen để định dạng.",
+  }),
+];
+
+type Flags = {
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  strike: boolean;
+  h2: boolean;
+  h3: boolean;
+  bullet: boolean;
+  ordered: boolean;
+  quote: boolean;
+  link: boolean;
+  canUndo: boolean;
+  canRedo: boolean;
+};
+
+const NO_FLAGS: Flags = {
+  bold: false,
+  italic: false,
+  underline: false,
+  strike: false,
+  h2: false,
+  h3: false,
+  bullet: false,
+  ordered: false,
+  quote: false,
+  link: false,
+  canUndo: false,
+  canRedo: false,
+};
+
 export function RichEditor({ value, onChange }: Props) {
   const editorRef = useRef<Editor | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,47 +108,34 @@ export function RichEditor({ value, onChange }: Props) {
     }
   }, []);
 
+  // editorProps phải ổn định qua các lần render (xem chú thích EXTENSIONS).
+  const [editorProps] = useState(() => ({
+    attributes: { class: "prose-legacy rich-editor__content" },
+    handlePaste: (_view: unknown, event: ClipboardEvent) => {
+      const imgs = [...(event.clipboardData?.files ?? [])].filter((f) =>
+        f.type.startsWith("image/"),
+      );
+      if (imgs.length === 0) return false;
+      event.preventDefault();
+      imgs.forEach(uploadAndInsert);
+      return true;
+    },
+    handleDrop: (_view: unknown, event: DragEvent) => {
+      const imgs = [...(event.dataTransfer?.files ?? [])].filter((f) =>
+        f.type.startsWith("image/"),
+      );
+      if (imgs.length === 0) return false;
+      event.preventDefault();
+      imgs.forEach(uploadAndInsert);
+      return true;
+    },
+  }));
+
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [2, 3] },
-        codeBlock: false,
-        link: {
-          openOnClick: false,
-          defaultProtocol: "https",
-          HTMLAttributes: { rel: "noopener nofollow", target: "_blank" },
-        },
-      }),
-      Image.configure({ HTMLAttributes: { loading: "lazy" } }),
-      Placeholder.configure({
-        placeholder:
-          "Dán nội dung từ Word / Google Docs vào đây — định dạng được giữ nguyên. Hoặc gõ trực tiếp rồi bôi đen để định dạng.",
-      }),
-    ],
+    extensions: EXTENSIONS,
     content: initialHtml,
-    editorProps: {
-      attributes: { class: "prose-legacy rich-editor__content" },
-      handlePaste: (_view, event) => {
-        const imgs = [...(event.clipboardData?.files ?? [])].filter((f) =>
-          f.type.startsWith("image/"),
-        );
-        if (imgs.length === 0) return false;
-        event.preventDefault();
-        imgs.forEach(uploadAndInsert);
-        return true;
-      },
-      handleDrop: (_view, event) => {
-        const dt = (event as DragEvent).dataTransfer;
-        const imgs = [...(dt?.files ?? [])].filter((f) =>
-          f.type.startsWith("image/"),
-        );
-        if (imgs.length === 0) return false;
-        event.preventDefault();
-        imgs.forEach(uploadAndInsert);
-        return true;
-      },
-    },
+    editorProps,
     onUpdate: ({ editor }) => onChange(editor.getHTML()),
   });
 
@@ -107,29 +143,33 @@ export function RichEditor({ value, onChange }: Props) {
     editorRef.current = editor;
   }, [editor]);
 
-  const s = useEditorState({
-    editor,
-    selector: ({ editor }) =>
-      editor
-        ? {
-            bold: editor.isActive("bold"),
-            italic: editor.isActive("italic"),
-            underline: editor.isActive("underline"),
-            strike: editor.isActive("strike"),
-            h2: editor.isActive("heading", { level: 2 }),
-            h3: editor.isActive("heading", { level: 3 }),
-            bullet: editor.isActive("bulletList"),
-            ordered: editor.isActive("orderedList"),
-            quote: editor.isActive("blockquote"),
-            link: editor.isActive("link"),
-            canUndo: editor.can().undo(),
-            canRedo: editor.can().redo(),
-          }
-        : null,
-  });
+  // Chỉ để ép re-render toolbar khi selection / nội dung đổi. Có thể là null cho
+  // tới transaction đầu tiên — khi đó dùng NO_FLAGS (toolbar mặc định không bật).
+  const flags =
+    useEditorState({
+      editor,
+      selector: ({ editor }): Flags =>
+        editor
+          ? {
+              bold: editor.isActive("bold"),
+              italic: editor.isActive("italic"),
+              underline: editor.isActive("underline"),
+              strike: editor.isActive("strike"),
+              h2: editor.isActive("heading", { level: 2 }),
+              h3: editor.isActive("heading", { level: 3 }),
+              bullet: editor.isActive("bulletList"),
+              ordered: editor.isActive("orderedList"),
+              quote: editor.isActive("blockquote"),
+              link: editor.isActive("link"),
+              canUndo: editor.can().undo(),
+              canRedo: editor.can().redo(),
+            }
+          : NO_FLAGS,
+    }) ?? NO_FLAGS;
 
   const changeCase = useCallback(
     (mode: "upper" | "lower") => {
+      const editor = editorRef.current;
       if (!editor) return;
       editor
         .chain()
@@ -160,10 +200,11 @@ export function RichEditor({ value, onChange }: Props) {
         })
         .run();
     },
-    [editor],
+    [],
   );
 
   const setLink = useCallback(() => {
+    const editor = editorRef.current;
     if (!editor) return;
     if (editor.isActive("link")) {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
@@ -172,15 +213,16 @@ export function RichEditor({ value, onChange }: Props) {
     const url = window.prompt("Dán URL liên kết:");
     if (!url) return;
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-  }, [editor]);
+  }, []);
 
   const insertImageUrl = useCallback(() => {
     setImgMenu(false);
+    const editor = editorRef.current;
     if (!editor) return;
     const url = window.prompt("Dán URL ảnh (https://…):");
     if (!url) return;
     editor.chain().focus().setImage({ src: url }).run();
-  }, [editor]);
+  }, []);
 
   const onPickFile = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,9 +233,11 @@ export function RichEditor({ value, onChange }: Props) {
     [uploadAndInsert],
   );
 
-  if (!editor || !s) {
+  if (!editor) {
     return (
-      <div className="rich-editor rich-editor--loading">Đang tải trình soạn thảo…</div>
+      <div className="rich-editor rich-editor--loading">
+        Đang tải trình soạn thảo…
+      </div>
     );
   }
 
@@ -203,28 +247,28 @@ export function RichEditor({ value, onChange }: Props) {
         <Btn
           label="B"
           title="Đậm (Ctrl+B)"
-          active={s.bold}
+          active={flags.bold}
           style={{ fontWeight: 800 }}
           onClick={() => editor.chain().focus().toggleBold().run()}
         />
         <Btn
           label="I"
           title="Nghiêng (Ctrl+I)"
-          active={s.italic}
+          active={flags.italic}
           style={{ fontStyle: "italic" }}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         />
         <Btn
           label="U"
           title="Gạch chân (Ctrl+U)"
-          active={s.underline}
+          active={flags.underline}
           style={{ textDecoration: "underline" }}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
         />
         <Btn
           label="S"
           title="Gạch ngang"
-          active={s.strike}
+          active={flags.strike}
           style={{ textDecoration: "line-through" }}
           onClick={() => editor.chain().focus().toggleStrike().run()}
         />
@@ -234,18 +278,14 @@ export function RichEditor({ value, onChange }: Props) {
         <Btn
           label="H2"
           title="Tiêu đề mục"
-          active={s.h2}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
+          active={flags.h2}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         />
         <Btn
           label="H3"
           title="Tiêu đề phụ"
-          active={s.h3}
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
+          active={flags.h3}
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         />
         <Btn
           label="¶"
@@ -258,25 +298,25 @@ export function RichEditor({ value, onChange }: Props) {
         <Btn
           label="•—"
           title="Danh sách gạch đầu dòng"
-          active={s.bullet}
+          active={flags.bullet}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         />
         <Btn
           label="1."
           title="Danh sách đánh số"
-          active={s.ordered}
+          active={flags.ordered}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         />
         <Btn
           label="❝"
           title="Trích dẫn"
-          active={s.quote}
+          active={flags.quote}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
         />
         <Btn
           label="🔗"
-          title={s.link ? "Bỏ liên kết" : "Chèn liên kết"}
-          active={s.link}
+          title={flags.link ? "Bỏ liên kết" : "Chèn liên kết"}
+          active={flags.link}
           onClick={setLink}
         />
 
@@ -331,13 +371,13 @@ export function RichEditor({ value, onChange }: Props) {
         <Btn
           label="↶"
           title="Hoàn tác"
-          disabled={!s.canUndo}
+          disabled={!flags.canUndo}
           onClick={() => editor.chain().focus().undo().run()}
         />
         <Btn
           label="↷"
           title="Làm lại"
-          disabled={!s.canRedo}
+          disabled={!flags.canRedo}
           onClick={() => editor.chain().focus().redo().run()}
         />
       </div>
