@@ -9,10 +9,13 @@ import { withLocale } from "@/lib/i18n/config";
 import { CartBadge } from "./cart-badge";
 import { LanguageSwitcher } from "./language-switcher";
 
+/** `heading: true` biến mục thành nhãn nhóm — hiển thị, không bấm được. */
+type NavChild = { href: string; label: string; heading?: boolean };
+
 type NavItem = {
   href: string;
   label: string;
-  children?: { href: string; label: string }[];
+  children?: NavChild[];
 };
 
 export function SiteHeader({
@@ -82,16 +85,25 @@ export function SiteHeader({
                   {item.label}
                 </Link>
                 {item.children && (
-                  <div className="invisible absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 border-t-2 border-[var(--brand)] bg-white opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="block border-b border-[var(--line)] px-4 py-3 text-[13px] text-[var(--ink)] last:border-b-0 hover:bg-[var(--bg-soft)] hover:text-[var(--brand)]"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                  <div className="invisible absolute left-1/2 top-full z-50 max-h-[75vh] w-72 -translate-x-1/2 overflow-y-auto border-t-2 border-[var(--brand)] bg-white opacity-0 shadow-xl transition group-hover:visible group-hover:opacity-100">
+                    {item.children.map((child) =>
+                      child.heading ? (
+                        <p
+                          key={child.href}
+                          className="border-b border-[var(--line)] bg-[var(--bg-soft)] px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--muted)]"
+                        >
+                          {child.label}
+                        </p>
+                      ) : (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="block border-b border-[var(--line)] px-4 py-3 text-[13px] text-[var(--ink)] last:border-b-0 hover:bg-[var(--bg-soft)] hover:text-[var(--brand)]"
+                        >
+                          {child.label}
+                        </Link>
+                      ),
+                    )}
                   </div>
                 )}
               </div>
@@ -148,15 +160,24 @@ export function SiteHeader({
               </div>
               {item.children && expanded === item.href && (
                 <div className="bg-[var(--bg-soft)] pb-2">
-                  {item.children.map((child) => (
-                    <Link
-                      key={child.href}
-                      href={child.href}
-                      className="block px-6 py-2.5 text-sm text-[var(--muted)]"
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
+                  {item.children.map((child) =>
+                    child.heading ? (
+                      <p
+                        key={child.href}
+                        className="px-6 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--ink)]"
+                      >
+                        {child.label}
+                      </p>
+                    ) : (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        className="block px-6 py-2.5 text-sm text-[var(--muted)]"
+                      >
+                        {child.label}
+                      </Link>
+                    ),
+                  )}
                 </div>
               )}
             </div>

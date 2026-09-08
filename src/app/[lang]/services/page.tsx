@@ -32,6 +32,9 @@ export default async function ServicesPage({ params }: Props) {
 
   const flora = services.filter((svc) => getServiceTheme(svc.slug).group === "flora");
   const voac = services.filter((svc) => getServiceTheme(svc.slug).group === "voac");
+  const portfolio = services.filter(
+    (svc) => getServiceTheme(svc.slug).group === "voac-portfolio",
+  );
 
   return (
     <>
@@ -79,6 +82,28 @@ export default async function ServicesPage({ params }: Props) {
           </header>
           <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {voac.map((svc) => (
+              <ServiceCardTile
+                key={svc.slug}
+                slug={svc.slug}
+                title={svc.title}
+                excerpt={getServiceTheme(svc.slug).tagline ?? svc.excerpt}
+                label={serviceLabel(dict, svc.slug)}
+                index={serviceIndex(svc.slug)}
+                lang={lang}
+                readMore={dict.common.readMore}
+              />
+            ))}
+          </Reveal>
+        </section>
+
+        <section>
+          <header className="mb-8 max-w-3xl">
+            <p className="eyebrow text-[var(--brand)]">03</p>
+            <h2 className="display-md mt-2">{s.divisionPortfolio}</h2>
+            <p className="body-base mt-3 text-[var(--muted)]">{s.divisionPortfolioNote}</p>
+          </header>
+          <Reveal className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {portfolio.map((svc) => (
               <ServiceCardTile
                 key={svc.slug}
                 slug={svc.slug}

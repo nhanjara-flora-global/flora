@@ -17,20 +17,20 @@
     "cart": "장바구니"
   },
   "services": {
-    "premium-agricultural-inputs-the-japanese-foundation": "농업 투입재",
-    "strategic-sourcing-procurement-your-bridge-to-vietnam": "제품 소싱",
+    "premium-agricultural-inputs-the-japanese-foundation": "일본 기준 투입재",
+    "strategic-sourcing-procurement-your-bridge-to-vietnam": "소싱 및 조달",
     "the-export-logistic-chain-precision-velocity-thermal-integrity": "수출 물류",
     "farming-precision-cultivation-the-honey-no-9-legacy": "정밀 재배",
-    "organic-certification-global-compliance-solutions": "인증 준수",
+    "organic-certification-global-compliance-solutions": "인증 및 규정 준수",
     "voac-dich-vu-cot-loi-cua-voac": "Core Services",
     "voac-dich-vu-ho-tro-cua-voac": "Auxiliary Services",
-    "voac-dich-vu-chung-nhan-huu-co": "Certification Services",
-    "voac-dich-vu-tim-nguon-san-pham": "Product Sourcing",
-    "voac-chung-nhan-huu-co-voac": "Organic Certification",
+    "voac-dich-vu-chung-nhan-huu-co": "인증 컨설팅",
+    "voac-dich-vu-tim-nguon-san-pham": "제품 소싱",
+    "voac-chung-nhan-huu-co-voac": "VOAC 유기농 표준",
     "voac-chung-nhan-voac-khong-hoa-chat-chem-free": "Chem-Free Certification",
     "voac-mo-hinh-nong-trai-khong-hoa-chat-voac": "Model Farms",
     "voac-doi-tac-nong-trai-huu-co-voac": "Farm Partners",
-    "voac-nguyen-lieu-nong-nghiep-huu-co-voac": "Agriculture Inputs"
+    "voac-nguyen-lieu-nong-nghiep-huu-co-voac": "VOAC 유기농 투입재"
   },
   "newsCategories": {
     "canh-tac-huu-co": "유기농 재배",

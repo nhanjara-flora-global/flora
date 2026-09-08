@@ -17,20 +17,20 @@
     "cart": "कार्ट"
   },
   "services": {
-    "premium-agricultural-inputs-the-japanese-foundation": "कृषि इनपुट",
-    "strategic-sourcing-procurement-your-bridge-to-vietnam": "उत्पाद सोर्सिंग",
+    "premium-agricultural-inputs-the-japanese-foundation": "जापानी मानक इनपुट",
+    "strategic-sourcing-procurement-your-bridge-to-vietnam": "सोर्सिंग एवं खरीद",
     "the-export-logistic-chain-precision-velocity-thermal-integrity": "निर्यात लॉजिस्टिक्स",
     "farming-precision-cultivation-the-honey-no-9-legacy": "सटीक खेती",
-    "organic-certification-global-compliance-solutions": "प्रमाणन",
+    "organic-certification-global-compliance-solutions": "प्रमाणन एवं अनुपालन",
     "voac-dich-vu-cot-loi-cua-voac": "Core Services",
     "voac-dich-vu-ho-tro-cua-voac": "Auxiliary Services",
-    "voac-dich-vu-chung-nhan-huu-co": "Certification Services",
-    "voac-dich-vu-tim-nguon-san-pham": "Product Sourcing",
-    "voac-chung-nhan-huu-co-voac": "Organic Certification",
+    "voac-dich-vu-chung-nhan-huu-co": "प्रमाणन परामर्श",
+    "voac-dich-vu-tim-nguon-san-pham": "उत्पाद सोर्सिंग",
+    "voac-chung-nhan-huu-co-voac": "VOAC जैविक मानक",
     "voac-chung-nhan-voac-khong-hoa-chat-chem-free": "Chem-Free Certification",
     "voac-mo-hinh-nong-trai-khong-hoa-chat-voac": "Model Farms",
     "voac-doi-tac-nong-trai-huu-co-voac": "Farm Partners",
-    "voac-nguyen-lieu-nong-nghiep-huu-co-voac": "Agriculture Inputs"
+    "voac-nguyen-lieu-nong-nghiep-huu-co-voac": "VOAC जैविक इनपुट"
   },
   "newsCategories": {
     "canh-tac-huu-co": "जैविक खेती",

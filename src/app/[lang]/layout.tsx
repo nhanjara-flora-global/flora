@@ -6,7 +6,13 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { isLocale, locales, withLocale, type Locale } from "@/lib/i18n/config";
-import { NEWS_CATEGORIES, SERVICE_ORDER } from "@/lib/legacy";
+import { NEWS_CATEGORIES } from "@/lib/legacy";
+import { getServiceStrings } from "@/lib/services/service-i18n";
+import {
+  FLORA_SERVICE_SLUGS,
+  VOAC_CORE_SERVICE_SLUGS,
+  VOAC_PORTFOLIO_SLUGS,
+} from "@/lib/services/service-theme";
 
 type Props = {
   children: React.ReactNode;
@@ -35,6 +41,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!isLocale(raw)) notFound();
   const lang = raw as Locale;
   const dict = getDictionary(lang);
+  const s = getServiceStrings(lang);
 
   const nav = [
     { href: withLocale(lang, "/"), label: dict.nav.home },
@@ -42,10 +49,19 @@ export default async function LocaleLayout({ children, params }: Props) {
     {
       href: withLocale(lang, "/services"),
       label: dict.nav.services,
-      children: SERVICE_ORDER.map((slug) => ({
-        href: withLocale(lang, `/services/${slug}`),
-        label: dict.services[slug],
-      })),
+      // Ba cụm, giữ đúng ranh giới gốc: dịch vụ Flora · dịch vụ VOAC ·
+      // chương trình & bộ chuẩn của VOAC (menu "Danh mục đầu tư" cũ).
+      children: [
+        { group: s.navGroupFlora, slugs: FLORA_SERVICE_SLUGS },
+        { group: s.navGroupVoac, slugs: VOAC_CORE_SERVICE_SLUGS },
+        { group: s.navGroupPortfolio, slugs: VOAC_PORTFOLIO_SLUGS },
+      ].flatMap(({ group, slugs }) => [
+        { href: `#${group}`, label: group, heading: true },
+        ...slugs.map((slug) => ({
+          href: withLocale(lang, `/services/${slug}`),
+          label: dict.services[slug],
+        })),
+      ]),
     },
     {
       href: withLocale(lang, "/news"),

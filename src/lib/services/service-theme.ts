@@ -6,7 +6,7 @@ import { SERVICE_ORDER, VOAC_SERVICE_SLUGS } from "@/lib/legacy";
  * metrics — so each page reads as a bespoke design, not a blog post.
  */
 
-export type ServiceGroup = "flora" | "voac";
+export type ServiceGroup = "flora" | "voac" | "voac-portfolio";
 
 export type HeroVariant =
   /** Full-bleed cover photo with a gradient scrim, title over the image. */
@@ -139,21 +139,21 @@ const THEME: Record<string, ServiceTheme> = {
     metrics: [{ value: "4", label: "Nhóm dịch vụ trọn gói" }],
   },
   "voac-chung-nhan-huu-co-voac": {
-    group: "voac",
+    group: "voac-portfolio",
     accent: "#256b4a",
     icon: "seal",
     hero: "editorial",
     tagline: "Xây dựng trên các tiêu chuẩn toàn cầu, sự tin cậy và tính bền vững.",
   },
   "voac-chung-nhan-voac-khong-hoa-chat-chem-free": {
-    group: "voac",
+    group: "voac-portfolio",
     accent: "#5b8c2a",
     icon: "droplet",
     hero: "editorial",
     tagline: "Bước khởi đầu vững chắc tiến tới canh tác hữu cơ quốc tế.",
   },
   "voac-mo-hinh-nong-trai-khong-hoa-chat-voac": {
-    group: "voac",
+    group: "voac-portfolio",
     accent: "#a2542f",
     icon: "pin",
     hero: "editorial",
@@ -164,14 +164,14 @@ const THEME: Record<string, ServiceTheme> = {
     ],
   },
   "voac-doi-tac-nong-trai-huu-co-voac": {
-    group: "voac",
+    group: "voac-portfolio",
     accent: "#4a7c59",
     icon: "handshake",
     hero: "editorial",
     tagline: "Mạng lưới xuất sắc trong nông nghiệp hữu cơ Việt Nam.",
   },
   "voac-nguyen-lieu-nong-nghiep-huu-co-voac": {
-    group: "voac",
+    group: "voac-portfolio",
     accent: "#6b4f2a",
     icon: "flask",
     hero: "editorial",
@@ -192,6 +192,16 @@ export function getServiceTheme(slug: string): ServiceTheme {
 
 export const FLORA_SERVICE_SLUGS = SERVICE_ORDER.filter(
   (slug) => !VOAC_SERVICE_SLUGS.includes(slug as (typeof VOAC_SERVICE_SLUGS)[number]),
+);
+
+/** Dịch vụ VOAC bán cho khách — menu "Dịch vụ" trên voac.vn. */
+export const VOAC_CORE_SERVICE_SLUGS = SERVICE_ORDER.filter(
+  (slug) => getServiceTheme(slug).group === "voac",
+);
+
+/** Chương trình & bộ chuẩn của chính VOAC — menu "Danh mục đầu tư VOAC". */
+export const VOAC_PORTFOLIO_SLUGS = SERVICE_ORDER.filter(
+  (slug) => getServiceTheme(slug).group === "voac-portfolio",
 );
 
 /** 1-based position of a service within the full catalogue, for display. */
