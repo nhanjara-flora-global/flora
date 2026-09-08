@@ -125,7 +125,7 @@ function HeroSpotlight({ service, theme, label, lang, dict }: Props) {
 
 function HeroEditorial({ service, model, theme, label, lang, dict }: Props) {
   const idx = serviceIndex(service.slug);
-  const showImage = theme.group === "flora" && Boolean(service.cover);
+  const showImage = Boolean(service.cover);
   const tagline = getServiceTagline(lang, service.slug) ?? model.tagline ?? service.excerpt;
 
   return (

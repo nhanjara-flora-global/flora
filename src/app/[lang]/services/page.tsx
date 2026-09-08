@@ -4,7 +4,6 @@ import { PageHero } from "@/components/page-hero";
 import {
   ServiceCardFeature,
   ServiceCardLarge,
-  ServiceCardTile,
   ServiceRow,
 } from "@/components/service/service-card";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
@@ -88,9 +87,9 @@ export default async function ServicesPage({ params }: Props) {
 
         <section>
           <SectionHead n="02" title={s.divisionVoac} note={s.divisionVoacNote} />
-          <Reveal className="grid gap-6 sm:grid-cols-2">
+          <Reveal className="grid gap-8 md:grid-cols-2">
             {voac.map((svc) => (
-              <ServiceCardTile key={svc.slug} {...shared(svc)} />
+              <ServiceCardLarge key={svc.slug} {...shared(svc)} cover={svc.cover} />
             ))}
           </Reveal>
         </section>
