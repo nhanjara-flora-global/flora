@@ -16,6 +16,7 @@ import {
 } from "@/components/admin/ui";
 import { listAdminProducts } from "@/lib/admin/data";
 import { formatPrice } from "@/lib/format";
+import { ProductActions } from "./product-actions";
 
 export const metadata: Metadata = { title: "Sản phẩm" };
 
@@ -31,8 +32,8 @@ const STOCK_LABEL: Record<string, string> = {
   onbackorder: "Đặt trước",
 };
 
-/** Remote images are not in `next.config` yet, so only local paths get optimised. */
 function Thumb({ src, name }: { src: string | null; name: string }) {
+  // Local path → next/image tối ưu; URL Supabase Storage → <img> thường.
   if (src?.startsWith("/")) {
     return (
       <Image
@@ -40,6 +41,16 @@ function Thumb({ src, name }: { src: string | null; name: string }) {
         alt=""
         width={44}
         height={44}
+        className="size-11 shrink-0 rounded-md object-cover"
+      />
+    );
+  }
+  if (src?.startsWith("http")) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt=""
         className="size-11 shrink-0 rounded-md object-cover"
       />
     );
@@ -82,6 +93,14 @@ export default async function AdminProductsPage({
         eyebrow="Danh mục"
         title="Sản phẩm"
         description="Toàn bộ sản phẩm, gồm cả bản nháp chưa hiện trên website."
+        action={
+          <Link
+            href="/admin/products/new"
+            className="rounded-md bg-[var(--brand)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--brand-2)]"
+          >
+            + Thêm sản phẩm
+          </Link>
+        }
       />
 
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -119,7 +138,12 @@ export default async function AdminProductsPage({
                     <div className="flex items-center gap-3">
                       <Thumb src={product.image_url} name={product.name} />
                       <div className="min-w-0">
-                        <span className="block truncate font-medium">{product.name}</span>
+                        <Link
+                          href={`/admin/products/${product.id}`}
+                          className="block truncate font-medium hover:text-[var(--brand)]"
+                        >
+                          {product.name}
+                        </Link>
                         <span className="block truncate text-xs text-[var(--muted)]">
                           /{product.slug}
                         </span>
@@ -141,13 +165,22 @@ export default async function AdminProductsPage({
                     />
                   </Cell>
                   <Cell align="right">
-                    <Link
-                      href={`/vi/products/${product.slug}`}
-                      target="_blank"
-                      className="text-sm text-[var(--muted)] transition hover:text-[var(--brand)]"
-                    >
-                      Xem ↗
-                    </Link>
+                    <div className="flex items-center justify-end gap-3">
+                      <Link
+                        href={`/admin/products/${product.id}`}
+                        className="text-sm text-[var(--muted)] transition hover:text-[var(--brand)]"
+                      >
+                        Sửa
+                      </Link>
+                      <Link
+                        href={`/vi/products/${product.slug}`}
+                        target="_blank"
+                        className="text-sm text-[var(--muted)] transition hover:text-[var(--brand)]"
+                      >
+                        Xem ↗
+                      </Link>
+                      <ProductActions id={product.id} status={product.status} />
+                    </div>
                   </Cell>
                 </Row>
               ))}

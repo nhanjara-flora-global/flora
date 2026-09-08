@@ -116,7 +116,7 @@ hết hạn sau 7 ngày — đổi `ADMIN_SECRET` là đăng xuất toàn bộ p
 | `/admin/posts` | CMS bài viết: viết, sửa, đăng/ẩn, xoá, dịch lại 5 ngôn ngữ |
 | `/admin/orders` | Lọc theo trạng thái, tìm theo mã/tên/email/SĐT, phân trang 20 dòng |
 | `/admin/orders/[id]` | Dòng hàng, thông tin khách, địa chỉ, ghi chú + cập nhật trạng thái đơn/thanh toán |
-| `/admin/products` | Toàn bộ sản phẩm gồm cả `draft`/`archived` (storefront chỉ thấy `published`) |
+| `/admin/products` | Thêm / sửa / đăng-ẩn / xoá sản phẩm, gán chuyên mục; xem cả `draft`/`archived` (storefront chỉ thấy `published`) |
 | `/admin/contacts` | Submission form liên hệ, tìm kiếm + phân trang |
 
 Đơn hàng, liên hệ và CMS bài viết chỉ có dữ liệu khi `DATA_SOURCE=supabase`; ở chế

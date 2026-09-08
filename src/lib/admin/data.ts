@@ -5,7 +5,12 @@
  * a "local mode" notice instead of pretending the shop has no orders.
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { LOCAL_PRODUCTS, type Product } from "@/lib/data/local";
+import {
+  LOCAL_CATEGORIES,
+  LOCAL_PRODUCTS,
+  type Category,
+  type Product,
+} from "@/lib/data/local";
 import { locales } from "@/lib/i18n/config";
 import { allArticles } from "@/lib/news";
 
@@ -256,6 +261,59 @@ export async function listAdminProducts(): Promise<Product[]> {
     return [];
   }
   return (data ?? []) as Product[];
+}
+
+export type AdminProduct = Product & { category_ids: string[] };
+
+/** Một sản phẩm (kể cả nháp) + danh sách id chuyên mục đang gán. */
+export async function getAdminProduct(
+  id: string,
+): Promise<AdminProduct | null> {
+  const supabase = await getServiceClient();
+  if (!supabase) {
+    const local = LOCAL_PRODUCTS.find((p) => p.id === id);
+    if (!local) return null;
+    const category_ids = LOCAL_CATEGORIES.filter((c) =>
+      local.category_slugs?.includes(c.slug),
+    ).map((c) => c.id);
+    return { ...local, category_ids };
+  }
+
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data) {
+    if (error) console.error("[admin] getAdminProduct:", error);
+    return null;
+  }
+
+  const { data: links } = await supabase
+    .from("product_categories")
+    .select("category_id")
+    .eq("product_id", id);
+
+  return {
+    ...(data as Product),
+    category_ids: (links ?? []).map((l) => l.category_id as string),
+  };
+}
+
+/** Chuyên mục sản phẩm cho dropdown/checkbox trong admin. */
+export async function listAdminCategories(): Promise<Category[]> {
+  const supabase = await getServiceClient();
+  if (!supabase) return LOCAL_CATEGORIES;
+
+  const { data, error } = await supabase
+    .from("categories")
+    .select("id, name, slug, description")
+    .order("sort_order");
+  if (error) {
+    console.error("[admin] listAdminCategories:", error);
+    return [];
+  }
+  return (data ?? []) as Category[];
 }
 
 export type DashboardData = {
