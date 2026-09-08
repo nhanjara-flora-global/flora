@@ -107,8 +107,8 @@ export async function saveProduct(input: ProductInput): Promise<ProductResult> {
     }
   }
 
-  revalidateProducts();
-  return { ok: true, id: savedId!, slug: slug ?? "" };
+  revalidateProduct(slug ?? input.slug);
+  return { ok: true, id: savedId!, slug: slug ?? input.slug ?? "" };
 }
 
 export async function setProductStatus(
@@ -122,11 +122,17 @@ export async function setProductStatus(
   const service = await supabaseFor();
   if (!service.ok) return { ok: false, error: service.error };
 
+  const { data: row } = await service.client
+    .from("products")
+    .select("slug")
+    .eq("id", id)
+    .maybeSingle();
+
   const { error } = await service.client
     .from("products")
     .update({ status, updated_at: new Date().toISOString() })
     .eq("id", id);
-  revalidateProducts();
+  revalidateProduct(row?.slug as string | undefined);
   return error ? { ok: false, error: error.message } : { ok: true };
 }
 
@@ -137,16 +143,27 @@ export async function deleteProduct(
   const service = await supabaseFor();
   if (!service.ok) return { ok: false, error: service.error };
 
+  const { data: row } = await service.client
+    .from("products")
+    .select("slug")
+    .eq("id", id)
+    .maybeSingle();
+
   // product_categories có ON DELETE CASCADE trong schema.
   const { error } = await service.client.from("products").delete().eq("id", id);
-  revalidateProducts();
+  revalidateProduct(row?.slug as string | undefined);
   return error ? { ok: false, error: error.message } : { ok: true };
 }
 
-function revalidateProducts() {
+/**
+ * Xoá cache trang bán hàng sau khi đổi sản phẩm. Revalidate cả path chính xác
+ * `/vi/products/<slug>` (bắt được trang render on-demand) lẫn pattern `[slug]`.
+ */
+function revalidateProduct(slug?: string | null) {
   for (const lang of locales) {
     revalidatePath(`/${lang}/products`);
     revalidatePath(`/${lang}/products/[slug]`, "page");
+    if (slug) revalidatePath(`/${lang}/products/${slug}`);
     revalidatePath(`/${lang}`);
   }
 }

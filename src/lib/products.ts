@@ -20,6 +20,8 @@ export type ProductStatus = (typeof PRODUCT_STATUSES)[number];
 
 export type ProductInput = {
   id?: string;
+  /** Chỉ dùng để revalidate đúng trang chi tiết khi sửa (slug không đổi lúc sửa). */
+  slug?: string;
   name: string;
   shortDescription: string;
   description: string;

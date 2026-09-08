@@ -64,6 +64,7 @@ export function ProductForm({ initial, categories }: Props) {
     }
     const input: ProductInput = {
       id: initial?.id,
+      slug: initial?.slug,
       name,
       shortDescription: String(fd.get("shortDescription") || ""),
       description: String(fd.get("description") || ""),
