@@ -55,14 +55,16 @@ export default async function ProductDetailPage({ params }: Props) {
           <div className="absolute inset-0 bg-[linear-gradient(145deg,#dce8d4_0%,#b7c9a5_45%,#6f8f5a_100%)]" />
         )}
       </div>
-      <div>
+      <div className="min-w-0">
         <Link
           href={withLocale(lang, "/products")}
           className="body-sm text-[var(--muted)] hover:text-[var(--brand)]"
         >
           {dict.common.backProducts}
         </Link>
-        <h1 className="display-lg mt-4 text-[var(--ink)]">{product.name}</h1>
+        <h1 className="display-lg mt-4 break-words text-[var(--ink)]">
+          {product.name}
+        </h1>
         <p className="display-md mt-4 text-[var(--brand)]">
           {formatPrice(product.price, product.currency, dict.common.priceOnRequest)}
         </p>
@@ -72,7 +74,7 @@ export default async function ProductDetailPage({ params }: Props) {
             : dict.common.outOfStock}
         </p>
         {(product.description || product.short_description) && (
-          <p className="body-base mt-6 whitespace-pre-line text-[var(--ink)]/85">
+          <p className="body-base mt-6 whitespace-pre-line break-words text-[var(--ink)]/85">
             {product.description || product.short_description}
           </p>
         )}
