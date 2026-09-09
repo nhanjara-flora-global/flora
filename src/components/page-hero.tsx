@@ -21,8 +21,8 @@ export function PageHero({
   return (
     <>
       <div className="border-b border-[var(--line)] bg-[var(--bg-soft)]">
-        <nav className="container-page meta flex flex-wrap items-center justify-between gap-2 py-2.5 text-[var(--muted)]">
-          <span className="flex flex-wrap items-center gap-2">
+        <nav className="container-page meta flex flex-wrap items-center gap-x-2 gap-y-1 py-2.5 text-[var(--muted)] sm:justify-between">
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <Link href={homeHref} className="hover:text-[var(--brand)]">
               Flora Global Corporate
             </Link>
@@ -35,7 +35,9 @@ export function PageHero({
               </span>
             ))}
           </span>
-          <span className="font-semibold text-[var(--ink)]">{last?.label ?? title}</span>
+          <span className="hidden font-semibold text-[var(--ink)] sm:block">
+            {last?.label ?? title}
+          </span>
         </nav>
       </div>
 

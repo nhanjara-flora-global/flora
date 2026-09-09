@@ -13,8 +13,7 @@
     "news": "新闻",
     "products": "产品",
     "contact": "联系",
-    "getInTouch": "联系我们",
-    "cart": "购物车"
+    "getInTouch": "联系我们"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "日本标准投入品",
@@ -105,13 +104,11 @@
     "readyPartner": "准备好融入我们的生态系统了吗？",
     "initiatePartnership": "开启合作",
     "backProducts": "← 返回产品",
-    "inStock": "有货",
-    "outOfStock": "缺货",
     "organic": "有机",
-    "priceOnRequest": "价格面议",
-    "requestQuote": "索取报价",
-    "addToCart": "加入购物车",
-    "addedToCart": "已加入购物车"
+    "wholesaleOnly": "按整柜批发",
+    "wholesaleTitle": "仅按整柜批发",
+    "wholesaleNote": "Flora Global 不做零售。肥料及有机投入品按整柜供应。请联系我们获取规格、起订量与报价。",
+    "wholesaleCta": "联系整柜批发"
   },
   "about": {
     "eyebrow": "“生态系统”引领者",
@@ -128,7 +125,7 @@
   "productsPage": {
     "eyebrow": "目录",
     "title": "产品",
-    "intro": "有机农产品与进口农资 — 越南盾计价，支持在线订购。",
+    "intro": "进口有机肥料与农业投入品 — 按整柜批发供应。请联系我们获取规格与报价。",
     "all": "全部",
     "empty": "该分类暂无产品。"
   },
@@ -162,6 +159,11 @@
       "日本农业投入品（分销/试验）",
       "投资者与利益相关方关系"
     ],
-    "timelines": ["立即", "下一季", "研究阶段"]
+    "timelines": [
+      "立即",
+      "下一季",
+      "研究阶段"
+    ],
+    "aboutProduct": "产品批发咨询"
   }
 }

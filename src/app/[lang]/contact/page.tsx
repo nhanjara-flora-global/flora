@@ -4,10 +4,11 @@ import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
+import { pageSeo } from "@/lib/seo";
 
 type Props = {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ sent?: string; error?: string }>;
+  searchParams: Promise<{ sent?: string; error?: string; product?: string }>;
 };
 
 const EN_INQUIRIES = [
@@ -28,8 +29,15 @@ const inputClass =
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(lang);
-  return { title: dict.contact.title, description: dict.contact.intro1 };
+  const locale = resolveLocale(lang);
+  const dict = getDictionary(locale);
+  return pageSeo({
+    lang: locale,
+    path: "/contact",
+    title: dict.contact.title,
+    description: dict.contact.intro2 || dict.contact.intro1,
+    image: "/images/contact-banner.jpg",
+  });
 }
 
 export default async function ContactPage({ params, searchParams }: Props) {
@@ -37,7 +45,8 @@ export default async function ContactPage({ params, searchParams }: Props) {
   const lang = resolveLocale(raw);
   const dict = getDictionary(lang);
   const c = dict.contact;
-  const { sent, error } = await searchParams;
+  const { sent, error, product } = await searchParams;
+  const productName = product?.trim().slice(0, 200);
 
   return (
     <>
@@ -62,8 +71,17 @@ export default async function ContactPage({ params, searchParams }: Props) {
             </p>
           )}
 
+          {productName && (
+            <p className="mb-6 rounded-[var(--radius-control)] border border-[var(--brand)]/30 bg-[var(--brand)]/5 px-4 py-3 text-sm text-[var(--brand)]">
+              {c.aboutProduct}: <strong>{productName}</strong>
+            </p>
+          )}
+
           <form action={submitContact} className="space-y-4">
             <input type="hidden" name="locale" value={lang} />
+            {productName && (
+              <input type="hidden" name="product" value={productName} />
+            )}
             <input name="name" required placeholder={c.name} className={inputClass} />
             <input
               name="email"

@@ -188,6 +188,16 @@
   }
 }
 
+/* iOS thu phóng khi focus vào ô nhập có font < 16px. Ép cỡ chữ tối thiểu
+   trên màn hình nhỏ để trang không giật khi người dùng chạm vào form. */
+@media (width < 40rem) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 body {
   background: var(--bg);
   color: var(--ink);
@@ -211,6 +221,15 @@ body {
   color: var(--ink);
   font-size: 1.0625rem;
   line-height: 1.8;
+  overflow-wrap: break-word;
+}
+
+/* Bảng và khối mã trong bài viết cũ hay rộng hơn khung điện thoại — cho cuộn
+   ngang trong khung của chính nó thay vì đẩy cả trang tràn lề. */
+.prose-legacy :is(table, pre) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .prose-legacy > * + * {
@@ -544,6 +563,52 @@ body {
   color: var(--sv-ink);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Comparison table inside service prose — scrolls sideways on narrow screens. */
+.svc-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--sv-line);
+  border-radius: var(--radius-card);
+  -webkit-overflow-scrolling: touch;
+}
+
+.svc-table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.svc-table th,
+.svc-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.55;
+  border-bottom: 1px solid var(--sv-line);
+}
+
+.svc-table thead th {
+  background: var(--sv-soft);
+  color: var(--sv-deep);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.svc-table tbody th {
+  color: var(--sv-ink);
+  font-weight: 600;
+  width: 12rem;
+}
+
+.svc-table tbody td {
+  color: var(--muted);
+}
+
+.svc-table tr:last-child th,
+.svc-table tr:last-child td {
+  border-bottom: 0;
 }
 
 /* Oversized decorative index number sitting behind a hero / section. */

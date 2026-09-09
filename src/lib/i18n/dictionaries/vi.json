@@ -13,8 +13,7 @@
     "news": "Tin tức",
     "products": "Sản phẩm",
     "contact": "Liên hệ",
-    "getInTouch": "Liên hệ",
-    "cart": "Giỏ hàng"
+    "getInTouch": "Liên hệ"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "Đầu vào chuẩn Nhật",
@@ -105,13 +104,11 @@
     "readyPartner": "Sẵn sàng đồng hành cùng hệ sinh thái của chúng tôi?",
     "initiatePartnership": "Bắt đầu hợp tác",
     "backProducts": "← Quay lại sản phẩm",
-    "inStock": "Còn hàng",
-    "outOfStock": "Hết hàng",
     "organic": "Hữu cơ",
-    "priceOnRequest": "Liên hệ",
-    "requestQuote": "Liên hệ báo giá",
-    "addToCart": "Thêm vào giỏ",
-    "addedToCart": "Đã thêm vào giỏ"
+    "wholesaleOnly": "Bán sỉ theo container",
+    "wholesaleTitle": "Chỉ bán sỉ theo container",
+    "wholesaleNote": "Flora Global không bán lẻ. Phân bón và nguyên liệu hữu cơ được cung ứng theo container. Liên hệ để nhận tư vấn quy cách, số lượng tối thiểu và báo giá.",
+    "wholesaleCta": "Liên hệ mua sỉ theo container"
   },
   "about": {
     "eyebrow": "Người dẫn dắt “Hệ sinh thái”",
@@ -128,7 +125,7 @@
   "productsPage": {
     "eyebrow": "Danh mục",
     "title": "Sản phẩm",
-    "intro": "Nông sản hữu cơ và nguyên liệu nhập khẩu — giá VND, giao dịch trực tuyến.",
+    "intro": "Phân bón và nguyên liệu hữu cơ nhập khẩu — cung ứng sỉ theo container. Liên hệ để nhận quy cách và báo giá.",
     "all": "Tất cả",
     "empty": "Không có sản phẩm trong danh mục này."
   },
@@ -162,6 +159,11 @@
       "Đầu vào nông nghiệp Nhật Bản (Phân phối/Thử nghiệm)",
       "Quan hệ nhà đầu tư & đối tác"
     ],
-    "timelines": ["Ngay lập tức", "Mùa vụ tới", "Giai đoạn nghiên cứu"]
+    "timelines": [
+      "Ngay lập tức",
+      "Mùa vụ tới",
+      "Giai đoạn nghiên cứu"
+    ],
+    "aboutProduct": "Yêu cầu mua sỉ cho sản phẩm"
   }
 }

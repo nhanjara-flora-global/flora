@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ServiceDetail } from "@/components/service/service-detail";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
-import { locales, resolveLocale } from "@/lib/i18n/config";
+import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getManualPage, getManualServices } from "@/lib/i18n/localized-content";
 import { getServices, SERVICE_ORDER } from "@/lib/legacy";
 import { parseService } from "@/lib/services/parse-service";
 import { getServiceTheme } from "@/lib/services/service-theme";
+import { JsonLd } from "@/components/seo/json-ld";
+import { SITE_NAME, SITE_URL, abs, breadcrumbLd, pageSeo } from "@/lib/seo";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
 
@@ -26,7 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = resolveLocale(lang);
   const service = getManualPage(slug, locale);
   if (!service) return { title: "Not found" };
-  return { title: service.title, description: service.excerpt };
+  return pageSeo({
+    lang: locale,
+    path: `/services/${slug}`,
+    title: service.title,
+    description: service.excerpt,
+    image: service.cover,
+  });
 }
 
 export default async function ServiceDetailPage({ params }: Props) {
@@ -47,15 +55,36 @@ export default async function ServiceDetailPage({ params }: Props) {
     .slice(0, 6)
     .map((svc) => ({ slug: svc.slug, title: svc.title, label: serviceLabel(dict, svc.slug) }));
 
+  const canonical = abs(withLocale(lang, `/services/${slug}`));
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.excerpt,
+    serviceType: label,
+    url: canonical,
+    provider: { "@type": "Organization", name: SITE_NAME, "@id": `${SITE_URL}/#organization` },
+    areaServed: "Worldwide",
+    ...(service.cover ? { image: abs(service.cover) } : {}),
+  };
+  const crumbs = breadcrumbLd([
+    { name: SITE_NAME, path: withLocale(lang, "/") },
+    { name: dict.servicesPage.title, path: withLocale(lang, "/services") },
+    { name: service.title, path: withLocale(lang, `/services/${slug}`) },
+  ]);
+
   return (
-    <ServiceDetail
-      service={service}
-      model={model}
-      theme={theme}
-      label={label}
-      lang={lang}
-      dict={dict}
-      others={others}
-    />
+    <>
+      <JsonLd data={[serviceLd, crumbs]} />
+      <ServiceDetail
+        service={service}
+        model={model}
+        theme={theme}
+        label={label}
+        lang={lang}
+        dict={dict}
+        others={others}
+      />
+    </>
   );
 }

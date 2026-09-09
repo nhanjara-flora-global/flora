@@ -45,11 +45,7 @@ export default async function EditProductPage({ params }: Props) {
           name: product.name,
           shortDescription: product.short_description ?? "",
           description: product.description ?? "",
-          price: product.price,
-          compareAtPrice: product.compare_at_price,
-          currency: product.currency,
           sku: product.sku ?? "",
-          stockStatus: product.stock_status,
           imageUrl: product.image_url ?? "",
           categoryIds: product.category_ids,
         }}

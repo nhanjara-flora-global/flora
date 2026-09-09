@@ -12,6 +12,14 @@ import {
   getLocalizedPosts,
 } from "@/lib/i18n/localized-content";
 import { formatDate, getPosts, NEWS_CATEGORIES } from "@/lib/legacy";
+import { JsonLd } from "@/components/seo/json-ld";
+import {
+  SITE_NAME,
+  SITE_URL,
+  abs,
+  breadcrumbLd,
+  pageSeo,
+} from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -23,9 +31,18 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, slug } = await params;
-  const post = await getLocalizedPost(slug, resolveLocale(lang));
+  const locale = resolveLocale(lang);
+  const post = await getLocalizedPost(slug, locale);
   if (!post) return { title: "Not found" };
-  return { title: post.title, description: post.excerpt };
+  return pageSeo({
+    lang: locale,
+    path: `/news/${slug}`,
+    title: post.title,
+    description: post.excerpt,
+    image: post.cover,
+    type: "article",
+    publishedTime: post.date || undefined,
+  });
 }
 
 export default async function NewsPostPage({ params }: Props) {
@@ -42,8 +59,27 @@ export default async function NewsPostPage({ params }: Props) {
     .filter((p) => p.slug !== slug)
     .slice(0, 3);
 
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: post.title,
+    description: post.excerpt,
+    ...(post.cover ? { image: [abs(post.cover)] } : {}),
+    ...(post.date ? { datePublished: post.date, dateModified: post.date } : {}),
+    inLanguage: lang,
+    mainEntityOfPage: abs(withLocale(lang, `/news/${slug}`)),
+    author: { "@type": "Organization", name: SITE_NAME, "@id": `${SITE_URL}/#organization` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+  const crumbs = breadcrumbLd([
+    { name: SITE_NAME, path: withLocale(lang, "/") },
+    { name: dict.newsPage.title, path: withLocale(lang, "/news") },
+    { name: post.title, path: withLocale(lang, `/news/${slug}`) },
+  ]);
+
   return (
     <>
+      <JsonLd data={[articleLd, crumbs]} />
       <PageHero
         eyebrow={formatDate(post.date)}
         title={post.title}

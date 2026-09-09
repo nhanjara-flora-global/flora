@@ -4,8 +4,18 @@ import { FloatingContact } from "@/components/floating-contact";
 import { RevealScript } from "@/components/reveal";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { isLocale, locales, withLocale, type Locale } from "@/lib/i18n/config";
+import {
+  SITE_NAME,
+  SITE_URL,
+  abs,
+  languageAlternates,
+  ogLocale,
+  organizationLd,
+  websiteLd,
+} from "@/lib/seo";
 import { NEWS_CATEGORIES } from "@/lib/legacy";
 import { getServiceStrings } from "@/lib/services/service-i18n";
 import {
@@ -24,15 +34,51 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { lang } = await params;
+  const { lang: raw } = await params;
+  const lang = isLocale(raw) ? raw : "en";
   const dict = getDictionary(lang);
+  const home = abs(withLocale(lang, "/"));
+  const ogImage = abs("/images/wp/2025_09_banner1-1.jpg");
+
   return {
+    metadataBase: new URL(SITE_URL),
     title: {
       default: dict.meta.title,
       template: `%s | Flora Global`,
     },
     description: dict.meta.description,
-    metadataBase: new URL("https://flora-global.vn"),
+    applicationName: SITE_NAME,
+    formatDetection: { telephone: false },
+    alternates: {
+      canonical: home,
+      languages: languageAlternates("/"),
+    },
+    openGraph: {
+      type: "website",
+      siteName: SITE_NAME,
+      locale: ogLocale(lang),
+      url: home,
+      title: dict.meta.title,
+      description: dict.meta.description,
+      images: [{ url: ogImage }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.title,
+      description: dict.meta.description,
+      images: [ogImage],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
+    },
   };
 }
 
@@ -83,12 +129,12 @@ export default async function LocaleLayout({ children, params }: Props) {
         }}
       />
       <RevealScript />
+      <JsonLd data={[organizationLd(), websiteLd()]} />
       <SiteHeader
         nav={nav}
         locale={lang}
         tagline={dict.topbar.tagline}
         getInTouch={dict.nav.getInTouch}
-        cartLabel={dict.nav.cart}
       />
       <main className="flex-1">{children}</main>
       <SiteFooter locale={lang} dict={dict} />

@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getLocalizedPosts } from "@/lib/i18n/localized-content";
 import { NEWS_CATEGORIES } from "@/lib/legacy";
+import { pageSeo } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -21,11 +22,18 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, category } = await params;
-  const dict = getDictionary(lang);
+  const locale = resolveLocale(lang);
+  const dict = getDictionary(locale);
   const found = NEWS_CATEGORIES.find((c) => c.slug === category);
-  return {
-    title: found ? dict.newsCategories[found.slug] : dict.newsPage.title,
-  };
+  if (!found) return { title: dict.newsPage.title };
+  const label = dict.newsCategories[found.slug];
+  return pageSeo({
+    lang: locale,
+    path: `/news/category/${found.slug}`,
+    title: label,
+    description: `${label} — ${dict.newsPage.title} · ${dict.meta.title}`,
+    image: "/images/wp/2025_09_banner22.jpg",
+  });
 }
 
 export default async function NewsCategoryPage({ params }: Props) {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Reveal } from "@/components/reveal";
@@ -9,6 +10,7 @@ import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { formatDate } from "@/lib/legacy";
 import { getLocalizedPosts } from "@/lib/i18n/localized-content";
 import { localizeProducts } from "@/lib/i18n/localized-catalog";
+import { pageSeo } from "@/lib/seo";
 
 const SLIDES = [
   {
@@ -36,6 +38,20 @@ const PILLAR_IMAGES = [
 ] as const;
 
 type Props = { params: Promise<{ lang: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang: raw } = await params;
+  const lang = resolveLocale(raw);
+  const dict = getDictionary(lang);
+  return pageSeo({
+    lang,
+    path: "/",
+    title: dict.meta.title,
+    titleAbsolute: true,
+    description: dict.meta.description,
+    image: SLIDES[0].src,
+  });
+}
 
 export default async function HomePage({ params }: Props) {
   const { lang: raw } = await params;
@@ -97,8 +113,8 @@ export default async function HomePage({ params }: Props) {
               <br />
               {h.ecosystemSubtitle}
             </h2>
-            <p className="body-base mt-6 text-justify text-[var(--muted)]">{h.ecosystemP1}</p>
-            <p className="body-base mt-4 text-justify text-[var(--muted)]">{h.ecosystemP2}</p>
+            <p className="body-base mt-6 text-left text-[var(--muted)] md:text-justify">{h.ecosystemP1}</p>
+            <p className="body-base mt-4 text-left text-[var(--muted)] md:text-justify">{h.ecosystemP2}</p>
             <Link
               href={withLocale(lang, "/about-us")}
               className="body-sm mt-8 inline-block rounded-[var(--radius-control)] bg-[var(--accent)] px-7 py-3 font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:brightness-110"
@@ -137,7 +153,7 @@ export default async function HomePage({ params }: Props) {
                 product={p}
                 href={withLocale(lang, `/products/${p.slug}`)}
                 organicLabel={dict.common.organic}
-                priceOnRequestLabel={dict.common.priceOnRequest}
+                wholesaleLabel={dict.common.wholesaleOnly}
               />
             ))}
           </Reveal>
@@ -202,7 +218,7 @@ function SectionHead({
   cta: string;
 }) {
   return (
-    <div className="mb-8 flex items-end justify-between gap-4">
+    <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
       <div>
         <p className="eyebrow text-[var(--brand)]">{eyebrow}</p>
         <h2 className="display-lg mt-2">{title}</h2>

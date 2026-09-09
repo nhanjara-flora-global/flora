@@ -25,6 +25,7 @@ export type VoacImage = {
 const MEDIA: Record<string, VoacImage[]> = {
   "voac-dich-vu-cot-loi-cua-voac": [
     { src: "https://voac.vn/wp-content/uploads/2025/10/eco-friendly-farming-methods.png", caption: "Tư vấn Canh tác Hữu cơ & Giải pháp Đặc thù", step: 1 },
+    { src: "/images/voac/voac-cot-loi-strict-certification.jpg", caption: "Chứng nhận Canh tác Hữu cơ Nghiêm ngặt", step: 2 },
     { src: "https://biosoilz.com/assets/img/Net-Zero-Agriculture_18Feb2025.jpg", caption: "Phân bón & Sản phẩm Bảo vệ Thực vật Hữu cơ Bền vững", step: 3 },
     { src: "https://worldwidequalitycontrol.com/wp-content/uploads/agricultural-factory-audit.jpg", caption: "Kiểm tra Sản phẩm Toàn diện & Hướng dẫn Pháp lý", step: 4 },
     { src: "https://i0.wp.com/www.globaltrademag.com/wp-content/uploads/2023/07/shutterstock_1455218390-scaled.jpg?fit=589%2C393&ssl=1", caption: "Nguồn cung Sản phẩm Chiến lược & Tối ưu Chuỗi Cung ứng", step: 5 },
@@ -33,11 +34,12 @@ const MEDIA: Record<string, VoacImage[]> = {
     { src: "https://staprodmtpdxpzan.blob.core.windows.net/dxp/styles/max_1280x1280/azblob/2025-03/3151.jpg?itok=QJlZKyd6", caption: "Hỗ trợ Tài chính Toàn diện", step: 8 },
   ],
   "voac-dich-vu-ho-tro-cua-voac": [
-    { src: "https://img.freepik.com/free-photo/business-people-shaking-hands-together_53876-20488.jpg?semt=ais_hybrid&w=740&q=80", caption: null, step: null },
-    { src: "https://s44783.pcdn.co/in/wp-content/uploads/sites/3/2023/04/what-does-a-business-analyst-do.png", caption: null, step: null },
-    { src: "https://confluencefarmers.com/wp-content/uploads/2024/03/Home-Page-2.jpg", caption: null, step: null },
+    { src: "/images/voac/voac-ho-tro-1.jpg", caption: null, step: null },
+    { src: "/images/voac/voac-ho-tro-2.jpg", caption: null, step: null },
+    { src: "/images/voac/voac-ho-tro-3.jpg", caption: null, step: null },
   ],
   "voac-dich-vu-tim-nguon-san-pham": [
+    { src: "/images/voac/voac-tim-nguon-core-sourcing.jpg", caption: "Dịch vụ Tìm Nguồn Cốt lõi", step: 1 },
     { src: "https://img.freepik.com/fotos-premium/garantia-de-qualidade-de-servicos-empresariais-mao-de-empresario-mostra-o-sinal-do-servico-superior-garantia-de-qualidade-em-fundo-preto-normas-de-garantia-certificacao-iso-e-conceito-de-padronizacao_162459-2353.jpg", caption: "Dịch vụ Đảm bảo Chất lượng", step: 2 },
     { src: "https://vlr.1cdn.vn/2023/06/02/amazon-import-export.jpg", caption: "Dịch vụ Hỗ trợ Logistics & Xuất khẩu", step: 3 },
     { src: "https://www.simplilearn.com/ice9/free_resources_article_thumb/Business_Analyst_Vs_Data_Analyst.jpg", caption: "Dịch vụ Giá trị Gia tăng", step: 4 },

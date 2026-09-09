@@ -27,6 +27,7 @@ export async function submitContact(formData: FormData) {
   const inquiry = field("inquiry");
   const timeline = field("timeline");
   const message = field("message");
+  const product = field("product");
 
   const contactPath = withLocale(locale, "/contact");
 
@@ -38,6 +39,7 @@ export async function submitContact(formData: FormData) {
   }
 
   const body = [
+    product && `Wholesale inquiry — product: ${product.slice(0, 200)}`,
     `Company: ${company}`,
     `Headquarters: ${location}`,
     `Nature of inquiry: ${inquiry}`,

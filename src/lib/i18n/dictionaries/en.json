@@ -13,8 +13,7 @@
     "news": "News",
     "products": "Products",
     "contact": "Contact",
-    "getInTouch": "Get in touch",
-    "cart": "Cart"
+    "getInTouch": "Get in touch"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "Japanese Inputs",
@@ -105,13 +104,11 @@
     "readyPartner": "Ready to integrate with our ecosystem?",
     "initiatePartnership": "Initiate partnership",
     "backProducts": "← Back to products",
-    "inStock": "In stock",
-    "outOfStock": "Out of stock",
     "organic": "Organic",
-    "priceOnRequest": "Contact for price",
-    "requestQuote": "Request a quote",
-    "addToCart": "Add to cart",
-    "addedToCart": "Added to cart"
+    "wholesaleOnly": "Wholesale by the container",
+    "wholesaleTitle": "Wholesale by the container only",
+    "wholesaleNote": "Flora Global does not sell retail. Fertilizers and organic inputs are supplied by the full container. Contact us for specifications, MOQ and pricing.",
+    "wholesaleCta": "Contact us for container wholesale"
   },
   "about": {
     "eyebrow": "The “Ecosystem” Leader",
@@ -128,7 +125,7 @@
   "productsPage": {
     "eyebrow": "Catalog",
     "title": "Products",
-    "intro": "Organic produce and imported agricultural inputs — VND pricing, online ordering.",
+    "intro": "Imported organic fertilizers and agricultural inputs — supplied wholesale by the container. Contact us for specifications and a quote.",
     "all": "All",
     "empty": "No products in this category."
   },
@@ -162,6 +159,11 @@
       "Japanese Agricultural Inputs (Distribution/Trials)",
       "Investor & Stakeholder Relations"
     ],
-    "timelines": ["Immediate", "Next Season", "Research Phase"]
+    "timelines": [
+      "Immediate",
+      "Next Season",
+      "Research Phase"
+    ],
+    "aboutProduct": "Wholesale inquiry for product"
   }
 }

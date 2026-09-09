@@ -5,12 +5,7 @@ import { useRef, useState, useTransition } from "react";
 import { saveProduct } from "@/app/actions/products";
 import { uploadPostImage } from "@/app/actions/upload";
 import type { Category } from "@/lib/data/local";
-import {
-  STOCK_STATUSES,
-  STOCK_STATUS_LABEL,
-  type ProductInput,
-  type StockStatus,
-} from "@/lib/products";
+import { type ProductInput } from "@/lib/products";
 
 type Initial = {
   id?: string;
@@ -18,11 +13,7 @@ type Initial = {
   name?: string;
   shortDescription?: string;
   description?: string;
-  price?: number | null;
-  compareAtPrice?: number | null;
-  currency?: string;
   sku?: string;
-  stockStatus?: StockStatus;
   imageUrl?: string;
   categoryIds?: string[];
 };
@@ -36,13 +27,6 @@ const field =
   "w-full rounded-md border border-[var(--line)] bg-white px-3 py-2 text-sm outline-none focus:border-[var(--brand)]";
 
 const IMG_ACCEPT = "image/jpeg,image/png,image/webp,image/gif,image/avif";
-
-function numOrNull(v: FormDataEntryValue | null): number | null {
-  const s = String(v ?? "").trim();
-  if (!s) return null;
-  const n = Number(s);
-  return Number.isFinite(n) ? n : null;
-}
 
 export function ProductForm({ initial, categories }: Props) {
   const router = useRouter();
@@ -68,11 +52,7 @@ export function ProductForm({ initial, categories }: Props) {
       name,
       shortDescription: String(fd.get("shortDescription") || ""),
       description: String(fd.get("description") || ""),
-      price: numOrNull(fd.get("price")),
-      compareAtPrice: numOrNull(fd.get("compareAtPrice")),
-      currency: String(fd.get("currency") || "VND"),
       sku: String(fd.get("sku") || ""),
-      stockStatus: String(fd.get("stockStatus") || "instock") as StockStatus,
       imageUrl,
       status,
       categoryIds: catIds,
@@ -156,60 +136,11 @@ export function ProductForm({ initial, categories }: Props) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
-          <span className="mb-1 block text-sm font-medium">
-            Giá (để trống = “Liên hệ”)
-          </span>
-          <input
-            type="number"
-            name="price"
-            min={0}
-            step={1000}
-            defaultValue={initial?.price ?? ""}
-            className={field}
-          />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Giá gạch ngang</span>
-          <input
-            type="number"
-            name="compareAtPrice"
-            min={0}
-            step={1000}
-            defaultValue={initial?.compareAtPrice ?? ""}
-            className={field}
-          />
-        </label>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Tiền tệ</span>
-          <select
-            name="currency"
-            defaultValue={initial?.currency ?? "VND"}
-            className={field}
-          >
-            <option value="VND">VND</option>
-            <option value="USD">USD</option>
-          </select>
-        </label>
-        <label className="block">
           <span className="mb-1 block text-sm font-medium">SKU</span>
           <input name="sku" defaultValue={initial?.sku ?? ""} className={field} />
-        </label>
-        <label className="block">
-          <span className="mb-1 block text-sm font-medium">Kho</span>
-          <select
-            name="stockStatus"
-            defaultValue={initial?.stockStatus ?? "instock"}
-            className={field}
-          >
-            {STOCK_STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {STOCK_STATUS_LABEL[s]}
-              </option>
-            ))}
-          </select>
+          <span className="mt-1 block text-xs text-[var(--muted)]">
+            Chỉ bán sỉ theo container — trang sản phẩm không hiển thị giá.
+          </span>
         </label>
       </div>
 

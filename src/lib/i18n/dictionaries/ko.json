@@ -13,8 +13,7 @@
     "news": "뉴스",
     "products": "제품",
     "contact": "문의",
-    "getInTouch": "문의하기",
-    "cart": "장바구니"
+    "getInTouch": "문의하기"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "일본 기준 투입재",
@@ -105,13 +104,11 @@
     "readyPartner": "저희 생태계와 함께할 준비가 되셨나요?",
     "initiatePartnership": "파트너십 시작",
     "backProducts": "← 제품으로 돌아가기",
-    "inStock": "재고 있음",
-    "outOfStock": "품절",
     "organic": "유기농",
-    "priceOnRequest": "가격 문의",
-    "requestQuote": "견적 문의",
-    "addToCart": "장바구니 담기",
-    "addedToCart": "장바구니에 담았습니다"
+    "wholesaleOnly": "컨테이너 단위 도매",
+    "wholesaleTitle": "컨테이너 단위 도매 전용",
+    "wholesaleNote": "Flora Global은 소매 판매를 하지 않습니다. 비료 및 유기 자재는 컨테이너 단위로 공급됩니다. 사양, 최소 주문 수량, 가격은 문의해 주세요.",
+    "wholesaleCta": "컨테이너 도매 문의"
   },
   "about": {
     "eyebrow": "“생태계” 리더",
@@ -128,7 +125,7 @@
   "productsPage": {
     "eyebrow": "카탈로그",
     "title": "제품",
-    "intro": "유기농 농산물과 수입 농업 투입재 — VND 가격, 온라인 주문.",
+    "intro": "수입 유기질 비료 및 농자재 — 컨테이너 단위 도매 공급. 사양 및 견적은 문의해 주세요.",
     "all": "전체",
     "empty": "이 카테고리에 제품이 없습니다."
   },
@@ -162,6 +159,11 @@
       "일본 농업 투입재 (유통/시험)",
       "투자자 및 이해관계자 관계"
     ],
-    "timelines": ["즉시", "다음 시즌", "연구 단계"]
+    "timelines": [
+      "즉시",
+      "다음 시즌",
+      "연구 단계"
+    ],
+    "aboutProduct": "제품 도매 문의"
   }
 }

@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocale } from "@/lib/i18n/config";
-import { CartBadge } from "./cart-badge";
 import { LanguageSwitcher } from "./language-switcher";
 
 /** `heading: true` biến mục thành nhãn nhóm — hiển thị, không bấm được. */
@@ -23,13 +22,11 @@ export function SiteHeader({
   locale,
   tagline,
   getInTouch,
-  cartLabel,
 }: {
   nav: NavItem[];
   locale: Locale;
   tagline: string;
   getInTouch: string;
-  cartLabel: string;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -51,6 +48,17 @@ export function SiteHeader({
     setExpanded(null);
     setOpenMenu(null);
   }
+
+  // Khoá cuộn nền khi menu mobile mở — nếu không, người dùng vuốt trong menu
+  // lại kéo trang phía sau, và thanh menu dài hơn màn hình thì bị hụt.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   useEffect(() => {
     if (openMenu === null) return;
@@ -153,7 +161,6 @@ export function SiteHeader({
 
         <div className="flex items-center gap-3">
           <LanguageSwitcher locale={locale} />
-          <CartBadge label={cartLabel} href={withLocale(locale, "/cart")} />
           <Link
             href={withLocale(locale, "/contact")}
             className="hidden rounded-[var(--radius-control)] bg-[var(--brand)] px-4 py-2 text-[13px] font-semibold uppercase tracking-wide text-white transition hover:bg-[var(--brand-2)] sm:inline-block"
@@ -165,17 +172,36 @@ export function SiteHeader({
             aria-label="Menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--line)] lg:hidden"
+            className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--line)] lg:hidden"
           >
-            <span className="h-0.5 w-5 bg-[var(--ink)]" />
-            <span className="h-0.5 w-5 bg-[var(--ink)]" />
-            <span className="h-0.5 w-5 bg-[var(--ink)]" />
+            <span
+              className={`h-0.5 w-5 bg-[var(--ink)] transition-transform ${
+                open ? "translate-y-2 rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`h-0.5 w-5 bg-[var(--ink)] transition-opacity ${
+                open ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`h-0.5 w-5 bg-[var(--ink)] transition-transform ${
+                open ? "-translate-y-2 -rotate-45" : ""
+              }`}
+            />
           </button>
         </div>
       </div>
 
       {open && (
-        <nav className="border-t border-[var(--line)] bg-white lg:hidden">
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+          />
+          <nav className="absolute inset-x-0 top-full z-50 max-h-[80dvh] overflow-y-auto overscroll-contain border-t border-[var(--line)] bg-white shadow-xl lg:hidden">
           {nav.map((item) => (
             <div key={item.href} className="border-b border-[var(--line)]">
               <div className="flex items-center justify-between">
@@ -222,7 +248,25 @@ export function SiteHeader({
               )}
             </div>
           ))}
+
+          <div className="space-y-3 p-4">
+            <Link
+              href={withLocale(locale, "/contact")}
+              className="block rounded-[var(--radius-control)] bg-[var(--brand)] px-4 py-3 text-center text-[13px] font-semibold uppercase tracking-wide text-white"
+            >
+              {getInTouch}
+            </Link>
+            <div className="flex flex-col gap-1 text-sm text-[var(--muted)]">
+              <a href="tel:0932108990" className="py-1">
+                0932.108.990
+              </a>
+              <a href="mailto:info@flora-global.vn" className="py-1">
+                info@flora-global.vn
+              </a>
+            </div>
+          </div>
         </nav>
+        </>
       )}
     </header>
   );

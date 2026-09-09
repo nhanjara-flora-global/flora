@@ -6,6 +6,7 @@ import { PageHero } from "@/components/page-hero";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getManualPage } from "@/lib/i18n/localized-content";
+import { pageSeo } from "@/lib/seo";
 
 type Props = { params: Promise<{ lang: string }> };
 
@@ -14,10 +15,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = resolveLocale(lang);
   const dict = getDictionary(locale);
   const page = getManualPage("about-us", locale);
-  return {
+  return pageSeo({
+    lang: locale,
+    path: "/about-us",
     title: page?.title ?? dict.about.title,
-    description: dict.about.eyebrow,
-  };
+    description: page?.excerpt || dict.about.eyebrow,
+    image: page?.cover ?? "/images/wp/2025_09_banner1-1.jpg",
+  });
 }
 
 export default async function AboutPage({ params }: Props) {

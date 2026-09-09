@@ -7,6 +7,7 @@ import { getCategories, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localizeCategories, localizeProducts } from "@/lib/i18n/localized-catalog";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
+import { pageSeo } from "@/lib/seo";
 
 export const revalidate = 300;
 
@@ -17,8 +18,15 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(lang);
-  return { title: dict.productsPage.title, description: dict.productsPage.intro };
+  const locale = resolveLocale(lang);
+  const dict = getDictionary(locale);
+  return pageSeo({
+    lang: locale,
+    path: "/products",
+    title: dict.productsPage.title,
+    description: dict.productsPage.intro,
+    image: "/images/wp/2026_03_ELITE.jpg",
+  });
 }
 
 export default async function ProductsPage({ params, searchParams }: Props) {
@@ -78,7 +86,7 @@ export default async function ProductsPage({ params, searchParams }: Props) {
               product={p}
               href={withLocale(lang, `/products/${p.slug}`)}
               organicLabel={dict.common.organic}
-              priceOnRequestLabel={dict.common.priceOnRequest}
+              wholesaleLabel={dict.common.wholesaleOnly}
             />
           ))}
         </Reveal>

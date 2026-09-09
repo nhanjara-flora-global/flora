@@ -1,18 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/data/local";
-import { formatPrice } from "@/lib/format";
 
 export function ProductCard({
   product,
   href,
   organicLabel = "Organic",
-  priceOnRequestLabel,
+  wholesaleLabel = "Wholesale by the container",
 }: {
   product: Product;
   href?: string;
   organicLabel?: string;
-  priceOnRequestLabel?: string;
+  wholesaleLabel?: string;
 }) {
   return (
     <Link
@@ -42,8 +41,8 @@ export function ProductCard({
           {product.name}
         </h3>
         <p className="body-sm line-clamp-2 text-[var(--muted)]">{product.short_description}</p>
-        <p className="mt-auto pt-2 font-semibold text-[var(--brand)]">
-          {formatPrice(product.price, product.currency, priceOnRequestLabel)}
+        <p className="meta mt-auto pt-2 uppercase text-[var(--brand)]">
+          {wholesaleLabel}
         </p>
       </div>
     </Link>

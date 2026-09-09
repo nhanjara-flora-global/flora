@@ -13,6 +13,7 @@ import { SERVICE_ORDER } from "@/lib/legacy";
 import { getServiceStrings } from "@/lib/services/service-i18n";
 import { getServiceTagline } from "@/lib/services/service-tagline";
 import { getServiceTheme, serviceIndex } from "@/lib/services/service-theme";
+import { pageSeo } from "@/lib/seo";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
 
@@ -24,8 +25,16 @@ type Props = { params: Promise<{ lang: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
-  const dict = getDictionary(lang);
-  return { title: dict.servicesPage.title, description: dict.servicesPage.eyebrow };
+  const locale = resolveLocale(lang);
+  const dict = getDictionary(locale);
+  const s = getServiceStrings(locale);
+  return pageSeo({
+    lang: locale,
+    path: "/services",
+    title: dict.servicesPage.title,
+    description: s.intro || dict.servicesPage.eyebrow,
+    image: "/images/wp/2026_03_PRECISION-GROWING.jpg",
+  });
 }
 
 export default async function ServicesPage({ params }: Props) {

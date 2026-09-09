@@ -10,12 +10,10 @@ import {
   PageHeader,
   Panel,
   Row,
-  STOCK_TONE,
   SearchForm,
   Table,
 } from "@/components/admin/ui";
 import { listAdminProducts } from "@/lib/admin/data";
-import { formatPrice } from "@/lib/format";
 import { ProductActions } from "./product-actions";
 
 export const metadata: Metadata = { title: "Sản phẩm" };
@@ -24,12 +22,6 @@ const STATUS_LABEL: Record<string, string> = {
   published: "Đang bán",
   draft: "Nháp",
   archived: "Lưu trữ",
-};
-
-const STOCK_LABEL: Record<string, string> = {
-  instock: "Còn hàng",
-  outofstock: "Hết hàng",
-  onbackorder: "Đặt trước",
 };
 
 function Thumb({ src, name }: { src: string | null; name: string }) {
@@ -131,7 +123,7 @@ export default async function AdminProductsPage({
           />
         ) : (
           <>
-            <Table head={["Sản phẩm", "SKU", "Giá", "Kho", "Trạng thái", ""]}>
+            <Table head={["Sản phẩm", "SKU", "Trạng thái", ""]}>
               {rows.map((product) => (
                 <Row key={product.id}>
                   <Cell>
@@ -151,13 +143,6 @@ export default async function AdminProductsPage({
                     </div>
                   </Cell>
                   <Cell muted>{product.sku || "—"}</Cell>
-                  <Cell>{formatPrice(product.price, product.currency)}</Cell>
-                  <Cell>
-                    <Badge
-                      label={STOCK_LABEL[product.stock_status] ?? product.stock_status}
-                      tone={STOCK_TONE[product.stock_status] ?? "neutral"}
-                    />
-                  </Cell>
                   <Cell>
                     <Badge
                       label={STATUS_LABEL[product.status] ?? product.status}

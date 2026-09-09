@@ -99,7 +99,7 @@ function HeroSpotlight({ service, theme, label, lang, dict }: Props) {
         />
       )}
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
-      <div className="container-page flex min-h-[68vh] flex-col justify-between pb-14 pt-6">
+      <div className="container-page flex min-h-[30rem] flex-col justify-between gap-12 pb-14 pt-6 md:min-h-[68vh]">
         <Crumbs lang={lang} dict={dict} label={label} dark />
         <div className="max-w-3xl">
           <div className="flex items-center gap-3">
@@ -242,6 +242,13 @@ function Body({ model, lang, service, theme }: Props) {
   const tagsNotShownAsImages = model.tags.filter(
     (t) => !captionSlugs.has(t.trim().toLowerCase()),
   );
+
+  // Ở chế độ prose, mục nào trùng tên với chú thích ảnh voac.vn thì ảnh đã
+  // hiện ngay trong mục — bỏ khỏi lưới ảnh cuối trang để khỏi lặp.
+  const proseSectionTitles =
+    mode === "prose"
+      ? new Set(secs.map((sec) => sec.title.trim().toLowerCase()))
+      : undefined;
 
   return (
     <div className="container-page section-y">
@@ -477,8 +484,24 @@ function Body({ model, lang, service, theme }: Props) {
                 }
               >
                 <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
+                  {sec.step != null ? `${sec.step}. ` : ""}
                   {sec.title}
                 </h2>
+                {(() => {
+                  const img = getVoacImages(service.slug).find(
+                    (m) =>
+                      m.caption?.trim().toLowerCase() === sec.title.trim().toLowerCase(),
+                  );
+                  return img ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={img.src}
+                      alt={img.caption ?? sec.title}
+                      loading="lazy"
+                      className="mt-4 aspect-[16/10] w-full rounded-[var(--radius-card)] border border-[var(--sv-line)] object-cover"
+                    />
+                  ) : null;
+                })()}
                 <div className="mt-4">
                   <ServiceBlocks blocks={sec.blocks} />
                 </div>
@@ -488,7 +511,9 @@ function Body({ model, lang, service, theme }: Props) {
         </div>
       )}
 
-      {!imagesConsumed && <VoacCaptionGrid slug={service.slug} />}
+      {!imagesConsumed && (
+        <VoacCaptionGrid slug={service.slug} exclude={proseSectionTitles} />
+      )}
 
       {/* Bỏ chip trùng với chú thích ảnh — nếu không, "Gạo · Cà phê · Hạt điều"
           hiện hai lần liền nhau: một lần dưới ảnh, một lần dưới dạng chip. */}
@@ -587,8 +612,12 @@ export function ServiceDetail(props: Props) {
  * Lưới ảnh có chú thích, giữ nguyên cách bố trí của voac.vn. Dùng flex thay
  * grid để hàng cuối tự căn giữa — số ảnh là 3, 4 hay 5 đều không bị lẻ hàng.
  */
-function VoacCaptionGrid({ slug }: { slug: string }) {
-  const items = getVoacImages(slug).filter((m) => m.step === null);
+function VoacCaptionGrid({ slug, exclude }: { slug: string; exclude?: Set<string> }) {
+  const items = getVoacImages(slug).filter(
+    (m) =>
+      m.step === null &&
+      !(exclude && m.caption && exclude.has(m.caption.trim().toLowerCase())),
+  );
   if (items.length === 0) return null;
 
   return (

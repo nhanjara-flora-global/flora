@@ -7,7 +7,6 @@ import { getServiceClientResult } from "@/lib/admin/data";
 import { locales } from "@/lib/i18n/config";
 import {
   PRODUCT_STATUSES,
-  STOCK_STATUSES,
   type ProductInput,
   type ProductResult,
   type ProductStatus,
@@ -36,9 +35,6 @@ export async function saveProduct(input: ProductInput): Promise<ProductResult> {
 
   const name = input.name.trim();
   if (!name) return { ok: false, error: "Thiếu tên sản phẩm." };
-  if (!(STOCK_STATUSES as readonly string[]).includes(input.stockStatus)) {
-    return { ok: false, error: "Tình trạng kho không hợp lệ." };
-  }
 
   const service = await supabaseFor();
   if (!service.ok) return { ok: false, error: service.error };
@@ -60,11 +56,7 @@ export async function saveProduct(input: ProductInput): Promise<ProductResult> {
     name,
     short_description: input.shortDescription.trim() || null,
     description: input.description.trim() || null,
-    price: input.price,
-    compare_at_price: input.compareAtPrice,
-    currency: input.currency.trim() || "VND",
     sku: input.sku.trim() || null,
-    stock_status: input.stockStatus,
     image_url: input.imageUrl.trim() || null,
     status: input.status,
     updated_at: new Date().toISOString(),

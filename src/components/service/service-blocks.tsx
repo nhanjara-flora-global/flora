@@ -103,6 +103,37 @@ function SpecRows({ rows }: { rows: { key: string; value: string }[] }) {
   );
 }
 
+function DataTable({ head, rows }: { head: string[]; rows: string[][] }) {
+  return (
+    <div className="svc-table-wrap">
+      <table className="svc-table">
+        {head.length > 0 && (
+          <thead>
+            <tr>
+              {head.map((h, i) => (
+                <th key={i} scope="col" dangerouslySetInnerHTML={{ __html: h }} />
+              ))}
+            </tr>
+          </thead>
+        )}
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={i}>
+              {r.map((c, j) =>
+                j === 0 ? (
+                  <th key={j} scope="row" dangerouslySetInnerHTML={{ __html: c }} />
+                ) : (
+                  <td key={j} dangerouslySetInnerHTML={{ __html: c }} />
+                ),
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 function LogoStrip({ images }: { images: { src: string; alt: string }[] }) {
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 py-2 sm:gap-6">
@@ -143,6 +174,8 @@ export function ServiceBlocks({ blocks }: { blocks: ServiceBlock[] }) {
             return <Checklist key={i} items={block.items} />;
           case "specs":
             return <SpecRows key={i} rows={block.rows} />;
+          case "table":
+            return <DataTable key={i} head={block.head} rows={block.rows} />;
           case "logos":
             return <LogoStrip key={i} images={block.images} />;
           default:

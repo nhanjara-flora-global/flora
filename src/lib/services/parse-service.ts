@@ -14,6 +14,7 @@ export type ServiceBlock =
   | { kind: "features"; ordered: boolean; items: FeatureItem[] }
   | { kind: "checklist"; items: string[] }
   | { kind: "specs"; rows: { key: string; value: string }[] }
+  | { kind: "table"; head: string[]; rows: string[][] }
   | { kind: "logos"; images: { src: string; alt: string }[] };
 
 export type ServiceSection = {
@@ -142,6 +143,37 @@ function listBlock(list: HTMLElement, sectionTitle: string): ServiceBlock | null
   return { kind: "checklist", items: raw.map((h) => stripTags(h)) };
 }
 
+/** A comparison <table> → header row + body rows of inline-safe HTML cells. */
+function tableBlock(table: HTMLElement): ServiceBlock | null {
+  const cellsOf = (tr: HTMLElement) =>
+    tr.childNodes
+      .filter((c) => {
+        const t = ((c as HTMLElement).rawTagName ?? "").toUpperCase();
+        return t === "TD" || t === "TH";
+      })
+      .map((c) => inlineHtml(c as HTMLElement));
+  const isHeadRow = (tr: HTMLElement) =>
+    tr.childNodes.some((c) => ((c as HTMLElement).rawTagName ?? "").toUpperCase() === "TH") &&
+    !tr.childNodes.some((c) => ((c as HTMLElement).rawTagName ?? "").toUpperCase() === "TD");
+
+  const trs = table.querySelectorAll("tr");
+  if (trs.length === 0) return null;
+
+  let head: string[] = [];
+  const rows: string[][] = [];
+  trs.forEach((tr, i) => {
+    const cells = cellsOf(tr);
+    if (cells.every((h) => stripTags(h).length === 0)) return;
+    if (i === 0 && isHeadRow(tr)) {
+      head = cells;
+    } else {
+      rows.push(cells);
+    }
+  });
+  if (rows.length === 0) return null;
+  return { kind: "table", head, rows };
+}
+
 /** An <ol>/<ul> that is purely a table of contents (only anchor links). */
 function isTocList(list: HTMLElement): boolean {
   const lis = list.querySelectorAll("li");
@@ -227,6 +259,13 @@ export function parseService(html: string): ServiceModel {
       const img = tag === "IMG" ? node : node.querySelector("img");
       const src = img?.getAttribute("src") ?? "";
       if (src) pendingLogos.push({ src, alt: img?.getAttribute("alt") ?? "" });
+      continue;
+    }
+
+    if (tag === "TABLE") {
+      flushLogos();
+      const block = tableBlock(node);
+      if (block) target().push(block);
       continue;
     }
 

@@ -23,7 +23,7 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
   }, [index, go]);
 
   return (
-    <section className="relative aspect-[1900/594] w-full overflow-hidden bg-[var(--bg-soft)]">
+    <section className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--bg-soft)] sm:aspect-[1900/594]">
       {slides.map((slide, i) => (
         <Image
           key={slide.src}
@@ -39,17 +39,21 @@ export function HeroSlider({ slides }: { slides: Slide[] }) {
       ))}
 
       {slides.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 gap-2 md:bottom-5">
+        <div className="absolute bottom-1 left-1/2 z-10 flex -translate-x-1/2 md:bottom-3">
           {slides.map((slide, i) => (
             <button
               key={slide.src}
               type="button"
               aria-label={`Slide ${i + 1}`}
               onClick={() => go(i)}
-              className={`h-1.5 w-7 border border-white/60 transition ${
-                i === index ? "bg-white" : "bg-white/25"
-              }`}
-            />
+              className="flex h-9 w-9 items-center justify-center"
+            >
+              <span
+                className={`block h-1.5 w-7 border border-white/60 transition ${
+                  i === index ? "bg-white" : "bg-white/25"
+                }`}
+              />
+            </button>
           ))}
         </div>
       )}
