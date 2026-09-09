@@ -232,7 +232,10 @@ function Body({ model, lang, service, theme }: Props) {
               : "prose";
 
   // Các mode này đã dùng hết ảnh của voac.vn, bỏ lưới ảnh chú thích ở cuối để khỏi lặp.
-  const imagesConsumed = mode !== "prose" && mode !== "spec-grid";
+  // "lead" chỉ có đoạn mở đầu + danh sách cây trồng → vẫn cần lưới ảnh có chú thích
+  // ("Đối tác Nông trại": Gạo · Cà phê · Hạt điều).
+  const imagesConsumed =
+    mode !== "prose" && mode !== "spec-grid" && mode !== "lead";
 
   const captionSlugs = new Set(
     getVoacImages(service.slug)
