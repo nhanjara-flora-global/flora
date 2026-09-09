@@ -235,22 +235,44 @@ function Body({ model, lang, service }: Props) {
           ))}
         </div>
       ) : model.numbered ? (
-        <div className="mx-auto mt-12 max-w-4xl space-y-10">
+        // Lưới 2 cột như trang "Dịch vụ cốt lõi" trên voac.vn: mỗi mục là một
+        // thẻ nền nhạt, ảnh trên đầu (mục nào không có ảnh thì chừa đúng khoảng
+        // đó để tiêu đề các thẻ cùng hàng thẳng nhau), rồi "N. Tiêu đề" + mô tả.
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
           {model.sections.map((sec) => {
             const img = getVoacImageByStep(service.slug, sec.step);
             return (
-              <div key={sec.id} className="grid gap-3 md:grid-cols-[auto_1fr] md:gap-7">
-                <span className="font-[family-name:var(--font-display)] text-4xl font-semibold leading-none text-[var(--sv-line)] md:text-5xl">
-                  {nn(sec.step ?? 0)}
-                </span>
-                <div>
-                  <h2 className="display-sm text-[var(--sv-deep)]">{sec.title}</h2>
-                  {img && <VoacFigure src={img.src} alt={img.caption ?? sec.title} className="mt-4" />}
-                  <div className="mt-3">
+              <article
+                key={sec.id}
+                className="flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-soft)]"
+              >
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--sv-softer)]">
+                  {img ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={img.src}
+                      alt={img.caption ?? sec.title}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden
+                      className="svc-watermark absolute inset-0 grid place-items-center text-[7rem]"
+                    >
+                      {nn(sec.step ?? 0)}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-1 flex-col p-6">
+                  <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold leading-snug text-[var(--sv-deep)]">
+                    {sec.step}. {sec.title}
+                  </h2>
+                  <div className="mt-3 [&_.svc-rich]:text-[0.95rem] [&_.svc-rich]:leading-relaxed [&_.svc-rich]:text-[var(--muted)]">
                     <ServiceBlocks blocks={sec.blocks} />
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
@@ -359,23 +381,6 @@ export function ServiceDetail(props: Props) {
       <CtaPanel lang={props.lang} dict={props.dict} />
       <Explore lang={props.lang} others={props.others} />
     </div>
-  );
-}
-
-/**
- * Ảnh của voac.vn trỏ ra ~17 tên miền ngoài. Dùng <img> thay next/image để
- * khỏi khai remotePatterns cho từng tên miền và không đẩy ảnh bên thứ ba qua
- * bộ tối ưu ảnh của mình.
- */
-function VoacFigure({ src, alt, className }: { src: string; alt: string; className?: string }) {
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      className={`aspect-[16/9] w-full rounded-[var(--radius-card)] border border-[var(--sv-line)] object-cover ${className ?? ""}`}
-    />
   );
 }
 
