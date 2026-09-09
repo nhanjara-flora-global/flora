@@ -44,3 +44,6 @@ next-env.d.ts
 
 # Windows shortcut litter
 *.lnk
+
+# Ảnh tham chiếu voac.vn, không đưa vào repo
+/imgVOAC/
