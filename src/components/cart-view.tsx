@@ -18,7 +18,8 @@ export function CartView({
   const vi = locale === "vi";
 
   return (
-    <div className="section-y mx-auto max-w-3xl px-4 md:px-6">
+    <div className="container-page section-y">
+      <div className="mx-auto max-w-3xl">
       <h1 className="display-lg text-[var(--ink)]">{vi ? "Giỏ hàng" : "Cart"}</h1>
 
       {items.length === 0 ? (
@@ -86,6 +87,7 @@ export function CartView({
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }

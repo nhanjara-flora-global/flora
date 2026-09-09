@@ -52,22 +52,24 @@ export default async function NewsPostPage({ params }: Props) {
         crumbs={[{ href: withLocale(lang, "/news"), label: dict.newsPage.title }]}
       />
 
-      <article className="section-y mx-auto max-w-3xl px-4 md:px-6">
-        {cats.length > 0 && (
-          <div className="mb-6 flex flex-wrap gap-2">
-            {cats.map((c) => (
-              <Link
-                key={c.slug}
-                href={withLocale(lang, `/news/category/${c.slug}`)}
-                className="meta rounded-[var(--radius-control)] border border-[var(--line)] px-3 py-1.5 uppercase text-[var(--muted)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
-              >
-                {dict.newsCategories[c.slug]}
-              </Link>
-            ))}
-          </div>
-        )}
-        <ContentLocaleBadge article={post} uiLocale={lang} />
-        <ArticleBody html={post.content} />
+      <article className="container-page section-y">
+        <div className="mx-auto max-w-3xl">
+          {cats.length > 0 && (
+            <div className="mb-6 flex flex-wrap gap-2">
+              {cats.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={withLocale(lang, `/news/category/${c.slug}`)}
+                  className="meta rounded-[var(--radius-control)] border border-[var(--line)] px-3 py-1.5 uppercase text-[var(--muted)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
+                >
+                  {dict.newsCategories[c.slug]}
+                </Link>
+              ))}
+            </div>
+          )}
+          <ContentLocaleBadge article={post} uiLocale={lang} />
+          <ArticleBody html={post.content} />
+        </div>
       </article>
 
       {related.length > 0 && (

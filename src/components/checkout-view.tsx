@@ -37,16 +37,18 @@ export function CheckoutView({
 
   if (items.length === 0) {
     return (
-      <div className="section-y mx-auto max-w-xl px-4 text-center">
-        <p className="text-[var(--muted)]">
-          {vi ? "Giỏ hàng đang trống." : "Your cart is empty."}
-        </p>
-        <Link
-          href={withLocale(locale, "/products")}
-          className="mt-4 inline-block text-[var(--brand)]"
-        >
-          {vi ? "Quay lại mua hàng" : "Back to shopping"}
-        </Link>
+      <div className="container-page section-y">
+        <div className="mx-auto max-w-xl text-center">
+          <p className="text-[var(--muted)]">
+            {vi ? "Giỏ hàng đang trống." : "Your cart is empty."}
+          </p>
+          <Link
+            href={withLocale(locale, "/products")}
+            className="mt-4 inline-block text-[var(--brand)]"
+          >
+            {vi ? "Quay lại mua hàng" : "Back to shopping"}
+          </Link>
+        </div>
       </div>
     );
   }

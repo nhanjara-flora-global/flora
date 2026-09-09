@@ -45,9 +45,11 @@ export function PageHero({
         </div>
       )}
 
-      <div className="mx-auto max-w-4xl px-4 pb-2 pt-[var(--section-y-sm)] text-center md:px-6">
-        {eyebrow && <p className="eyebrow mb-3 text-[var(--muted)]">{eyebrow}</p>}
-        <h1 className="display-lg text-[var(--brand)]">{title}</h1>
+      <div className="container-page pb-2 pt-[var(--section-y-sm)] text-center">
+        <div className="mx-auto max-w-4xl">
+          {eyebrow && <p className="eyebrow mb-3 text-[var(--muted)]">{eyebrow}</p>}
+          <h1 className="display-lg text-[var(--brand)]">{title}</h1>
+        </div>
       </div>
     </>
   );

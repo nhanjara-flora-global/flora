@@ -36,9 +36,11 @@ export default async function AboutPage({ params }: Props) {
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/about-us"), label: dict.about.title }]}
       />
-      <div className="section-y mx-auto max-w-3xl px-4 md:px-6">
-        <ContentLocaleBadge article={page} uiLocale={lang} />
-        <ArticleBody html={page.content} />
+      <div className="container-page section-y">
+        <div className="mx-auto max-w-3xl">
+          <ContentLocaleBadge article={page} uiLocale={lang} />
+          <ArticleBody html={page.content} />
+        </div>
       </div>
     </>
   );

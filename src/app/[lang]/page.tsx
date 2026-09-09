@@ -90,33 +90,35 @@ export default async function HomePage({ params }: Props) {
       </section>
 
       <section className="bg-[var(--bg-soft)]">
-        <Reveal className="section-y mx-auto max-w-3xl px-4 text-center md:px-6">
-          <h2 className="display-md text-[var(--brand)]">
-            {h.ecosystemTitle}
-            <br />
-            {h.ecosystemSubtitle}
-          </h2>
-          <p className="body-base mt-6 text-justify text-[var(--muted)]">{h.ecosystemP1}</p>
-          <p className="body-base mt-4 text-justify text-[var(--muted)]">{h.ecosystemP2}</p>
-          <Link
-            href={withLocale(lang, "/about-us")}
-            className="body-sm mt-8 inline-block rounded-[var(--radius-control)] bg-[var(--accent)] px-7 py-3 font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:brightness-110"
-          >
-            {h.aboutCta}
-          </Link>
+        <Reveal className="container-page section-y">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="display-md text-[var(--brand)]">
+              {h.ecosystemTitle}
+              <br />
+              {h.ecosystemSubtitle}
+            </h2>
+            <p className="body-base mt-6 text-justify text-[var(--muted)]">{h.ecosystemP1}</p>
+            <p className="body-base mt-4 text-justify text-[var(--muted)]">{h.ecosystemP2}</p>
+            <Link
+              href={withLocale(lang, "/about-us")}
+              className="body-sm mt-8 inline-block rounded-[var(--radius-control)] bg-[var(--accent)] px-7 py-3 font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:brightness-110"
+            >
+              {h.aboutCta}
+            </Link>
 
-          <figure className="mt-12">
-            <div className="relative mx-auto aspect-square w-44 overflow-hidden rounded-full shadow-[var(--shadow-soft)] ring-4 ring-white md:w-56">
-              <Image
-                src="/images/wp/2025_09_thuyhoa.jpg"
-                alt={h.ceoCaption}
-                fill
-                sizes="224px"
-                className="object-cover"
-              />
-            </div>
-            <figcaption className="body-sm mt-4 text-[var(--muted)]">{h.ceoCaption}</figcaption>
-          </figure>
+            <figure className="mt-12">
+              <div className="relative mx-auto aspect-square w-44 overflow-hidden rounded-full shadow-[var(--shadow-soft)] ring-4 ring-white md:w-56">
+                <Image
+                  src="/images/wp/2025_09_thuyhoa.jpg"
+                  alt={h.ceoCaption}
+                  fill
+                  sizes="224px"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="body-sm mt-4 text-[var(--muted)]">{h.ceoCaption}</figcaption>
+            </figure>
+          </div>
         </Reveal>
       </section>
 
