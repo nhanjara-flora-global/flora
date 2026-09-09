@@ -390,6 +390,9 @@ function Body({ model, lang, service, theme }: Props) {
             const img = stepImageFor(sec.step) ?? nonStepImages[i] ?? null;
             const imageRight = model.numbered ? (sec.step ?? i + 1) % 2 === 1 : true;
             const specRows = sec.blocks.flatMap((b) => (b.kind === "specs" ? b.rows : []));
+            // Ảnh chụp sản phẩm (đoạn văn thường, không đánh số) hiện trọn khung
+            // như voac.vn; ảnh cảnh đồng / logistics thì phủ kín ô cho đầy đặn.
+            const contain = !model.numbered && specRows.length === 0;
             return (
               <div
                 key={sec.id}
@@ -421,19 +424,34 @@ function Body({ model, lang, service, theme }: Props) {
                       </div>
                     )}
                   </div>
-                  {img && (
-                    <div
-                      className={`relative min-h-[15rem] ${imageRight ? "" : "md:order-first"}`}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={img.src}
-                        alt={img.caption ?? sec.title}
-                        loading="lazy"
-                        className="absolute inset-0 h-full w-full object-cover"
-                      />
-                    </div>
-                  )}
+                  {img &&
+                    (contain ? (
+                      <div
+                        className={`flex items-center justify-center bg-white p-5 md:p-6 ${
+                          imageRight ? "" : "md:order-first"
+                        }`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={img.src}
+                          alt={img.caption ?? sec.title}
+                          loading="lazy"
+                          className="max-h-[22rem] w-full object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className={`relative min-h-[15rem] ${imageRight ? "" : "md:order-first"}`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={img.src}
+                          alt={img.caption ?? sec.title}
+                          loading="lazy"
+                          className="absolute inset-0 h-full w-full object-cover"
+                        />
+                      </div>
+                    ))}
                 </div>
               </div>
             );
