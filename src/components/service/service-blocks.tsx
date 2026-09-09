@@ -111,17 +111,17 @@ function SpecRows({ rows }: { rows: { key: string; value: string }[] }) {
 
 function LogoStrip({ images }: { images: { src: string; alt: string }[] }) {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap items-center justify-center gap-4 py-2 sm:gap-6">
       {images.map((img, i) => (
         <div
           key={i}
-          className="relative h-24 w-40 rounded-[var(--radius-control)] border border-[var(--line)] bg-white p-3"
+          className="relative h-24 w-40 rounded-[var(--radius-control)] border border-[var(--sv-line)] bg-white p-3 sm:h-28 sm:w-48"
         >
           <Image
             src={img.src}
             alt={img.alt || "Certification mark"}
             fill
-            sizes="160px"
+            sizes="192px"
             className="object-contain p-2"
           />
         </div>

@@ -191,13 +191,37 @@ function SectionHeading({ index, title }: { index: number; title: string }) {
   );
 }
 
-function Body({ model, lang, service }: Props) {
+function Body({ model, lang, service, theme }: Props) {
   const s = getServiceStrings(lang);
+
+  const allOf = (sec: (typeof model.sections)[number], kind: string) =>
+    sec.blocks.length > 0 && sec.blocks.every((b) => b.kind === kind);
+
   const isSpecGrid =
-    model.sections.length >= 2 &&
-    model.sections.every(
-      (sec) => sec.blocks.length > 0 && sec.blocks.every((b) => b.kind === "specs"),
-    );
+    model.sections.length >= 2 && model.sections.every((sec) => allOf(sec, "specs"));
+  const isProseCards =
+    model.sections.length >= 2 && model.sections.every((sec) => allOf(sec, "paragraph"));
+
+  // Bố cục phần thân bám theo cách voac.vn trình bày từng loại trang dịch vụ:
+  //   spec-grid    — lưới 3 cột bảng thông số (mô hình nông trại VOAC)
+  //   number-cards — lưới thẻ nhạt, ảnh trên đầu ("Dịch vụ cốt lõi VOAC")
+  //   dark-cards   — lưới thẻ nền đậm, ảnh nền mờ ("Dịch vụ hỗ trợ VOAC")
+  //   split-rows   — mục đánh số full-width, ảnh xen kẽ trái/phải ("Tìm nguồn sản phẩm")
+  //   prose        — mục dọc + dải logo chứng nhận ("Chứng nhận hữu cơ") và các dịch vụ Flora
+  const mode = isSpecGrid
+    ? "spec-grid"
+    : isProseCards && model.numbered
+      ? "number-cards"
+      : isProseCards
+        ? "dark-cards"
+        : model.numbered
+          ? "split-rows"
+          : "prose";
+
+  // dark-cards / split-rows / number-cards đã dùng hết ảnh của voac.vn rồi,
+  // nên bỏ lưới ảnh có chú thích ở cuối để khỏi lặp.
+  const imagesConsumed = mode === "dark-cards" || mode === "split-rows" || mode === "number-cards";
+  const nonStepImages = getVoacImages(service.slug).filter((m) => m.step === null);
 
   const captionSlugs = new Set(
     getVoacImages(service.slug)
@@ -219,7 +243,7 @@ function Body({ model, lang, service }: Props) {
         )}
       </div>
 
-      {isSpecGrid ? (
+      {mode === "spec-grid" && (
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {model.sections.map((sec) => (
             <div key={sec.id} className="card flex flex-col p-6">
@@ -234,7 +258,9 @@ function Body({ model, lang, service }: Props) {
             </div>
           ))}
         </div>
-      ) : model.numbered ? (
+      )}
+
+      {mode === "number-cards" && (
         // Lưới 2 cột như trang "Dịch vụ cốt lõi" trên voac.vn: mỗi mục là một
         // thẻ nền nhạt, ảnh trên đầu (mục nào không có ảnh thì chừa đúng khoảng
         // đó để tiêu đề các thẻ cùng hàng thẳng nhau), rồi "N. Tiêu đề" + mô tả.
@@ -276,20 +302,109 @@ function Body({ model, lang, service }: Props) {
             );
           })}
         </div>
-      ) : (
-        <div className="mx-auto mt-12 max-w-3xl space-y-14">
-          {model.sections.map((sec, i) => (
-            <section key={sec.id}>
-              <SectionHeading index={i + 1} title={sec.title} />
-              <div className="mt-5">
-                <ServiceBlocks blocks={sec.blocks} />
-              </div>
-            </section>
-          ))}
+      )}
+
+      {mode === "dark-cards" && (
+        // Lưới thẻ nền đậm, ảnh nền mờ như trang "Dịch vụ hỗ trợ" trên voac.vn.
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {model.sections.map((sec, i) => {
+            const img = nonStepImages[i] ?? null;
+            return (
+              <article
+                key={sec.id}
+                className="relative isolate flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-[var(--sv-deep)] p-7 text-white md:p-8"
+              >
+                {img && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={img.src}
+                    alt=""
+                    aria-hidden
+                    loading="lazy"
+                    className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20"
+                  />
+                )}
+                <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight">
+                  {sec.title}
+                </h2>
+                <div className="mt-4 [&_.svc-rich]:text-[0.95rem] [&_.svc-rich]:leading-relaxed [&_.svc-rich]:text-white/80 [&_.svc-rich_a]:text-white [&_.svc-rich_strong]:text-white">
+                  <ServiceBlocks blocks={sec.blocks} />
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
 
-      <VoacCaptionGrid slug={service.slug} />
+      {mode === "split-rows" && (
+        // Mục đánh số full-width, ảnh xen kẽ trái/phải như trang "Tìm nguồn
+        // sản phẩm" trên voac.vn.
+        <div className="mt-12 space-y-6">
+          {model.sections.map((sec, i) => {
+            const img = getVoacImageByStep(service.slug, sec.step);
+            const flip = (sec.step ?? i + 1) % 2 === 1;
+            return (
+              <div
+                key={sec.id}
+                className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-softer)]"
+              >
+                <div className={img ? "grid md:grid-cols-2" : ""}>
+                  {img && (
+                    <div className={`relative min-h-[15rem] ${flip ? "md:order-last" : ""}`}>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={img.src}
+                        alt={img.caption ?? sec.title}
+                        loading="lazy"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-7 md:p-9">
+                    <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
+                      {sec.step}. {sec.title}
+                    </h2>
+                    <div className="mt-4">
+                      <ServiceBlocks blocks={sec.blocks} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {mode === "prose" && (
+        <div className="mx-auto mt-12 max-w-3xl space-y-14">
+          {model.sections.map((sec, i) =>
+            theme.group === "flora" ? (
+              <section key={sec.id}>
+                <SectionHeading index={i + 1} title={sec.title} />
+                <div className="mt-5">
+                  <ServiceBlocks blocks={sec.blocks} />
+                </div>
+              </section>
+            ) : (
+              <section
+                key={sec.id}
+                className={
+                  i > 0 ? "border-t border-[var(--sv-line)] pt-14" : undefined
+                }
+              >
+                <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
+                  {sec.title}
+                </h2>
+                <div className="mt-4">
+                  <ServiceBlocks blocks={sec.blocks} />
+                </div>
+              </section>
+            ),
+          )}
+        </div>
+      )}
+
+      {!imagesConsumed && <VoacCaptionGrid slug={service.slug} />}
 
       {/* Bỏ chip trùng với chú thích ảnh — nếu không, "Gạo · Cà phê · Hạt điều"
           hiện hai lần liền nhau: một lần dưới ảnh, một lần dưới dạng chip. */}
