@@ -156,7 +156,9 @@ function isQuote(html: string): boolean {
   const text = stripTags(html);
   if (text.length < 12 || text.length > 240) return false;
   const quoted = /^["“”']/.test(text) && /["“”']$/.test(text);
-  const wrapped = /^<(strong|em)>[^]*<\/(strong|em)>$/.test(html.trim());
+  // Chỉ <em> mới coi là trích dẫn; <strong> là nhấn mạnh / tiêu đề phụ, không
+  // phải câu trích (vd "… đã được Viện Hữu cơ Châu Á chứng thực." in đậm).
+  const wrapped = /^<em>[^]*<\/em>$/.test(html.trim());
   return quoted || (wrapped && text.length < 150 && /[."'!?]$/.test(text));
 }
 

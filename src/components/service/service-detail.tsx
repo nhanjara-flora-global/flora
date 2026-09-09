@@ -197,31 +197,42 @@ function Body({ model, lang, service, theme }: Props) {
   const allOf = (sec: (typeof model.sections)[number], kind: string) =>
     sec.blocks.length > 0 && sec.blocks.every((b) => b.kind === kind);
 
-  const isSpecGrid =
-    model.sections.length >= 2 && model.sections.every((sec) => allOf(sec, "specs"));
-  const isProseCards =
-    model.sections.length >= 2 && model.sections.every((sec) => allOf(sec, "paragraph"));
-
-  // Bố cục phần thân bám theo cách voac.vn trình bày từng loại trang dịch vụ:
-  //   spec-grid    — lưới 3 cột bảng thông số (mô hình nông trại VOAC)
-  //   number-cards — lưới thẻ nhạt, ảnh trên đầu ("Dịch vụ cốt lõi VOAC")
-  //   dark-cards   — lưới thẻ nền đậm, ảnh nền mờ ("Dịch vụ hỗ trợ VOAC")
-  //   split-rows   — mục đánh số full-width, ảnh xen kẽ trái/phải ("Tìm nguồn sản phẩm")
-  //   prose        — mục dọc + dải logo chứng nhận ("Chứng nhận hữu cơ") và các dịch vụ Flora
-  const mode = isSpecGrid
-    ? "spec-grid"
-    : isProseCards && model.numbered
-      ? "number-cards"
-      : isProseCards
-        ? "dark-cards"
-        : model.numbered
-          ? "split-rows"
-          : "prose";
-
-  // dark-cards / split-rows / number-cards đã dùng hết ảnh của voac.vn rồi,
-  // nên bỏ lưới ảnh có chú thích ở cuối để khỏi lặp.
-  const imagesConsumed = mode === "dark-cards" || mode === "split-rows" || mode === "number-cards";
   const nonStepImages = getVoacImages(service.slug).filter((m) => m.step === null);
+  const stepImageFor = (step: number | null) =>
+    step == null ? null : getVoacImageByStep(service.slug, step);
+
+  const secs = model.sections;
+  const isSpecSecs = secs.length >= 2 && secs.every((sec) => allOf(sec, "specs"));
+  const isParaSecs = secs.length >= 2 && secs.every((sec) => allOf(sec, "paragraph"));
+  const hasStepImages = secs.some((sec) => stepImageFor(sec.step));
+  // Có đúng một ảnh (không gắn số thứ tự) cho mỗi mục → trình bày kiểu hàng ngang.
+  const oneToOneImages = secs.length >= 2 && nonStepImages.length >= secs.length;
+
+  // Mỗi loại trang trên voac.vn có một kiểu trình bày riêng:
+  //   lead         — trang chỉ có đoạn mở đầu (+ logo / trích dẫn)
+  //   number-cards — lưới thẻ nhạt, ảnh trên đầu ("Dịch vụ cốt lõi")
+  //   dark-cards   — lưới thẻ nền đậm, ảnh nền mờ ("Dịch vụ hỗ trợ")
+  //   media-rows   — mỗi mục một hàng: nội dung + ảnh ("Tìm nguồn sản phẩm",
+  //                  "Mô hình nông trại", "Đầu vào nông nghiệp hữu cơ")
+  //   spec-grid    — lưới bảng thông số (dự phòng khi không có ảnh)
+  //   prose        — mục dọc + dải logo chứng nhận, và các dịch vụ Flora
+  const mode: "lead" | "number-cards" | "dark-cards" | "media-rows" | "spec-grid" | "prose" =
+    secs.length === 0
+      ? "lead"
+      : isParaSecs && model.numbered
+        ? "number-cards"
+        : (model.numbered && hasStepImages) ||
+            (isSpecSecs && oneToOneImages) ||
+            (isParaSecs && oneToOneImages)
+          ? "media-rows"
+          : isParaSecs
+            ? "dark-cards"
+            : isSpecSecs
+              ? "spec-grid"
+              : "prose";
+
+  // Các mode này đã dùng hết ảnh của voac.vn, bỏ lưới ảnh chú thích ở cuối để khỏi lặp.
+  const imagesConsumed = mode !== "prose" && mode !== "spec-grid";
 
   const captionSlugs = new Set(
     getVoacImages(service.slug)
@@ -236,12 +247,46 @@ function Body({ model, lang, service, theme }: Props) {
     <div className="container-page section-y">
       <div className="mx-auto max-w-3xl">
         <ContentLocaleBadge article={service} uiLocale={lang} />
-        {model.lead.length > 0 && (
+        {model.lead.length > 0 && mode !== "lead" && (
           <div className="border-l-2 border-[var(--sv)] pl-5 text-[1.15rem] leading-relaxed text-[var(--ink)] [&_.svc-rich]:text-[1.15rem]">
             <ServiceBlocks blocks={model.lead} />
           </div>
         )}
       </div>
+
+      {mode === "lead" &&
+        (() => {
+          // Trang chỉ có đoạn mở đầu. Nếu kết thúc bằng dải logo thì xếp
+          // logo sang cột phải ("Chứng nhận hữu cơ VOAC"); nếu không thì để
+          // dọc, logo & trích dẫn căn giữa ("Chứng nhận VOAC không hoá chất").
+          const last = model.lead[model.lead.length - 1];
+          const logos = last?.kind === "logos" ? last.images : null;
+          const rest = logos ? model.lead.slice(0, -1) : model.lead;
+          return logos ? (
+            <div className="mx-auto mt-4 grid max-w-4xl gap-10 md:grid-cols-[1fr_18rem] md:items-start">
+              <div className="leading-relaxed [&_.svc-rich]:text-[1.1rem]">
+                <ServiceBlocks blocks={rest} />
+              </div>
+              <div className="flex flex-row flex-wrap justify-center gap-8 md:flex-col md:items-center">
+                {logos.map((im, i) => (
+                  <div key={i} className="relative h-40 w-40 sm:h-44 sm:w-44">
+                    <Image
+                      src={im.src}
+                      alt={im.alt || "Certification mark"}
+                      fill
+                      sizes="176px"
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="mx-auto mt-4 max-w-3xl leading-relaxed [&_.svc-rich]:text-[1.1rem]">
+              <ServiceBlocks blocks={model.lead} />
+            </div>
+          );
+        })()}
 
       {mode === "spec-grid" && (
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -336,21 +381,50 @@ function Body({ model, lang, service, theme }: Props) {
         </div>
       )}
 
-      {mode === "split-rows" && (
-        // Mục đánh số full-width, ảnh xen kẽ trái/phải như trang "Tìm nguồn
-        // sản phẩm" trên voac.vn.
+      {mode === "media-rows" && (
+        // Mỗi mục một hàng ngang: nội dung một bên, ảnh một bên. Mục có đánh
+        // số thì ảnh xen kẽ trái/phải ("Tìm nguồn sản phẩm"); còn lại ảnh nằm
+        // bên phải ("Mô hình nông trại", "Đầu vào nông nghiệp hữu cơ").
         <div className="mt-12 space-y-6">
           {model.sections.map((sec, i) => {
-            const img = getVoacImageByStep(service.slug, sec.step);
-            const flip = (sec.step ?? i + 1) % 2 === 1;
+            const img = stepImageFor(sec.step) ?? nonStepImages[i] ?? null;
+            const imageRight = model.numbered ? (sec.step ?? i + 1) % 2 === 1 : true;
+            const specRows = sec.blocks.flatMap((b) => (b.kind === "specs" ? b.rows : []));
             return (
               <div
                 key={sec.id}
                 className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-softer)]"
               >
                 <div className={img ? "grid md:grid-cols-2" : ""}>
+                  <div className="p-7 md:p-9">
+                    <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
+                      {sec.step != null ? `${sec.step}. ` : ""}
+                      {sec.title}
+                    </h2>
+                    {specRows.length > 0 ? (
+                      <ul className="mt-4 space-y-2">
+                        {specRows.map((r, j) => (
+                          <li key={j} className="body-sm flex gap-2 text-[var(--ink)]">
+                            <span aria-hidden className="text-[var(--sv)]">
+                              •
+                            </span>
+                            <span>
+                              <span className="text-[var(--muted)]">{r.key}:</span>{" "}
+                              <span className="font-medium">{r.value}</span>
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="mt-4">
+                        <ServiceBlocks blocks={sec.blocks} />
+                      </div>
+                    )}
+                  </div>
                   {img && (
-                    <div className={`relative min-h-[15rem] ${flip ? "md:order-last" : ""}`}>
+                    <div
+                      className={`relative min-h-[15rem] ${imageRight ? "" : "md:order-first"}`}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={img.src}
@@ -360,14 +434,6 @@ function Body({ model, lang, service, theme }: Props) {
                       />
                     </div>
                   )}
-                  <div className="p-7 md:p-9">
-                    <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
-                      {sec.step}. {sec.title}
-                    </h2>
-                    <div className="mt-4">
-                      <ServiceBlocks blocks={sec.blocks} />
-                    </div>
-                  </div>
                 </div>
               </div>
             );

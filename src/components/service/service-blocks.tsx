@@ -7,15 +7,9 @@ function Prose({ html }: { html: string }) {
 
 function PullQuote({ html }: { html: string }) {
   return (
-    <figure className="relative my-2 pl-6">
-      <span
-        aria-hidden
-        className="absolute -left-1 -top-3 font-[family-name:var(--font-display)] text-5xl leading-none text-[var(--sv-line)]"
-      >
-        &ldquo;
-      </span>
+    <figure className="my-6 text-center">
       <blockquote
-        className="font-[family-name:var(--font-display)] text-xl leading-snug text-[var(--sv-ink)] md:text-2xl"
+        className="mx-auto max-w-2xl font-[family-name:var(--font-display)] text-xl italic leading-snug text-[var(--sv)] md:text-2xl"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </figure>
