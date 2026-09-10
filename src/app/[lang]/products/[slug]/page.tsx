@@ -99,9 +99,6 @@ export default async function ProductDetailPage({ params }: Props) {
           <p className="display-sm text-[var(--brand)]">
             {dict.common.wholesaleTitle}
           </p>
-          <p className="body-sm mt-2 text-[var(--muted)]">
-            {dict.common.wholesaleNote}
-          </p>
           <Link
             href={`${withLocale(lang, "/contact")}?product=${encodeURIComponent(product.name)}#contact-form`}
             className="mt-5 inline-flex items-center justify-center rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
