@@ -66,17 +66,24 @@ function Crumbs({
 function Metrics({ theme, dark }: { theme: ServiceTheme; dark?: boolean }) {
   if (!theme.metrics?.length) return null;
   return (
-    <dl className="mt-8 flex flex-wrap gap-x-8 gap-y-4">
+    <dl
+      className={`mt-8 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-5 ${
+        theme.metrics.length === 3 ? "sm:grid-cols-3" : ""
+      }`}
+    >
       {theme.metrics.map((m) => (
-        <div key={m.label} className="max-w-[13rem]">
+        <div
+          key={m.label}
+          className={`border-t pt-4 ${dark ? "border-white/25" : "border-[var(--line)]"}`}
+        >
           <dt
-            className={`font-[family-name:var(--font-display)] text-2xl font-semibold ${
-              dark ? "text-white" : "text-[var(--sv)]"
+            className={`text-lg font-bold leading-snug md:text-xl ${
+              dark ? "text-white" : "text-[var(--ink)]"
             }`}
           >
             {m.value}
           </dt>
-          <dd className={`meta mt-1 uppercase ${dark ? "text-white/70" : "text-[var(--muted)]"}`}>
+          <dd className={`meta mt-1 ${dark ? "text-white/70" : "text-[var(--muted)]"}`}>
             {m.label}
           </dd>
         </div>
@@ -91,8 +98,8 @@ function CtaButton({ lang, dict, dark }: { lang: Locale; dict: Dictionary; dark?
       href={withLocale(lang, "/contact")}
       className={`body-sm mt-8 inline-flex items-center gap-2 rounded-[var(--radius-control)] px-6 py-3 font-semibold uppercase tracking-wide shadow-[var(--shadow-soft)] transition ${
         dark
-          ? "bg-white text-[var(--sv-deep)] hover:bg-white/90"
-          : "bg-[var(--sv)] text-white hover:bg-[var(--sv-deep)]"
+          ? "bg-white text-[var(--brand)] hover:bg-white/90"
+          : "bg-[var(--brand)] text-white hover:bg-[color-mix(in_srgb,var(--brand)_85%,#000)]"
       }`}
     >
       {dict.common.initiatePartnership}
@@ -114,19 +121,18 @@ function HeroSpotlight({ service, theme, label, lang, dict, sectionPath, section
           className="-z-10 object-cover"
         />
       )}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/45 to-black/20" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
       <div className="container-page flex min-h-[30rem] flex-col justify-between gap-12 pb-14 pt-6 md:min-h-[68vh]">
         <Crumbs lang={lang} sectionPath={sectionPath} sectionLabel={sectionLabel} label={label} dark />
         <div className="max-w-3xl">
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-              <ServiceIcon name={theme.icon} className="h-5 w-5" />
-            </span>
-            <span className="eyebrow text-white/80">
-              {getServiceStrings(lang).service} {nn(serviceIndex(service.slug))} · {label}
+          <div className="flex items-center gap-2.5 text-white/85">
+            <ServiceIcon name={theme.icon} className="h-5 w-5" />
+            <span className="meta font-semibold uppercase tracking-[0.08em]">
+              {getServiceStrings(lang).service} {nn(serviceIndex(service.slug))}
             </span>
           </div>
-          <h1 className="display-lg mt-5 text-white">{service.title}</h1>
+          <h1 className="display-lg mt-4 text-white">{service.title}</h1>
           {getServiceTagline(lang, service.slug) && (
             <p className="lead mt-4 max-w-2xl text-white/85">
               {getServiceTagline(lang, service.slug)}
@@ -146,34 +152,26 @@ function HeroEditorial({ service, model, theme, label, lang, dict, sectionPath, 
   const tagline = getServiceTagline(lang, service.slug) ?? model.tagline ?? service.excerpt;
 
   return (
-    <header className="relative overflow-hidden border-b border-[var(--sv-line)] bg-[var(--sv-soft)]">
-      <span
-        aria-hidden
-        className="svc-watermark pointer-events-none absolute -right-6 -top-16 hidden text-[16rem] sm:block md:text-[22rem]"
-      >
-        {nn(idx)}
-      </span>
-      <div className="container-page relative py-6">
+    <header className="relative overflow-hidden border-b border-[var(--line)] bg-[var(--bg-soft)]">
+      <div className="container-page relative py-5">
         <Crumbs lang={lang} sectionPath={sectionPath} sectionLabel={sectionLabel} label={label} />
       </div>
-      <div className="container-page relative grid gap-10 pb-[var(--section-y-sm)] md:grid-cols-[1.25fr_1fr] md:items-center md:pb-[var(--section-y)]">
+      <div className="container-page relative grid gap-10 pb-[var(--section-y-sm)] md:grid-cols-[1.1fr_1fr] md:items-center lg:gap-16">
         <div>
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--sv)] text-white">
-              <ServiceIcon name={theme.icon} className="h-5 w-5" />
-            </span>
-            <span className="eyebrow text-[var(--sv-ink)]">
-              {getServiceStrings(lang).service} {nn(idx)} · {label}
+          <div className="flex items-center gap-2.5 text-[var(--sv-ink)]">
+            <ServiceIcon name={theme.icon} className="h-5 w-5" />
+            <span className="meta font-semibold uppercase tracking-[0.08em]">
+              {getServiceStrings(lang).service} {nn(idx)}
             </span>
           </div>
-          <h1 className="display-lg mt-5 text-[var(--sv-deep)]">{service.title}</h1>
+          <h1 className="display-lg mt-4 text-[var(--ink)]">{service.title}</h1>
           {tagline && <p className="lead mt-4 max-w-xl text-[var(--muted)]">{tagline}</p>}
           <Metrics theme={theme} />
           <CtaButton lang={lang} dict={dict} />
         </div>
 
         {showImage ? (
-          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radius-card)] border border-[var(--sv-line)] shadow-[var(--shadow-lift)]">
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-soft)]">
             <Image
               src={service.cover!}
               alt={service.title}
@@ -557,14 +555,14 @@ function Body({ model, lang, service, theme }: Props) {
 
 function CtaPanel({ lang, dict }: { lang: Locale; dict: Dictionary }) {
   return (
-    <section className="bg-[var(--sv)] text-white">
+    <section className="bg-[var(--brand)] text-white">
       <div className="container-page flex flex-col items-start gap-6 py-[var(--section-y-sm)] md:flex-row md:items-center md:justify-between">
         <p className="font-[family-name:var(--font-display)] text-2xl md:max-w-2xl md:text-[1.75rem]">
           {dict.common.readyPartner}
         </p>
         <Link
           href={withLocale(lang, "/contact")}
-          className="body-sm shrink-0 rounded-[var(--radius-control)] bg-white px-7 py-3 font-semibold uppercase tracking-wide text-[var(--sv-deep)] transition hover:bg-white/90"
+          className="body-sm shrink-0 rounded-[var(--radius-control)] bg-white px-7 py-3 font-semibold uppercase tracking-wide text-[var(--brand)] transition hover:bg-white/90"
         >
           {dict.common.initiatePartnership}
         </Link>

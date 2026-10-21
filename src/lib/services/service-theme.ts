@@ -1,10 +1,13 @@
 import { SERVICE_ORDER, VOAC_SERVICE_SLUGS } from "@/lib/legacy";
 
 /**
- * Per-service visual identity. The detail template is shared, but every service
- * gets its own accent colour, hero treatment, icon and (curated) headline
- * metrics — so each page reads as a bespoke design, not a blog post.
+ * Per-service visual identity. The detail template is shared; every service
+ * gets its own hero treatment, icon and (curated) headline metrics. Accents all
+ * use one leaf green beside the maroon brand — 14 different hues made the
+ * site look disjointed.
  */
+
+const ACCENT = "#2f6b45";
 
 export type ServiceGroup = "flora" | "voac" | "voac-portfolio";
 
@@ -45,7 +48,7 @@ export type ServiceTheme = {
 const THEME: Record<string, ServiceTheme> = {
   "premium-agricultural-inputs-the-japanese-foundation": {
     group: "flora",
-    accent: "#8a5a2b",
+    accent: ACCENT,
     icon: "sprout",
     hero: "editorial",
     metrics: [
@@ -56,7 +59,7 @@ const THEME: Record<string, ServiceTheme> = {
   },
   "strategic-sourcing-procurement-your-bridge-to-vietnam": {
     group: "flora",
-    accent: "#2f4b7c",
+    accent: ACCENT,
     icon: "route",
     hero: "editorial",
     metrics: [
@@ -67,7 +70,7 @@ const THEME: Record<string, ServiceTheme> = {
   },
   "the-export-logistic-chain-precision-velocity-thermal-integrity": {
     group: "flora",
-    accent: "#0f6b6b",
+    accent: ACCENT,
     icon: "truck",
     hero: "spotlight",
     metrics: [
@@ -78,7 +81,7 @@ const THEME: Record<string, ServiceTheme> = {
   },
   "farming-precision-cultivation-the-honey-no-9-legacy": {
     group: "flora",
-    accent: "#b07d1a",
+    accent: ACCENT,
     icon: "leaf",
     hero: "spotlight",
     metrics: [
@@ -89,7 +92,7 @@ const THEME: Record<string, ServiceTheme> = {
   },
   "organic-certification-global-compliance-solutions": {
     group: "flora",
-    accent: "#3a6b35",
+    accent: ACCENT,
     icon: "badge",
     hero: "editorial",
     metrics: [
@@ -101,7 +104,7 @@ const THEME: Record<string, ServiceTheme> = {
 
   "voac-dich-vu-cot-loi-cua-voac": {
     group: "voac",
-    accent: "#2e6d3f",
+    accent: ACCENT,
     icon: "layers",
     hero: "editorial",
     metrics: [
@@ -111,40 +114,40 @@ const THEME: Record<string, ServiceTheme> = {
   },
   "voac-dich-vu-ho-tro-cua-voac": {
     group: "voac",
-    accent: "#5a7a3f",
+    accent: ACCENT,
     icon: "briefcase",
     hero: "editorial",
     metrics: [{ value: "4", label: "Nhóm dịch vụ hỗ trợ" }],
   },
   "voac-dich-vu-chung-nhan-huu-co": {
     group: "voac",
-    accent: "#1f6f5c",
+    accent: ACCENT,
     icon: "shield",
     hero: "editorial",
     metrics: [{ value: "USDA · EU · JAS", label: "Tiêu chuẩn quốc tế" }],
   },
   "voac-dich-vu-tim-nguon-san-pham": {
     group: "voac",
-    accent: "#3f5c8a",
+    accent: ACCENT,
     icon: "search",
     hero: "editorial",
     metrics: [{ value: "4", label: "Nhóm dịch vụ trọn gói" }],
   },
   "voac-chung-nhan-huu-co-voac": {
     group: "voac-portfolio",
-    accent: "#256b4a",
+    accent: ACCENT,
     icon: "seal",
     hero: "editorial",
   },
   "voac-chung-nhan-voac-khong-hoa-chat-chem-free": {
     group: "voac-portfolio",
-    accent: "#5b8c2a",
+    accent: ACCENT,
     icon: "droplet",
     hero: "editorial",
   },
   "voac-mo-hinh-nong-trai-khong-hoa-chat-voac": {
     group: "voac-portfolio",
-    accent: "#a2542f",
+    accent: ACCENT,
     icon: "pin",
     hero: "editorial",
     metrics: [
@@ -154,13 +157,13 @@ const THEME: Record<string, ServiceTheme> = {
   },
   "voac-doi-tac-nong-trai-huu-co-voac": {
     group: "voac-portfolio",
-    accent: "#4a7c59",
+    accent: ACCENT,
     icon: "handshake",
     hero: "editorial",
   },
   "voac-nguyen-lieu-nong-nghiep-huu-co-voac": {
     group: "voac-portfolio",
-    accent: "#6b4f2a",
+    accent: ACCENT,
     icon: "flask",
     hero: "editorial",
   },
@@ -168,7 +171,7 @@ const THEME: Record<string, ServiceTheme> = {
 
 const FALLBACK: ServiceTheme = {
   group: "flora",
-  accent: "#7c1226",
+  accent: ACCENT,
   icon: "leaf",
   hero: "editorial",
 };

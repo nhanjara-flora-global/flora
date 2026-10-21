@@ -20,7 +20,7 @@ function FeatureGrid({ items }: { items: FeatureItem[] }) {
   return (
     <div className="grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-line)] sm:grid-cols-2">
       {items.map((it, i) => (
-        <div key={i} className="flex flex-col gap-2 bg-[var(--surface)] p-5">
+        <div key={i} className="flex flex-col gap-2 bg-[var(--surface)] p-5 sm:odd:last:col-span-2">
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--sv-soft)] text-xs font-semibold text-[var(--sv-ink)]">
             {String(i + 1).padStart(2, "0")}
           </span>

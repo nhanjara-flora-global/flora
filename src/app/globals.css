@@ -84,10 +84,10 @@
 }
 
 @utility eyebrow {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0.28em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 

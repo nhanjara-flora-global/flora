@@ -10,7 +10,7 @@ export function PageHero({
   image,
   crumbs = [],
   homeHref = "/",
-  overlay = false,
+  overlay = true,
   video,
   videoSpeed,
 }: {
@@ -26,7 +26,6 @@ export function PageHero({
   /** Playback rate for `video` (1 = normal, 0.5 = half speed). */
   videoSpeed?: number;
 }) {
-  const last = crumbs.at(-1);
 
   return (
     <>
@@ -45,9 +44,6 @@ export function PageHero({
               </span>
             ))}
           </span>
-          <span className="hidden font-semibold text-[var(--ink)] sm:block">
-            {last?.label ?? title}
-          </span>
         </nav>
       </div>
 
@@ -60,9 +56,15 @@ export function PageHero({
           <Image src={image} alt={overlay ? "" : title} fill priority sizes="100vw" className="object-cover" />
           {video && <HeroVideo src={video} poster={image} speed={videoSpeed} />}
           {overlay && (
-            <div className="container-page absolute inset-0 flex items-center">
-              <div className="max-w-xl text-white [text-shadow:0_2px_12px_rgb(0_0_0/0.45)]">
-                {eyebrow && <p className="eyebrow mb-3">{eyebrow}</p>}
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"
+            />
+          )}
+          {overlay && (
+            <div className="container-page absolute inset-0 flex items-end pb-10 md:pb-14">
+              <div className="relative max-w-2xl text-white">
+                {eyebrow && <p className="eyebrow mb-3 text-white/85">{eyebrow}</p>}
                 <h1 className="display-lg">{title}</h1>
               </div>
             </div>

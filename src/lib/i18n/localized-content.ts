@@ -207,19 +207,3 @@ export function machineBadgeLabel(locale: Locale): string {
   }
 }
 
-export function manualBadgeLabel(locale: Locale): string {
-  switch (locale) {
-    case "vi":
-      return "Bản dịch chính thức";
-    case "zh":
-      return "正式译文";
-    case "ko":
-      return "공식 번역";
-    case "hi":
-      return "आधिकारिक अनुवाद";
-    case "si":
-      return "නිල පරිවර්තනය";
-    default:
-      return "Official translation";
-  }
-}

@@ -11,7 +11,7 @@ export function FloatingContact({
   return (
     <Link
       href={withLocale(locale, "/contact")}
-      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-4 z-40 flex items-center gap-2 rounded-full bg-[var(--brand)] p-3.5 text-white shadow-lg transition hover:bg-[var(--brand-2)] sm:bottom-5 sm:left-5 sm:px-4 sm:py-3 print:hidden"
+      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-40 flex items-center gap-2 rounded-full bg-[var(--brand)] p-3.5 text-white shadow-lg transition hover:bg-[var(--brand-2)] sm:bottom-5 sm:right-5 sm:px-4 sm:py-3 print:hidden"
       aria-label={label}
     >
       <svg
