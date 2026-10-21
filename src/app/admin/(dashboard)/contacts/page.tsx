@@ -63,16 +63,16 @@ export default async function AdminContactsPage({
                     </p>
                   </div>
                   <p className="body-sm mt-0.5 text-[var(--muted)]">
-                    <a href={`mailto:${contact.email}`} className="hover:text-[var(--brand)]">
-                      {contact.email}
-                    </a>
                     {contact.phone && (
-                      <>
-                        {" · "}
-                        <a href={`tel:${contact.phone}`} className="hover:text-[var(--brand)]">
-                          {contact.phone}
-                        </a>
-                      </>
+                      <a href={`tel:${contact.phone}`} className="hover:text-[var(--brand)]">
+                        {contact.phone}
+                      </a>
+                    )}
+                    {contact.phone && contact.email && " · "}
+                    {contact.email && (
+                      <a href={`mailto:${contact.email}`} className="hover:text-[var(--brand)]">
+                        {contact.email}
+                      </a>
                     )}
                   </p>
                   <p className="body-sm mt-2 whitespace-pre-line text-[var(--ink)]">

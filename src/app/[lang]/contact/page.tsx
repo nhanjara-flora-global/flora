@@ -11,58 +11,11 @@ type Props = {
   searchParams: Promise<{ sent?: string; error?: string; product?: string }>;
 };
 
-// Must match PERSONA_TYPES / INQUIRY_TYPES / TIMELINES in the server action —
-// the localized labels below are cosmetic only, these English values are what
-// actually gets submitted and validated.
-const EN_PERSONAS = ["Farmer / Farm Owner", "Global Buyer / Importer", "Strategic Partner", "Other"];
-
-const EN_INQUIRIES = [
-  "Strategic Sourcing & Procurement",
-  "Honey No. 9 Export & Supply",
-  "Organic Certification Stewardship (Auditing/Consultancy)",
-  "Japanese Agricultural Inputs (Distribution/Trials)",
-  "Investor & Stakeholder Relations",
-];
-
-const EN_TIMELINES = ["Immediate", "Next Season", "Research Phase"];
-
 const MAP_SRC =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.705716053586!2d106.70960757355158!3d10.757148459552042!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f655d851335%3A0xbe41f3b0e056fb87!2zNjkyLzMxIMSQb8OgbiBWxINuIELGoSwgUGjGsOG7nW5nIDE2LCBRdeG6rW4gNCwgSOG7kyBDaMOtIE1pbmggMDcwMDAsIFZp4buHdCBOYW0!5e0!3m2!1svi!2sus!4v1757321932129!5m2!1svi!2sus";
 
 const inputClass =
   "w-full rounded-[var(--radius-control)] border border-[var(--line)] bg-white px-4 py-3 text-sm outline-none transition focus:border-[var(--brand)]";
-
-function RadioCards({
-  name,
-  options,
-  labels,
-  columns = 2,
-}: {
-  name: string;
-  options: readonly string[];
-  labels: readonly string[];
-  columns?: 2 | 4;
-}) {
-  return (
-    <div className={`grid gap-2 ${columns === 4 ? "grid-cols-2 sm:grid-cols-4" : "sm:grid-cols-2"}`}>
-      {options.map((value, i) => (
-        <label key={value} className="group cursor-pointer">
-          <input
-            type="radio"
-            name={name}
-            value={value}
-            required
-            defaultChecked={i === 0}
-            className="peer sr-only"
-          />
-          <span className="body-sm block rounded-[var(--radius-control)] border border-[var(--line)] px-4 py-3 text-[var(--ink)] transition peer-checked:border-[var(--brand)] peer-checked:bg-[var(--brand)]/5 peer-checked:font-semibold peer-checked:text-[var(--brand)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--brand)]">
-            {labels[i] ?? value}
-          </span>
-        </label>
-      ))}
-    </div>
-  );
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang } = await params;
@@ -73,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     path: "/contact",
     title: dict.contact.title,
     description: dict.contact.intro2 || dict.contact.intro1,
-    image: "/images/voac/voac-ho-tro-1.jpg",
+    image: "/images/contact-tomato.jpg",
   });
 }
 
@@ -90,7 +43,8 @@ export default async function ContactPage({ params, searchParams }: Props) {
       <PageHero
         eyebrow={c.eyebrow}
         title={c.title}
-        image="/images/voac/voac-ho-tro-1.jpg"
+        image="/images/contact-tomato.jpg"
+        overlay
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/contact"), label: c.title }]}
       />
@@ -114,57 +68,33 @@ export default async function ContactPage({ params, searchParams }: Props) {
             </p>
           )}
 
+          <h2 className="display-md">{c.formTitle}</h2>
+          <p className="mb-6 mt-2 text-[var(--muted)]">{c.formIntro}</p>
+
           <form action={submitContact} className="space-y-4">
             <input type="hidden" name="locale" value={lang} />
             {productName && (
               <input type="hidden" name="product" value={productName} />
             )}
 
-            <div>
-              <span className="mb-1.5 block text-sm text-[var(--muted)]">{c.personaLabel}</span>
-              <RadioCards name="persona" options={EN_PERSONAS} labels={c.personas} columns={4} />
-            </div>
-
             <input name="name" required placeholder={c.name} className={inputClass} />
+            <input name="email" type="email" placeholder={c.email} className={inputClass} />
             <input
-              name="email"
-              type="email"
+              name="phone"
+              type="tel"
               required
-              placeholder={c.email}
+              placeholder={c.phone}
               className={inputClass}
             />
-            <input name="company" required placeholder={c.company} className={inputClass} />
-            <input name="location" required placeholder={c.location} className={inputClass} />
-            <input name="phone" placeholder={c.phone} className={inputClass} />
-
-            <div>
-              <span className="mb-1.5 block text-sm text-[var(--muted)]">{c.inquiry}</span>
-              <RadioCards name="inquiry" options={EN_INQUIRIES} labels={c.inquiries} columns={2} />
-            </div>
 
             <textarea
               name="message"
-              rows={6}
+              rows={5}
+              required
               maxLength={2000}
               placeholder={c.message}
               className={inputClass}
             />
-
-            <label className="block">
-              <span className="mb-1.5 block text-sm text-[var(--muted)]">{c.timeline}</span>
-              <select
-                name="timeline"
-                required
-                defaultValue={EN_TIMELINES[0]}
-                className={inputClass}
-              >
-                {EN_TIMELINES.map((value, i) => (
-                  <option key={value} value={value}>
-                    {c.timelines[i] ?? value}
-                  </option>
-                ))}
-              </select>
-            </label>
 
             <button
               type="submit"

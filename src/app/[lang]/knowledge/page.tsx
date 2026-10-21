@@ -36,7 +36,8 @@ export default async function NewsPage({ params }: Props) {
       <PageHero
         eyebrow={dict.newsPage.eyebrow}
         title={dict.newsPage.title}
-        image="/images/wp/2025_09_banner22.jpg"
+        image="/videos/organic-farm-poster.jpg"
+        video="/videos/organic-farm.mp4"
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/knowledge"), label: dict.newsPage.title }]}
       />

@@ -4,7 +4,9 @@
     "description": "The Integrated Supply Chain Agriculture Ecosystem — Vertically Integrated. Vertically Trusted."
   },
   "topbar": {
-    "tagline": "Vertically Integrated. Vertically Trusted."
+    "tagline": "Farming advisory, organic certification support, and partnership for sustainable agriculture in Vietnam",
+    "group": "Fertilizer Corporation",
+    "service": "Service"
   },
   "nav": {
     "home": "Home",
@@ -128,9 +130,7 @@
     "initiatePartnership": "Initiate partnership",
     "backProducts": "← Back to products",
     "organic": "Organic",
-    "wholesaleOnly": "Wholesale by the container",
-    "wholesaleTitle": "Wholesale by the container only",
-    "wholesaleCta": "Contact us for container wholesale"
+    "wholesaleCta": "Contact us"
   },
   "about": {
     "eyebrow": "The “Ecosystem” Leader",
@@ -156,26 +156,33 @@
     "all": "All",
     "empty": "No products in this category."
   },
+  "productDetail": {
+    "specsTitle": "Product specifications",
+    "originLabel": "Origin",
+    "manufacturerLabel": "Manufacturer",
+    "packagingLabel": "Packaging",
+    "licenseLabel": "Registration decision no.",
+    "storageLabel": "Storage",
+    "highlightsTitle": "Key benefits",
+    "descriptionTitle": "Product description",
+    "processTitle": "Recommended process",
+    "dosageTitle": "Dosage by crop type",
+    "techniqueTitle": "Application technique",
+    "noteLabel": "Important note",
+    "capabilityTitle": "Supply capability",
+    "capabilityDesc": "Palletized and container-loaded — ready for large-volume orders.",
+    "relatedTitle": "Related products",
+    "faqTitle": "Frequently asked questions"
+  },
   "contact": {
     "eyebrow": "Let’s move beyond the transaction",
     "title": "Start a Partnership",
     "sent": "Thank you. Your inquiry has been received — our team will respond shortly.",
     "error": "Please complete all required fields marked with *.",
-    "name": "Full Name & Professional Title *",
-    "email": "Corporate Email Address *",
-    "company": "Company Name *",
-    "location": "Headquarters Location *",
-    "phone": "Phone",
-    "personaLabel": "I am a... *",
-    "personas": [
-      "Farmer / Farm Owner",
-      "Global Buyer / Importer",
-      "Strategic Partner",
-      "Other"
-    ],
-    "inquiry": "What Are You Looking For? *",
-    "message": "Project Details / Message",
-    "timeline": "Timeline *",
+    "name": "Your name *",
+    "email": "Your email",
+    "phone": "Phone number *",
+    "message": "Your request *",
     "submit": "Initiate Partnership",
     "companyName": "FLORA GLOBAL COMPANY LIMITED",
     "intro1": "Flora Global is more than a supplier; we are a strategic bridge between Vietnam’s agricultural potential and the world’s most demanding markets. Whether you are a global corporation seeking a Single Point of Accountability for sourcing, a farm looking to unlock Global Certification, or a retailer requiring a consistent supply of Honey No. 9 Passion Fruit, our ecosystem is ready to integrate with your ambitions.",
@@ -186,18 +193,8 @@
     "hoursLabel": "Hours",
     "hours": "Monday – Friday: 08:30 – 17:30 (ICT / GMT+7)",
     "hoursNote": "Our global supply chain team is available for scheduled consultations across all major time zones.",
-    "inquiries": [
-      "Strategic Sourcing & Procurement",
-      "Honey No. 9 Export & Supply",
-      "Organic Certification Stewardship (Auditing/Consultancy)",
-      "Japanese Agricultural Inputs (Distribution/Trials)",
-      "Investor & Stakeholder Relations"
-    ],
-    "timelines": [
-      "Immediate",
-      "Next Season",
-      "Research Phase"
-    ],
-    "aboutProduct": "Wholesale inquiry for product"
+    "aboutProduct": "Wholesale inquiry for product",
+    "formTitle": "How can we help you?",
+    "formIntro": "Send us your request!"
   }
 }

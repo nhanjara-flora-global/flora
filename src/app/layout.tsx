@@ -1,7 +1,6 @@
 import Script from "next/script";
 import {
   Be_Vietnam_Pro,
-  Literata,
   Noto_Sans_SC,
   Noto_Sans_KR,
   Noto_Sans_Devanagari,
@@ -15,11 +14,6 @@ const body = Be_Vietnam_Pro({
   variable: "--font-body",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700"],
-});
-
-const display = Literata({
-  variable: "--font-display",
-  subsets: ["latin", "vietnamese"],
 });
 
 const notoSc = Noto_Sans_SC({
@@ -54,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       suppressHydrationWarning
-      className={`${body.variable} ${display.variable} ${notoSc.variable} ${notoKr.variable} ${notoHi.variable} ${notoSi.variable} h-full`}
+      className={`${body.variable} ${notoSc.variable} ${notoKr.variable} ${notoHi.variable} ${notoSi.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">
         {children}

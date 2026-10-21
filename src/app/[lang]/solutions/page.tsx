@@ -92,7 +92,8 @@ export default async function SolutionsPage({ params }: Props) {
       <PageHero
         eyebrow={dict.servicesPage.eyebrow}
         title={dict.servicesPage.title}
-        image="/images/wp/2026_03_PRECISION-GROWING.jpg"
+        image="/videos/solutions-hero-poster.jpg"
+        video="/videos/solutions-hero.mp4"
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/solutions"), label: dict.servicesPage.title }]}
       />

@@ -30,7 +30,13 @@ export function HeroSlider({
   }, [index, go]);
 
   return (
-    <section className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--bg-soft)] sm:aspect-[1900/594]">
+    <section
+      className={`relative w-full overflow-hidden bg-[var(--bg-soft)] ${
+        // Có nội dung phủ lên thì chiều cao theo nội dung; nếu cố định tỉ lệ thì
+        // khung chữ cao hơn hero và bị cắt mất phần trên.
+        children ? "" : "aspect-[16/10] sm:aspect-[1900/594]"
+      }`}
+    >
       {slides.map((slide, i) => (
         <Image
           key={slide.src}
@@ -38,6 +44,7 @@ export function HeroSlider({
           alt={slide.alt}
           fill
           priority={i === 0}
+          quality={95}
           sizes="100vw"
           className={`object-cover transition-opacity duration-1000 ${
             i === index ? "opacity-100" : "opacity-0"
@@ -47,8 +54,8 @@ export function HeroSlider({
 
       {children && (
         <>
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/10" />
-          <div className="container-page relative z-10 flex h-full items-end pb-14 md:items-center md:pb-0">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-black/5 to-transparent" />
+          <div className="container-page relative z-10 flex items-end pb-6 pt-44 md:min-h-[28rem] md:items-center md:py-12">
             {children}
           </div>
         </>

@@ -1,7 +1,6 @@
 import { Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { Category } from "@/lib/data/local";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { withLocale, type Locale } from "@/lib/i18n/config";
 import { NEWS_CATEGORIES, SERVICE_ORDER } from "@/lib/legacy";
@@ -11,11 +10,9 @@ import { getServiceStrings } from "@/lib/services/service-i18n";
 export function SiteFooter({
   locale,
   dict,
-  productCategories,
 }: {
   locale: Locale;
   dict: Dictionary;
-  productCategories: Category[];
 }) {
   const f = dict.footer;
   const s = getServiceStrings(locale);
@@ -47,15 +44,7 @@ export function SiteFooter({
 
   return (
     <footer className="relative isolate mt-auto flex min-h-[90svh] flex-col overflow-hidden">
-      <Image
-        src="/images/footer/HOME_0000s_0007s_0000s_0000_BG.png"
-        alt=""
-        fill
-        sizes="100vw"
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 select-none object-cover"
-      />
-      <div className="bg-[color-mix(in_srgb,var(--brand)_62%,transparent)] text-white">
+      <div className="bg-[var(--brand)] text-white">
         <div className="container-page grid items-center gap-6 py-4 md:grid-cols-3">
           <p className="display-md">
             {f.needHelp}
@@ -83,7 +72,7 @@ export function SiteFooter({
         </div>
       </div>
 
-      <div className="relative flex flex-1 flex-col overflow-hidden bg-[color-mix(in_srgb,var(--bg-soft)_78%,transparent)] text-[var(--ink)]">
+      <div className="relative flex flex-1 flex-col overflow-hidden bg-[var(--bg-soft)] text-[var(--ink)]">
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 select-none bg-[var(--brand)] opacity-[0.12] [mask-image:url(/images/footer/ttl.svg)] [mask-position:center_bottom] [mask-repeat:no-repeat] [mask-size:100%_auto]"
@@ -162,16 +151,6 @@ export function SiteFooter({
                     {dict.productsPage.all}
                   </Link>
                 </li>
-                {productCategories.map((c) => (
-                  <li key={c.slug}>
-                    <Link
-                      href={withLocale(locale, `/products/${c.slug}`)}
-                      className="hover:text-[var(--brand)]"
-                    >
-                      {c.name}
-                    </Link>
-                  </li>
-                ))}
               </ul>
             </div>
 

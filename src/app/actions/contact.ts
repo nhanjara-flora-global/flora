@@ -3,27 +3,6 @@
 import { redirect } from "next/navigation";
 import { defaultLocale, isLocale, withLocale } from "@/lib/i18n/config";
 
-const INQUIRY_TYPES = [
-  "Strategic Sourcing & Procurement",
-  "Honey No. 9 Export & Supply",
-  "Organic Certification Stewardship (Auditing/Consultancy)",
-  "Japanese Agricultural Inputs (Distribution/Trials)",
-  "Investor & Stakeholder Relations",
-];
-
-const TIMELINES = ["Immediate", "Next Season", "Research Phase"];
-
-// "I am a…" — routes the enquiry to the right team without adding a DB
-// column; folded into the free-text message body below, same as inquiry/timeline.
-// Not exported: a "use server" file may only export async functions, so this
-// must stay in sync by hand with EN_PERSONAS in app/[lang]/contact/page.tsx.
-const PERSONA_TYPES = [
-  "Farmer / Farm Owner",
-  "Global Buyer / Importer",
-  "Strategic Partner",
-  "Other",
-];
-
 export async function submitContact(formData: FormData) {
   const field = (key: string) => String(formData.get(key) || "").trim();
 
@@ -33,38 +12,21 @@ export async function submitContact(formData: FormData) {
   const name = field("name");
   const email = field("email");
   const phone = field("phone");
-  const company = field("company");
-  const location = field("location");
-  const persona = field("persona");
-  const inquiry = field("inquiry");
-  const timeline = field("timeline");
   const message = field("message");
   const product = field("product");
 
   const contactPath = withLocale(locale, "/contact");
 
-  if (!name || !email || !company || !location) {
-    redirect(`${contactPath}?error=1#contact-form`);
-  }
-  if (
-    !PERSONA_TYPES.includes(persona) ||
-    !INQUIRY_TYPES.includes(inquiry) ||
-    !TIMELINES.includes(timeline)
-  ) {
+  if (!name || !phone || !message) {
     redirect(`${contactPath}?error=1#contact-form`);
   }
 
   const body = [
     product && `Wholesale inquiry — product: ${product.slice(0, 200)}`,
-    `Company: ${company}`,
-    `Headquarters: ${location}`,
-    `I am a: ${persona}`,
-    `Nature of inquiry: ${inquiry}`,
-    `Timeline: ${timeline}`,
-    message && `\n${message}`,
+    message,
   ]
     .filter(Boolean)
-    .join("\n");
+    .join("\n\n");
 
   if ((process.env.DATA_SOURCE ?? "local") === "local") {
     console.info("[contact:local]", { name, email, phone, body, locale });
@@ -75,8 +37,9 @@ export async function submitContact(formData: FormData) {
   const supabase = createServiceClient();
   await supabase.from("contact_submissions").insert({
     name,
+    // contact_submissions.email is NOT NULL; email is optional on the form.
     email,
-    phone: phone || null,
+    phone,
     message: body,
     source: "contact",
   });

@@ -4,7 +4,9 @@
     "description": "통합 농업 공급망 생태계 — Vertically Integrated. Vertically Trusted."
   },
   "topbar": {
-    "tagline": "수직 통합. 수직 신뢰."
+    "tagline": "영농 컨설팅, 유기농 인증 지원, 지속 가능한 베트남 농업 발전의 동반자",
+    "group": "비료 총공사",
+    "service": "서비스"
   },
   "nav": {
     "home": "홈",
@@ -128,9 +130,7 @@
     "initiatePartnership": "파트너십 시작",
     "backProducts": "← 제품으로 돌아가기",
     "organic": "유기농",
-    "wholesaleOnly": "컨테이너 단위 도매",
-    "wholesaleTitle": "컨테이너 단위 도매 전용",
-    "wholesaleCta": "컨테이너 도매 문의"
+    "wholesaleCta": "문의하기"
   },
   "about": {
     "eyebrow": "“생태계” 리더",
@@ -156,26 +156,33 @@
     "all": "전체",
     "empty": "이 카테고리에 제품이 없습니다."
   },
+  "productDetail": {
+    "specsTitle": "제품 사양",
+    "originLabel": "원산지",
+    "manufacturerLabel": "제조사",
+    "packagingLabel": "포장 규격",
+    "licenseLabel": "유통 인정 결정 번호",
+    "storageLabel": "보관 방법",
+    "highlightsTitle": "주요 효과",
+    "descriptionTitle": "제품 설명",
+    "processTitle": "권장 시비 절차",
+    "dosageTitle": "작물별 시비량",
+    "techniqueTitle": "시비 기술 및 절차",
+    "noteLabel": "중요 안내",
+    "capabilityTitle": "공급 역량",
+    "capabilityDesc": "팔레트 적재, 컨테이너 단위 출고 — 대량 주문에도 대응 가능합니다.",
+    "relatedTitle": "관련 제품",
+    "faqTitle": "자주 묻는 질문"
+  },
   "contact": {
     "eyebrow": "단순한 거래를 넘어",
     "title": "Flora와 파트너십 시작",
     "sent": "감사합니다. 문의가 접수되었습니다 — 곧 연락드리겠습니다.",
     "error": "* 표시된 필수 항목을 모두 입력해 주세요.",
-    "name": "성명 및 직함 *",
-    "email": "회사 이메일 *",
-    "company": "회사명 *",
-    "location": "본사 위치 *",
-    "phone": "전화",
-    "personaLabel": "저는... *",
-    "personas": [
-      "농가 / 농장주",
-      "글로벌 바이어 / 수입업체",
-      "전략적 파트너",
-      "기타"
-    ],
-    "inquiry": "무엇을 찾고 계신가요? *",
-    "message": "프로젝트 상세 / 메시지",
-    "timeline": "일정 *",
+    "name": "성함 *",
+    "email": "이메일",
+    "phone": "전화번호 *",
+    "message": "문의 내용 *",
     "submit": "파트너십 시작",
     "companyName": "FLORA GLOBAL 유한회사",
     "intro1": "Flora Global은 단순한 공급자가 아니라, 베트남 농업 잠재력과 세계 가장 까다로운 시장을 잇는 전략적 다리입니다. 소싱을 위한 단일 책임 창구를 찾는 글로벌 기업, 글로벌 인증이 필요한 농장, 또는 Honey No. 9 패션프루트의 안정적 공급이 필요한 소매업체라면, 저희 생태계가 함께할 준비가 되어 있습니다.",
@@ -186,18 +193,8 @@
     "hoursLabel": "운영 시간",
     "hours": "월요일 – 금요일: 08:30 – 17:30 (ICT / GMT+7)",
     "hoursNote": "글로벌 공급망 팀은 주요 시간대에서 예약 상담이 가능합니다.",
-    "inquiries": [
-      "전략적 소싱 및 조달",
-      "Honey No. 9 수출 및 공급",
-      "유기농 인증 지원 (심사/컨설팅)",
-      "일본 농업 투입재 (유통/시험)",
-      "투자자 및 이해관계자 관계"
-    ],
-    "timelines": [
-      "즉시",
-      "다음 시즌",
-      "연구 단계"
-    ],
-    "aboutProduct": "제품 도매 문의"
+    "aboutProduct": "제품 도매 문의",
+    "formTitle": "무엇을 도와드릴까요?",
+    "formIntro": "요청 내용을 보내 주세요!"
   }
 }

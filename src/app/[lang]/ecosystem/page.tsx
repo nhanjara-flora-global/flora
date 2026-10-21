@@ -55,7 +55,9 @@ export default async function EcosystemPage({ params }: Props) {
       <PageHero
         eyebrow={dict.ecosystemPage.eyebrow}
         title={dict.ecosystemPage.title}
-        image="/images/wp/2026_03_ELITE.jpg"
+        image="/videos/tractor-drone-poster.jpg"
+        video="/videos/tractor-drone.mp4"
+        videoSpeed={0.6}
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/ecosystem"), label: dict.ecosystemPage.title }]}
       />

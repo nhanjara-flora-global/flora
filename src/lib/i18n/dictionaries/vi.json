@@ -4,7 +4,9 @@
     "description": "Hệ sinh thái chuỗi cung ứng nông nghiệp tích hợp — Vertically Integrated. Vertically Trusted."
   },
   "topbar": {
-    "tagline": "Tích hợp dọc. Tin cậy dọc."
+    "tagline": "Tư vấn canh tác, hỗ trợ cấp chứng nhận organic, đồng hành phát triển nông nghiệp Việt Nam bền vững",
+    "group": "Tổng công ty Phân bón",
+    "service": "Dịch vụ"
   },
   "nav": {
     "home": "Trang chủ",
@@ -128,9 +130,7 @@
     "initiatePartnership": "Bắt đầu hợp tác",
     "backProducts": "← Quay lại sản phẩm",
     "organic": "Hữu cơ",
-    "wholesaleOnly": "Bán sỉ theo container",
-    "wholesaleTitle": "Chỉ bán sỉ theo container",
-    "wholesaleCta": "Liên hệ mua sỉ"
+    "wholesaleCta": "Liên hệ"
   },
   "about": {
     "eyebrow": "Người dẫn dắt “Hệ sinh thái”",
@@ -156,26 +156,33 @@
     "all": "Tất cả",
     "empty": "Không có sản phẩm trong danh mục này."
   },
+  "productDetail": {
+    "specsTitle": "Thông số sản phẩm",
+    "originLabel": "Xuất xứ",
+    "manufacturerLabel": "Nhà sản xuất",
+    "packagingLabel": "Quy cách đóng gói",
+    "licenseLabel": "Số quyết định lưu hành",
+    "storageLabel": "Bảo quản",
+    "highlightsTitle": "Lợi ích nổi bật",
+    "descriptionTitle": "Mô tả sản phẩm",
+    "processTitle": "Quy trình khuyến nghị",
+    "dosageTitle": "Liều lượng sử dụng theo loại cây",
+    "techniqueTitle": "Kỹ thuật và quy trình bón",
+    "noteLabel": "Lưu ý quan trọng",
+    "capabilityTitle": "Năng lực cung ứng",
+    "capabilityDesc": "Đóng pallet, xuất theo container — sẵn sàng đáp ứng đơn hàng số lượng lớn.",
+    "relatedTitle": "Sản phẩm liên quan",
+    "faqTitle": "Câu hỏi thường gặp"
+  },
   "contact": {
     "eyebrow": "Hãy vượt qua giao dịch đơn thuần",
     "title": "Hợp tác cùng Flora",
     "sent": "Cảm ơn bạn. Yêu cầu đã được ghi nhận — đội ngũ sẽ phản hồi sớm.",
     "error": "Vui lòng điền đầy đủ các trường bắt buộc đánh dấu *.",
-    "name": "Họ tên & chức danh *",
-    "email": "Email công ty *",
-    "company": "Tên công ty *",
-    "location": "Trụ sở *",
-    "phone": "Điện thoại",
-    "personaLabel": "Tôi là... *",
-    "personas": [
-      "Nông dân / Chủ trang trại",
-      "Nhà mua hàng quốc tế",
-      "Đối tác chiến lược",
-      "Khác"
-    ],
-    "inquiry": "Bạn đang tìm kiếm điều gì? *",
-    "message": "Chi tiết dự án / Tin nhắn",
-    "timeline": "Thời hạn *",
+    "name": "Tên của bạn *",
+    "email": "Email của bạn",
+    "phone": "Số điện thoại *",
+    "message": "Yêu cầu của bạn *",
     "submit": "Bắt đầu hợp tác",
     "companyName": "CÔNG TY TNHH FLORA GLOBAL",
     "intro1": "Flora Global không chỉ là nhà cung cấp; chúng tôi là cầu nối chiến lược giữa tiềm năng nông nghiệp Việt Nam và những thị trường đòi hỏi khắt khe nhất. Dù bạn là tập đoàn toàn cầu cần một Điểm chịu trách nhiệm duy nhất cho thu mua, một trang trại muốn mở khóa Chứng nhận toàn cầu, hay nhà bán lẻ cần nguồn cung ổn định Passion Fruit Honey No. 9 — hệ sinh thái của chúng tôi sẵn sàng đồng hành.",
@@ -186,18 +193,8 @@
     "hoursLabel": "Giờ làm việc",
     "hours": "Thứ Hai – Thứ Sáu: 08:30 – 17:30 (ICT / GMT+7)",
     "hoursNote": "Đội ngũ chuỗi cung ứng toàn cầu sẵn sàng tư vấn theo lịch trên mọi múi giờ chính.",
-    "inquiries": [
-      "Thu mua & cung ứng chiến lược",
-      "Xuất khẩu & cung ứng Honey No. 9",
-      "Hỗ trợ chứng nhận hữu cơ (Kiểm toán/Tư vấn)",
-      "Đầu vào nông nghiệp Nhật Bản (Phân phối/Thử nghiệm)",
-      "Quan hệ nhà đầu tư & đối tác"
-    ],
-    "timelines": [
-      "Ngay lập tức",
-      "Mùa vụ tới",
-      "Giai đoạn nghiên cứu"
-    ],
-    "aboutProduct": "Yêu cầu mua sỉ cho sản phẩm"
+    "aboutProduct": "Yêu cầu mua sỉ cho sản phẩm",
+    "formTitle": "Làm thế nào chúng tôi có thể giúp bạn?",
+    "formIntro": "Hãy gửi nội dung yêu cầu cho chúng tôi!"
   }
 }

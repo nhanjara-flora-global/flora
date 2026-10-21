@@ -36,7 +36,9 @@ export default async function AboutPage({ params }: Props) {
       <PageHero
         eyebrow={dict.about.eyebrow}
         title={page.title}
-        image="/images/wp/2025_09_banner1-1.jpg"
+        image="/videos/industrial-docks-poster.jpg"
+        video="/videos/industrial-docks.mp4"
+        videoSpeed={0.6}
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/about-us"), label: dict.about.title }]}
       />

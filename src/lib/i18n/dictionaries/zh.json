@@ -4,7 +4,9 @@
     "description": "一体化农业供应链生态系统 — Vertically Integrated. Vertically Trusted."
   },
   "topbar": {
-    "tagline": "垂直整合。垂直可信。"
+    "tagline": "种植咨询、有机认证支持，携手推动越南农业可持续发展",
+    "group": "肥料总公司",
+    "service": "服务"
   },
   "nav": {
     "home": "首页",
@@ -128,9 +130,7 @@
     "initiatePartnership": "开启合作",
     "backProducts": "← 返回产品",
     "organic": "有机",
-    "wholesaleOnly": "按整柜批发",
-    "wholesaleTitle": "仅按整柜批发",
-    "wholesaleCta": "联系整柜批发"
+    "wholesaleCta": "联系我们"
   },
   "about": {
     "eyebrow": "“生态系统”引领者",
@@ -156,26 +156,33 @@
     "all": "全部",
     "empty": "该分类暂无产品。"
   },
+  "productDetail": {
+    "specsTitle": "产品规格",
+    "originLabel": "产地",
+    "manufacturerLabel": "生产商",
+    "packagingLabel": "包装规格",
+    "licenseLabel": "流通许可决定书编号",
+    "storageLabel": "储存方式",
+    "highlightsTitle": "主要优点",
+    "descriptionTitle": "产品描述",
+    "processTitle": "建议施用流程",
+    "dosageTitle": "按作物类型的施用量",
+    "techniqueTitle": "施用技术与流程",
+    "noteLabel": "重要提示",
+    "capabilityTitle": "供应能力",
+    "capabilityDesc": "托盘装载、整柜出货 — 可满足大批量订单。",
+    "relatedTitle": "相关产品",
+    "faqTitle": "常见问题"
+  },
   "contact": {
     "eyebrow": "让我们超越单纯交易",
     "title": "与 Flora 合作",
     "sent": "谢谢。您的询盘已收到 — 我们的团队将尽快回复。",
     "error": "请填写所有标有 * 的必填项。",
-    "name": "姓名与职位 *",
-    "email": "企业邮箱 *",
-    "company": "公司名称 *",
-    "location": "总部所在地 *",
-    "phone": "电话",
-    "personaLabel": "我是... *",
-    "personas": [
-      "农户 / 农场主",
-      "国际买家 / 进口商",
-      "战略合作伙伴",
-      "其他"
-    ],
-    "inquiry": "您在寻找什么？ *",
-    "message": "项目详情 / 留言",
-    "timeline": "时间安排 *",
+    "name": "您的姓名 *",
+    "email": "您的邮箱",
+    "phone": "电话号码 *",
+    "message": "您的需求 *",
     "submit": "开启合作",
     "companyName": "FLORA GLOBAL 有限公司",
     "intro1": "Flora Global 不仅是供应商，更是连接越南农业潜力与全球最严苛市场的战略桥梁。无论您是寻求单一责任主体的全球企业、希望获得全球认证的农场，还是需要稳定供应 Honey No. 9 百香果的零售商，我们的生态系统都已准备好与您对接。",
@@ -186,18 +193,8 @@
     "hoursLabel": "营业时间",
     "hours": "周一至周五：08:30 – 17:30（ICT / GMT+7）",
     "hoursNote": "我们的全球供应链团队可按预约在主要时区提供咨询。",
-    "inquiries": [
-      "战略采购与供应链",
-      "Honey No. 9 出口与供应",
-      "有机认证托管（审核/咨询）",
-      "日本农业投入品（分销/试验）",
-      "投资者与利益相关方关系"
-    ],
-    "timelines": [
-      "立即",
-      "下一季",
-      "研究阶段"
-    ],
-    "aboutProduct": "产品批发咨询"
+    "aboutProduct": "产品批发咨询",
+    "formTitle": "我们可以如何帮助您？",
+    "formIntro": "请把您的需求发送给我们！"
   }
 }

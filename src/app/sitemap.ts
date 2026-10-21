@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { locales, withLocale } from "@/lib/i18n/config";
 import { abs, languageAlternates } from "@/lib/seo";
-import { getCategories, getProducts } from "@/lib/catalog";
+import { getProducts } from "@/lib/catalog";
 import { getServices, NEWS_CATEGORIES, SERVICE_ORDER } from "@/lib/legacy";
 import { allArticles } from "@/lib/news";
 import { getSolutionCluster } from "@/lib/services/service-theme";
@@ -31,11 +31,7 @@ const STATIC: Entry[] = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [articles, products, categories] = await Promise.all([
-    allArticles(),
-    getProducts(),
-    getCategories(),
-  ]);
+  const [articles, products] = await Promise.all([allArticles(), getProducts()]);
 
   const entries: Entry[] = [
     ...STATIC,
@@ -60,11 +56,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       path: `/products/${p.slug}`,
       changeFrequency: "monthly" as ChangeFreq,
       priority: 0.7,
-    })),
-    ...categories.map((c) => ({
-      path: `/products/${c.slug}`,
-      changeFrequency: "weekly" as ChangeFreq,
-      priority: 0.6,
     })),
   ];
 

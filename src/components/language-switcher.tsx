@@ -12,7 +12,14 @@ import {
   type Locale,
 } from "@/lib/i18n/config";
 
-export function LanguageSwitcher({ locale }: { locale: Locale }) {
+export function LanguageSwitcher({
+  locale,
+  onDark = false,
+}: {
+  locale: Locale;
+  /** Nút hiển thị trên nền đỏ thương hiệu: viền và chữ trắng. */
+  onDark?: boolean;
+}) {
   const pathname = usePathname() || "/";
   const bare = stripLocale(pathname);
   const [open, setOpen] = useState(false);
@@ -46,7 +53,11 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={localeLabels[locale]}
-        className="flex items-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--line)] px-2.5 py-2 text-[12px] font-semibold text-[var(--ink)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
+        className={`flex items-center gap-1.5 rounded-[var(--radius-control)] border px-2.5 py-2 text-[12px] font-semibold transition ${
+          onDark
+            ? "border-white/40 text-white hover:border-white hover:bg-white/10"
+            : "border-[var(--line)] text-[var(--ink)] hover:border-[var(--brand)] hover:text-[var(--brand)]"
+        }`}
       >
         <span className="text-base leading-none">{localeFlags[locale]}</span>
         <span className="tracking-wide">{localeShort[locale]}</span>

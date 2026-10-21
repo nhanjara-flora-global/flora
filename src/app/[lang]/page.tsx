@@ -17,12 +17,8 @@ import { pageSeo } from "@/lib/seo";
 // HeroSlider text overlay added for the homepage rebuild (see document/REEDIT.txt).
 const SLIDES = [
   {
-    src: "/images/voac/voac-chemical-free-model-farm.jpg",
-    alt: "Aerial view of organic farmland in Vietnam",
-  },
-  {
-    src: "/images/voac/voac-organic-inputs.jpg",
-    alt: "Hands holding rich soil beside a young organic crop",
+    src: "/images/home/hero-greenhouse.jpg",
+    alt: "Greenhouse growing vegetables on a farm",
   },
 ];
 
@@ -78,20 +74,20 @@ export default async function HomePage({ params }: Props) {
   return (
     <>
       <HeroSlider slides={SLIDES}>
-        <div className="max-w-2xl text-white">
-          <p className="eyebrow text-white/80">{h.heroEyebrow}</p>
-          <h1 className="display-lg mt-3 text-white">{h.heroTitle}</h1>
-          <p className="lead mt-4 max-w-xl text-white/90">{h.heroSubtitle}</p>
+        <div className="ml-auto max-w-2xl lg:mr-[calc(-1*max(0px,(100vw_-_88rem)/2)_-_2.5rem)] rounded-[var(--radius-card)] bg-white p-6 text-[var(--ink)] shadow-[var(--shadow-lift)] md:p-9">
+          <p className="eyebrow text-[var(--brand)]">{h.heroEyebrow}</p>
+          <h1 className="display-lg mt-3 text-[var(--ink)]">{h.heroTitle}</h1>
+          <p className="lead mt-4 max-w-xl text-[var(--muted)]">{h.heroSubtitle}</p>
           <div className="mt-7 flex flex-wrap gap-4">
             <Link
               href={withLocale(lang, "/ecosystem")}
-              className="body-sm rounded-[var(--radius-control)] bg-white px-6 py-3 font-semibold uppercase tracking-wide text-[var(--brand)] shadow-[var(--shadow-soft)] transition hover:bg-white/90"
+              className="body-sm rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:brightness-110"
             >
               {h.heroCta1}
             </Link>
             <Link
               href={withLocale(lang, "/products")}
-              className="body-sm rounded-[var(--radius-control)] border-2 border-white px-6 py-3 font-semibold uppercase tracking-wide text-white transition hover:bg-white/10"
+              className="body-sm rounded-[var(--radius-control)] border-2 border-[var(--brand)] px-6 py-3 font-semibold uppercase tracking-wide text-[var(--brand)] transition hover:bg-[var(--brand)]/10"
             >
               {h.heroCta2}
             </Link>
@@ -100,7 +96,7 @@ export default async function HomePage({ params }: Props) {
       </HeroSlider>
 
       <section className="container-page section-y">
-        <Reveal className="space-y-16 md:space-y-20">
+        <div className="space-y-16 md:space-y-20">
           {h.pillars.map((pillar, i) => (
             <div
               key={pillar.title}
@@ -133,7 +129,7 @@ export default async function HomePage({ params }: Props) {
               </Link>
             </div>
           ))}
-        </Reveal>
+        </div>
       </section>
 
       <section className="bg-[var(--bg-soft)]">
@@ -212,7 +208,6 @@ export default async function HomePage({ params }: Props) {
                 product={p}
                 href={withLocale(lang, `/products/${p.slug}`)}
                 organicLabel={dict.common.organic}
-                wholesaleLabel={dict.common.wholesaleOnly}
               />
             ))}
           </Reveal>

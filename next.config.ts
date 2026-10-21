@@ -35,17 +35,19 @@ const nextConfig: NextConfig = {
     // Giới hạn thật của ảnh là 8MB (kiểm trong uploadPostImage); chừa dư cho phần bao multipart.
     serverActions: { bodySizeLimit: "12mb" },
   },
-  images: supabaseHost
-    ? {
-        remotePatterns: [
-          {
-            protocol: "https",
-            hostname: supabaseHost,
-            pathname: "/storage/v1/object/public/**",
-          },
-        ],
-      }
-    : undefined,
+  images: {
+    // Next 16 only serves whitelisted qualities; 95 is for the sharp hero photo.
+    qualities: [75, 95],
+    ...(supabaseHost && {
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: supabaseHost,
+          pathname: "/storage/v1/object/public/**",
+        },
+      ],
+    }),
+  },
   async redirects() {
     return [
       { source: "/blog", destination: "/knowledge", permanent: true },

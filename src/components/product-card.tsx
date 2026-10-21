@@ -6,12 +6,10 @@ export function ProductCard({
   product,
   href,
   organicLabel = "Organic",
-  wholesaleLabel = "Wholesale by the container",
 }: {
   product: Product;
   href?: string;
   organicLabel?: string;
-  wholesaleLabel?: string;
 }) {
   return (
     <Link
@@ -41,9 +39,6 @@ export function ProductCard({
           {product.name}
         </h3>
         <p className="body-sm line-clamp-2 text-[var(--muted)]">{product.short_description}</p>
-        <p className="meta mt-auto pt-2 uppercase text-[var(--brand)]">
-          {wholesaleLabel}
-        </p>
       </div>
     </Link>
   );

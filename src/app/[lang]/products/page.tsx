@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Reveal } from "@/components/reveal";
 import { PageHero } from "@/components/page-hero";
-import { ProductCard } from "@/components/product-card";
+import { ProductsCatalog } from "@/components/products-catalog";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localizeCategories, localizeProducts } from "@/lib/i18n/localized-catalog";
@@ -39,44 +37,23 @@ export default async function ProductsPage({ params }: Props) {
       <PageHero
         eyebrow={dict.productsPage.eyebrow}
         title={dict.productsPage.title}
-        image="/images/wp/2026_03_ELITE.jpg"
+        image="/videos/farmers-field-poster.jpg"
+        video="/videos/farmers-field.mp4"
+        videoSpeed={0.6}
         homeHref={withLocale(lang, "/")}
         crumbs={[{ href: withLocale(lang, "/products"), label: dict.productsPage.title }]}
       />
       <div className="container-page section-y">
         <p className="lead max-w-2xl text-[var(--muted)]">{dict.productsPage.intro}</p>
 
-        {/* Category browsing now lives at its own path (/products/{category}) instead
-            of a query filter, so these chips navigate rather than self-filter. */}
-        <div className="mt-8 flex flex-wrap gap-2">
-          <span className="body-sm rounded-[var(--radius-control)] border border-[var(--brand)] bg-[var(--brand)] px-4 py-2 text-white">
-            {dict.productsPage.all}
-          </span>
-          {categories.map((c) => (
-            <Link
-              key={c.id}
-              href={withLocale(lang, `/products/${c.slug}`)}
-              className="body-sm rounded-[var(--radius-control)] border border-[var(--line)] px-4 py-2 text-[var(--ink)] transition hover:border-[var(--brand)]"
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
-
-        <Reveal className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {products.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              href={withLocale(lang, `/products/${p.slug}`)}
-              organicLabel={dict.common.organic}
-              wholesaleLabel={dict.common.wholesaleOnly}
-            />
-          ))}
-        </Reveal>
-        {products.length === 0 && (
-          <p className="body-base mt-10 text-[var(--muted)]">{dict.productsPage.empty}</p>
-        )}
+        <ProductsCatalog
+          lang={lang}
+          products={products}
+          categories={categories}
+          organicLabel={dict.common.organic}
+          allLabel={dict.productsPage.all}
+          emptyLabel={dict.productsPage.empty}
+        />
       </div>
     </>
   );

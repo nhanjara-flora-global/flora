@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  /* Headings share the body sans-serif (with CJK/Indic fallbacks). */
+  --font-display: var(--font-body), var(--font-zh), var(--font-ko), var(--font-hi), var(--font-si),
+    system-ui, sans-serif;
   /* Legacy Flatsome palette: primary #7c1226, secondary #144ba0 */
   --bg: #ffffff;
   --bg-soft: #f6f4f2;
@@ -29,7 +32,6 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-body);
-  --font-display: var(--font-display);
 }
 
 /* ── Typography scale ───────────────────────────────────────────────
@@ -624,4 +626,45 @@ body {
 
 @supports not (color: color-mix(in srgb, red, blue)) {
   .svc { --sv-soft: #f6f4f2; --sv-line: var(--line); --sv-ink: var(--brand); --sv-deep: var(--brand); }
+}
+
+/* ── Top-bar marquee ───────────────────────────────────────────────
+   Two identical tracks side by side; each slides one full track-width left,
+   so the loop is seamless. Items are separated by spacing only. Pauses on hover; static under reduced motion. */
+.marquee {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  white-space: nowrap;
+  animation: marquee-scroll 240s linear infinite;
+}
+.marquee-set {
+  display: flex;
+  align-items: center;
+  /* Gap between the end of one repeat and the start of the next. */
+  margin-right: 8rem;
+}
+.marquee-set > li {
+  margin-right: 0.3em;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee-scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee-track[aria-hidden] {
+    display: none;
+  }
 }

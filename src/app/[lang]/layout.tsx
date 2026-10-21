@@ -19,8 +19,6 @@ import {
 import { NEWS_CATEGORIES } from "@/lib/legacy";
 import { getServiceStrings } from "@/lib/services/service-i18n";
 import { SOLUTION_CLUSTER_ORDER, servicesByCluster } from "@/lib/services/service-theme";
-import { getCategories } from "@/lib/catalog";
-import { localizeCategories } from "@/lib/i18n/localized-catalog";
 
 type Props = {
   children: React.ReactNode;
@@ -102,8 +100,6 @@ export default async function LocaleLayout({ children, params }: Props) {
     ecosystem: s.clusterEcosystem,
   };
   const clusteredServices = servicesByCluster();
-  const productCategories = localizeCategories(await getCategories(), lang);
-
   const nav = [
     { href: withLocale(lang, "/"), label: dict.nav.home },
     {
@@ -120,13 +116,6 @@ export default async function LocaleLayout({ children, params }: Props) {
     {
       href: withLocale(lang, "/products"),
       label: dict.nav.products,
-      children: [
-        { href: withLocale(lang, "/products"), label: dict.productsPage.all },
-        ...productCategories.map((c) => ({
-          href: withLocale(lang, `/products/${c.slug}`),
-          label: c.name,
-        })),
-      ],
     },
     {
       href: withLocale(lang, "/ecosystem"),
@@ -160,11 +149,11 @@ export default async function LocaleLayout({ children, params }: Props) {
       <SiteHeader
         nav={nav}
         locale={lang}
-        tagline={dict.topbar.tagline}
+        topbar={dict.topbar}
         getInTouch={dict.nav.getInTouch}
       />
       <main className="flex-1">{children}</main>
-      <SiteFooter locale={lang} dict={dict} productCategories={productCategories} />
+      <SiteFooter locale={lang} dict={dict} />
       <FloatingContact locale={lang} label={dict.floating.contact} />
     </>
   );
