@@ -26,6 +26,8 @@ const STATIC: Entry[] = [
   { path: "/products", changeFrequency: "weekly", priority: 0.8 },
   { path: "/knowledge", changeFrequency: "daily", priority: 0.7 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.6 },
+  { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

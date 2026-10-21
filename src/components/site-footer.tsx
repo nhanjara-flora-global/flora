@@ -220,6 +220,16 @@ export function SiteFooter({
                     {dict.nav.contact}
                   </Link>
                 </li>
+                <li>
+                  <Link href={withLocale(locale, "/terms")} className="hover:text-[var(--brand)]">
+                    {f.terms}
+                  </Link>
+                </li>
+                <li>
+                  <Link href={withLocale(locale, "/privacy")} className="hover:text-[var(--brand)]">
+                    {f.privacy}
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

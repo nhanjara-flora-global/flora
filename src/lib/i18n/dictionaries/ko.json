@@ -110,7 +110,10 @@
     "addressLabel": "본사 – 호치민시",
     "address": "베트남 호치민시 Xom Chieu 동 Doan Van Bo 거리 692/31",
     "facebook": "Facebook: Flora Global – Ms. Hoa",
-    "copyright": "저작권 {year} © Flora Global"
+    "copyright": "저작권 {year} © Flora Global",
+    "terms": "이용약관",
+    "privacy": "개인정보 처리방침",
+    "legalUpdated": "최종 업데이트"
   },
   "floating": {
     "contact": "문의"

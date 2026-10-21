@@ -110,7 +110,10 @@
     "addressLabel": "总部 – 胡志明市",
     "address": "越南胡志明市 Xom Chieu 坊 Doan Van Bo 路 692/31 号",
     "facebook": "Facebook：Flora Global – Ms. Hoa",
-    "copyright": "版权所有 {year} © Flora Global"
+    "copyright": "版权所有 {year} © Flora Global",
+    "terms": "使用条款",
+    "privacy": "隐私政策",
+    "legalUpdated": "最后更新"
   },
   "floating": {
     "contact": "联系"

@@ -110,7 +110,10 @@
     "addressLabel": "Trụ sở chính TP.HCM",
     "address": "692/31 Đường Đoàn Văn Bơ, Phường Xóm Chiếu, TP. Hồ Chí Minh, Việt Nam",
     "facebook": "Facebook: Flora Global – Ms. Hoa",
-    "copyright": "Bản quyền {year} © Flora Global"
+    "copyright": "Bản quyền {year} © Flora Global",
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách bảo mật",
+    "legalUpdated": "Cập nhật lần cuối"
   },
   "floating": {
     "contact": "Liên hệ"
