@@ -390,13 +390,13 @@ function Body({ model, lang, service, theme }: Props) {
                     alt=""
                     aria-hidden
                     loading="lazy"
-                    className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20"
+                    className="absolute inset-0 -z-10 h-full w-full object-cover opacity-15"
                   />
                 )}
                 <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold leading-tight">
                   {sec.title}
                 </h2>
-                <div className="mt-4 [&_.svc-rich]:text-[0.95rem] [&_.svc-rich]:leading-relaxed [&_.svc-rich]:text-white/80 [&_.svc-rich_a]:text-white [&_.svc-rich_strong]:text-white">
+                <div className="svc-on-dark mt-4">
                   <ServiceBlocks blocks={sec.blocks} />
                 </div>
               </article>

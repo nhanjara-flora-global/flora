@@ -567,6 +567,18 @@ body {
   text-underline-offset: 3px;
 }
 
+/* Rich text on dark service cards — must beat the unlayered .svc-rich colours. */
+.svc-on-dark .svc-rich {
+  color: rgb(255 255 255 / 0.9);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.svc-on-dark .svc-rich strong,
+.svc-on-dark .svc-rich a {
+  color: #fff;
+}
+
 /* Comparison table inside service prose — scrolls sideways on narrow screens. */
 .svc-table-wrap {
   overflow-x: auto;

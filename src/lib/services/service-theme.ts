@@ -83,7 +83,7 @@ const THEME: Record<string, ServiceTheme> = {
     group: "flora",
     accent: ACCENT,
     icon: "leaf",
-    hero: "spotlight",
+    hero: "editorial",
     metrics: [
       { value: "17–19%", label: "Brix profile" },
       { value: "25 ha", label: "Across 4 agro-climatic zones" },
