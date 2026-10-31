@@ -1,8 +1,9 @@
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 
 /**
- * Ô quảng cáo hiện tự quảng cáo sản phẩm/dịch vụ Flora. Chữ nằm trong
- * dictionaries (news.ads.*), ở đây chỉ giữ link và ảnh. Khi chuyển sang
+ * Ô quảng cáo hiện tự quảng cáo sản phẩm/dịch vụ Flora. Đây là nội dung
+ * MẶC ĐỊNH: chữ nằm trong dictionaries (news.ads.*), ở đây chỉ giữ link và ảnh;
+ * admin sửa / tắt từng mẫu ở /admin/ads (src/lib/site-slots.ts). Khi chuyển sang
  * Google AdSense chỉ cần thay phần ruột của <AdSlot>, kích thước ô giữ nguyên.
  */
 export type AdKey = keyof Dictionary["news"]["ads"];

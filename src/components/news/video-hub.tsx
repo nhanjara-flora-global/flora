@@ -2,20 +2,21 @@ import Link from "next/link";
 import { VIDEOS, videoThumbnail, videoWatchUrl, type Video } from "@/lib/data/videos";
 import { withLocale, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
-import { fill } from "@/lib/news-format";
+import { fill, localHref } from "@/lib/news-format";
+import { getSlot } from "@/lib/site-slots";
 import { AdSlot } from "./ad-slot";
+import { FieldStoryBanner } from "./banners";
 import { VideoCard } from "./cards";
 import { Media } from "./media";
 import { SectionHeader } from "./ui";
 import { VideoPlayer } from "./video-player";
 
-const HONEY_HREF = "/solutions/farming-precision-cultivation-the-honey-no-9-legacy";
 
 /**
  * Trang Video (document/flora-design-handoff/pages/video.html). Video được
  * nhúng từ YouTube/TikTok — xem src/lib/data/videos.ts để thêm/bớt.
  */
-export function VideoHub({
+export async function VideoHub({
   lang,
   dict,
   current,
@@ -25,6 +26,7 @@ export function VideoHub({
   current: Video;
 }) {
   const n = dict.news;
+  const story = await getSlot("field-story", lang);
   const others = VIDEOS.filter((v) => v.id !== current.id);
   const upNext = others.slice(0, 5);
   const howto = others.filter((v) => v.kind === "howto" && !upNext.includes(v)).slice(0, 4);
@@ -115,26 +117,8 @@ export function VideoHub({
         <AdSlot ad="partnerFarm" size="billboard" tone="cream" surface="dark" reverse lang={lang} dict={dict} className="mt-10" />
 
         <section aria-labelledby="v-story" className="mt-10">
-          <SectionHeader id="v-story" title={n.fieldStory} href={withLocale(lang, HONEY_HREF)} onDark />
-          <div className="flex flex-wrap bg-black">
-            <Media
-              src="/images/wp/2026_03_PRECISION-GROWING.jpg"
-              alt={n.honeyTitle}
-              ratio=""
-              sizes="(max-width:768px) 100vw, 60vw"
-              className="min-h-[240px] flex-[3_1_480px] md:min-h-[320px]"
-            />
-            <div className="flex flex-[2_1_300px] flex-col justify-center gap-3 p-6 md:p-8">
-              <h3 className="font-serif text-2xl font-bold leading-[1.2] md:text-[28px]">{n.honeyTitle}</h3>
-              <p className="text-sm leading-relaxed text-on-dark">{dict.home.pillars[1].body}</p>
-              <Link
-                href={withLocale(lang, HONEY_HREF)}
-                className="self-start bg-white px-3.5 py-2 text-[13px] font-bold text-ink hover:bg-[#e8e8e8]"
-              >
-                {n.readMore}
-              </Link>
-            </div>
-          </div>
+          <SectionHeader id="v-story" title={n.fieldStory} href={localHref(lang, story.href)} onDark />
+          <FieldStoryBanner slot={story} lang={lang} surface="black" />
         </section>
 
         {howto.length > 0 && (

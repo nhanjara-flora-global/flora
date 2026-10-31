@@ -17,7 +17,7 @@ import {
   organizationLd,
   websiteLd,
 } from "@/lib/seo";
-import { NEWS_CATEGORIES } from "@/lib/legacy";
+import { categoryName, getNewsCategories } from "@/lib/news-categories";
 import { getServiceStrings } from "@/lib/services/service-i18n";
 import { SOLUTION_CLUSTER_ORDER, servicesByCluster } from "@/lib/services/service-theme";
 
@@ -85,6 +85,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const lang = raw as Locale;
   const dict = getDictionary(lang);
   const s = getServiceStrings(lang);
+  const newsCategories = await getNewsCategories();
 
   // Business-capability clusters (Precision Farming / Certification / Sourcing /
   // Export) replace the old Flora-vs-VOAC brand split — see document/REEDIT.txt.
@@ -149,9 +150,9 @@ export default async function LocaleLayout({ children, params }: Props) {
     {
       href: withLocale(lang, "/knowledge"),
       label: dict.nav.news,
-      children: NEWS_CATEGORIES.map((c) => ({
+      children: newsCategories.map((c) => ({
         href: withLocale(lang, `/knowledge/category/${c.slug}`),
-        label: dict.newsCategories[c.slug],
+        label: categoryName(c, lang),
       })),
     },
     { href: withLocale(lang, "/video"), label: dict.nav.video },

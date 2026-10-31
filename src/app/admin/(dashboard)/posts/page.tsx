@@ -14,13 +14,12 @@ import {
 } from "@/components/admin/ui";
 import { getServiceClientResult } from "@/lib/admin/data";
 import { postState, STATE_LABELS, type PostState } from "@/lib/admin/posts";
-import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { formatDate, NEWS_CATEGORIES } from "@/lib/legacy";
+import { formatDate } from "@/lib/legacy";
+import { categoryName, getNewsCategories } from "@/lib/news-categories";
 import { PostActions } from "./post-actions";
 
 export const metadata: Metadata = { title: "Bài viết" };
 
-const CATEGORY_LABEL = getDictionary("vi").newsCategories as Record<string, string>;
 const STATES: PostState[] = ["published", "scheduled", "draft", "archived"];
 
 type PostRow = {
@@ -67,7 +66,9 @@ export default async function AdminPostsPage({
 }) {
   const sp = await searchParams;
   const status = STATES.find((s) => s === sp.status);
-  const cat = NEWS_CATEGORIES.find((c) => c.slug === sp.cat)?.slug;
+  const categories = await getNewsCategories();
+  const categoryLabel = new Map(categories.map((c) => [c.slug, categoryName(c, "vi")]));
+  const cat = categories.find((c) => c.slug === sp.cat)?.slug;
   const q = sp.q?.trim().slice(0, 60) ?? "";
   const result = await listPosts();
 
@@ -84,6 +85,12 @@ export default async function AdminPostsPage({
             className="rounded-md border border-[var(--line)] bg-white px-4 py-2 text-sm font-medium hover:border-[var(--brand)] hover:text-[var(--brand)]"
           >
             Xem trên web ↗
+          </Link>
+          <Link
+            href="/admin/post-categories"
+            className="rounded-md border border-[var(--line)] bg-white px-4 py-2 text-sm font-medium hover:border-[var(--brand)] hover:text-[var(--brand)]"
+          >
+            Chuyên mục
           </Link>
           <Link
             href="/admin/posts/new"
@@ -178,9 +185,9 @@ export default async function AdminPostsPage({
             className="rounded-md border border-[var(--line)] bg-white px-2 py-2 text-sm outline-none focus:border-[var(--brand)]"
           >
             <option value="">Mọi chuyên mục</option>
-            {NEWS_CATEGORIES.map((c) => (
+            {categories.map((c) => (
               <option key={c.slug} value={c.slug}>
-                {CATEGORY_LABEL[c.slug] ?? c.label}
+                {categoryLabel.get(c.slug)}
               </option>
             ))}
           </select>
@@ -214,7 +221,7 @@ export default async function AdminPostsPage({
                       </span>
                     </Link>
                   </Cell>
-                  <Cell muted>{r.category ? (CATEGORY_LABEL[r.category] ?? r.category) : "—"}</Cell>
+                  <Cell muted>{r.category ? (categoryLabel.get(r.category) ?? r.category) : "—"}</Cell>
                   <Cell>
                     <Badge label={STATE_LABELS[r.state]} tone={POST_STATE_TONE[r.state]} />
                   </Cell>

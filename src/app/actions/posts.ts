@@ -16,9 +16,9 @@ import {
 import { locales } from "@/lib/i18n/config";
 import { slugify, textToHtml } from "@/lib/slug.mjs";
 import { translateArticle } from "@/lib/gt-translate.mjs";
-import { getPost as getSeedPost, NEWS_CATEGORIES } from "@/lib/legacy";
+import { getPost as getSeedPost } from "@/lib/legacy";
+import { getNewsCategory } from "@/lib/news-categories";
 
-const CATEGORY_SLUGS: readonly string[] = NEWS_CATEGORIES.map((c) => c.slug);
 const TARGET_LOCALES = locales.filter((l) => l !== "vi");
 
 export type PostInput = {
@@ -91,7 +91,7 @@ export async function savePost(input: PostInput, intent: Intent): Promise<PostRe
   const seoDescription = input.seoDescription.trim().slice(0, 300);
 
   if (!title) return { ok: false, error: "Thiếu tiêu đề." };
-  if (!CATEGORY_SLUGS.includes(input.category)) {
+  if (!(await getNewsCategory(input.category))) {
     return { ok: false, error: "Chuyên mục không hợp lệ." };
   }
   if (coverUrl && !/^(https:\/\/|\/)\S+$/.test(coverUrl)) {

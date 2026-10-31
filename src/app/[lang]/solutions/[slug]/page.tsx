@@ -104,7 +104,7 @@ export default async function SolutionDetailPage({ params }: Props) {
         others={others}
         sectionPath="/solutions"
         sectionLabel={dict.servicesPage.title}
-        after={<RelatedKnowledge lang={lang} dict={dict} category={categoryForService(slug)} />}
+        after={<RelatedKnowledge lang={lang} category={categoryForService(slug)} />}
       />
     </>
   );

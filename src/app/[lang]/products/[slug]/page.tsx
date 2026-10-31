@@ -249,7 +249,6 @@ function ProductDetail({
             <RelatedProducts lang={lang} dict={dict} product={product} />
             <RelatedKnowledge
               lang={lang}
-              dict={dict}
               category={product.category_slugs?.includes("nguyen-lieu-nhap-khau-huu-co") ? "canh-tac-huu-co" : "thi-truong-xu-huong"}
             />
           </>

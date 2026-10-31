@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getServiceClient } from "@/lib/admin/data";
-import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { NEWS_CATEGORIES } from "@/lib/legacy";
+import { categoryName, getNewsCategories } from "@/lib/news-categories";
 import { SITE_URL } from "@/lib/seo";
 import { PostEditor } from "../post-editor";
 
@@ -28,8 +27,7 @@ export default async function EditPostPage({ params }: Props) {
   const post = await getPost(id);
   if (!post) notFound();
 
-  const names = getDictionary("vi").newsCategories as Record<string, string>;
-  const categories = NEWS_CATEGORIES.map((c) => ({ slug: c.slug, label: names[c.slug] ?? c.label }));
+  const categories = (await getNewsCategories()).map((c) => ({ slug: c.slug, label: categoryName(c, "vi") }));
 
   return (
     <PostEditor
@@ -42,7 +40,8 @@ export default async function EditPostPage({ params }: Props) {
         publishedAt: post.published_at,
         updatedAt: post.updated_at,
         title: post.title,
-        category: post.category ?? categories[0].slug,
+        // Chuyên mục cũ đã bị xoá → chọn sẵn chuyên mục đầu, lưu lại là xong.
+        category: categories.some((c) => c.slug === post.category) ? post.category : categories[0].slug,
         excerpt: post.excerpt ?? "",
         content: post.content ?? "",
         coverUrl: post.cover_url,

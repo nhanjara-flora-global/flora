@@ -15,22 +15,14 @@ import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getLocalizedPost, getLocalizedPosts, type LocalizedArticle } from "@/lib/i18n/localized-content";
 import { localizeProduct } from "@/lib/i18n/localized-catalog";
-import { getPosts, NEWS_CATEGORIES } from "@/lib/legacy";
+import { getPosts } from "@/lib/legacy";
 import { PRODUCT_FALLBACK_IMAGE, coverFor } from "@/lib/media";
+import { categoryName, getNewsCategories } from "@/lib/news-categories";
 import { formatNewsDate, splitAfterParagraph } from "@/lib/news-format";
 import { isPreview } from "@/lib/preview";
 import { SITE_NAME, SITE_URL, abs, breadcrumbLd, pageSeo } from "@/lib/seo";
 
 export const revalidate = 300;
-
-/** Sản phẩm gợi ý trong hộp "Sản phẩm liên quan", theo chuyên mục bài. */
-const RELATED_PRODUCT: Record<string, string> = {
-  "canh-tac-huu-co": "phan-ga-huu-co-nhat-ban",
-  "chung-nhan-tieu-chuan": "phan-ga-huu-co-nhat-ban",
-  "goc-nhin-flora": "phan-ga-huu-co-nhat-ban",
-  "xuat-khau-logistics": "bot-hat-sen-100-nguyen-chat",
-  "thi-truong-xu-huong": "bot-hat-sen-100-nguyen-chat",
-};
 
 const PROSE = "prose-legacy prose-news";
 
@@ -65,8 +57,9 @@ export default async function NewsPostPage({ params }: Props) {
   const post = await getLocalizedPost(slug, lang, { draft: await isPreview() });
   if (!post) notFound();
 
+  const allCats = await getNewsCategories();
   const cats = (post.categories ?? [])
-    .map((c) => NEWS_CATEGORIES.find((x) => x.slug === c))
+    .map((c) => allCats.find((x) => x.slug === c))
     .filter((c) => c !== undefined);
   const primary = cats[0];
   const others = (await getLocalizedPosts(lang)).filter((p) => p.slug !== slug);
@@ -75,7 +68,8 @@ export default async function NewsPostPage({ params }: Props) {
   const mostRead = others.filter((p) => !related.includes(p)).slice(0, 5);
   const more = others.filter((p) => !related.includes(p) && !mostRead.includes(p)).slice(0, 3);
 
-  const productSlug = primary ? RELATED_PRODUCT[primary.slug] : undefined;
+  // Sản phẩm gợi ý trong hộp "Sản phẩm liên quan" — chọn theo chuyên mục ở /admin/post-categories.
+  const productSlug = primary?.relatedProduct;
   const rawProduct = productSlug ? await getProductBySlug(productSlug) : null;
   const product = rawProduct ? localizeProduct(rawProduct, lang) : null;
   const productImage = product?.image_url ?? (product && PRODUCT_FALLBACK_IMAGE[product.slug]?.src);
@@ -112,7 +106,7 @@ export default async function NewsPostPage({ params }: Props) {
         breadcrumb={[
           { href: withLocale(lang, "/knowledge"), label: dict.newsPage.title },
           ...(primary
-            ? [{ href: withLocale(lang, `/knowledge/category/${primary.slug}`), label: dict.newsCategories[primary.slug] }]
+            ? [{ href: withLocale(lang, `/knowledge/category/${primary.slug}`), label: categoryName(primary, lang) }]
             : []),
         ]}
         title={post.title}
@@ -199,7 +193,7 @@ export default async function NewsPostPage({ params }: Props) {
                   href={withLocale(lang, `/knowledge/category/${c.slug}`)}
                   className="block bg-ad-bg px-3 py-1.5 text-[13px] hover:underline"
                 >
-                  {dict.newsCategories[c.slug]}
+                  {categoryName(c, lang)}
                 </Link>
               </li>
             ))}

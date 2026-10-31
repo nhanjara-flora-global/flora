@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { AdBand, AdCreative, AdSlot } from "@/components/news/ad-slot";
+import { AdBand, AdCreative, AdSlot, anyAdVisible } from "@/components/news/ad-slot";
+import { FieldStoryBanner, HomeStrip } from "@/components/news/banners";
 import {
   FeatureStory,
   LeadStory,
@@ -18,37 +19,22 @@ import { Meta, RankedList, SectionHeader } from "@/components/news/ui";
 import { getProducts } from "@/lib/catalog";
 import { VIDEOS, videoThumbnail } from "@/lib/data/videos";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { resolveLocale, withLocale, type Locale } from "@/lib/i18n/config";
+import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import {
   getLocalizedPosts,
   getManualPage,
   type LocalizedArticle,
 } from "@/lib/i18n/localized-content";
 import { localizeProducts } from "@/lib/i18n/localized-catalog";
-import { NEWS_CATEGORIES } from "@/lib/legacy";
 import { PRODUCT_FALLBACK_IMAGE, coverFor } from "@/lib/media";
-import { formatNewsDate, serviceHref } from "@/lib/news-format";
+import { categoryLabeler, categoryName, getNewsCategories } from "@/lib/news-categories";
+import { formatNewsDate, localHref, serviceHref } from "@/lib/news-format";
 import { pageSeo } from "@/lib/seo";
+import { getSlot, type ResolvedSlot } from "@/lib/site-slots";
 import { servicesByCluster } from "@/lib/services/service-theme";
 
 // Trang chủ hiện bài mới nhất và "x giờ trước" — làm mới sau tối đa 5 phút.
 export const revalidate = 300;
-
-const HERO_IMAGE = "/images/home/hero-greenhouse.jpg";
-
-const PILLAR_HREFS = [
-  "/solutions/premium-agricultural-inputs-the-japanese-foundation",
-  "/solutions/farming-precision-cultivation-the-honey-no-9-legacy",
-  "/solutions/organic-certification-global-compliance-solutions",
-  "/solutions/the-export-logistic-chain-precision-velocity-thermal-integrity",
-] as const;
-
-const PILLAR_IMAGES = [
-  "/images/wp/2026_03_ELITE.jpg",
-  "/images/wp/2026_03_PRECISION-GROWING.jpg",
-  "/images/wp/2025_09_tuvanthietke.jpg",
-  "/images/wp/2025_09_quanlyduan.jpg",
-] as const;
 
 /** Bài nền tảng cho khối "Kiến thức nổi bật"; slug nào không còn thì lấy bài kế tiếp. */
 const FEATURED_SLUGS = [
@@ -78,15 +64,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: dict.meta.title,
     titleAbsolute: true,
     description: dict.meta.description,
-    image: HERO_IMAGE,
+    image: (await getSlot("home-lead", lang)).image,
   });
-}
-
-/** Tiêu đề trụ cột trong từ điển viết HOA toàn bộ — đổi về kiểu câu cho tiêu đề báo. */
-function sentenceCase(text: string, locale: Locale): string {
-  if (text !== text.toLocaleUpperCase(locale)) return text;
-  const lower = text.toLocaleLowerCase(locale);
-  return lower.charAt(0).toLocaleUpperCase(locale) + lower.slice(1);
 }
 
 export default async function HomePage({ params }: Props) {
@@ -95,17 +74,23 @@ export default async function HomePage({ params }: Props) {
   const dict = getDictionary(lang);
   const h = dict.home;
   const n = dict.news;
-  const [rawProducts, posts] = await Promise.all([getProducts(), getLocalizedPosts(lang)]);
+  const [rawProducts, posts, newsCategories, strip, lead, side1, side2, fieldStory, showAdPair] = await Promise.all([
+    getProducts(),
+    getLocalizedPosts(lang),
+    getNewsCategories(),
+    getSlot("home-strip", lang),
+    getSlot("home-lead", lang),
+    getSlot("home-side-1", lang),
+    getSlot("home-side-2", lang),
+    getSlot("field-story", lang),
+    anyAdVisible(["sourcing", "lotus"], lang),
+  ]);
   const products = localizeProducts(rawProducts, lang);
   const clusters = servicesByCluster();
 
   const categoryOf = (p: LocalizedArticle) => p.category ?? p.categories?.[0] ?? null;
-  const categoryLabel = (p: LocalizedArticle) => {
-    const c = categoryOf(p);
-    return c && c in dict.newsCategories
-      ? dict.newsCategories[c as keyof typeof dict.newsCategories]
-      : null;
-  };
+  const catLabel = categoryLabeler(newsCategories, lang);
+  const categoryLabel = (p: LocalizedArticle) => catLabel(categoryOf(p));
   const toStory = (p: LocalizedArticle): Story => ({
     href: withLocale(lang, `/knowledge/${p.slug}`),
     title: p.title,
@@ -131,19 +116,20 @@ export default async function HomePage({ params }: Props) {
   for (const p of featured) used.add(p.slug);
   featured.push(...take(2 - featured.length));
   const latest = take(10);
-  const columns = NEWS_CATEGORIES.map((c) => ({
+  const columns = newsCategories.map((c) => ({
     category: c,
     posts: take(4, (p) => (p.categories ?? []).includes(c.slug)),
   })).filter((col) => col.posts.length > 0);
   const recommended = take(10);
 
   const service = (slug: string) => getManualPage(slug, lang);
-  const pillarStory = (i: 0 | 3, label: string): Story => ({
-    href: withLocale(lang, PILLAR_HREFS[i]),
-    title: sentenceCase(h.pillars[i].title, lang),
-    excerpt: h.pillars[i].body,
-    image: PILLAR_IMAGES[i],
-    meta: [label],
+  // Banner sửa trong /admin/banners: nhãn hiện ở dòng meta dưới bài.
+  const bannerStory = (b: ResolvedSlot): Story => ({
+    href: localHref(lang, b.href),
+    title: b.copy.title,
+    excerpt: b.copy.body,
+    image: b.image,
+    meta: [b.copy.eyebrow],
   });
   const sourcing = service(SOURCING_SLUG);
   const voacInputs = service(VOAC_INPUTS_SLUG);
@@ -152,34 +138,18 @@ export default async function HomePage({ params }: Props) {
     <div className="mx-auto max-w-[1280px] px-4 pb-14 pt-4">
       <h1 className="sr-only">{dict.meta.title}</h1>
 
-      <Link
-        href={withLocale(lang, "/ecosystem")}
-        className="flex flex-wrap items-center gap-x-5 gap-y-2 bg-primary px-5 py-3 text-white"
-      >
-        <span className="text-[13px] font-extrabold uppercase tracking-[0.5px]">{h.heroEyebrow}</span>
-        <span className="flex-[1_1_240px] text-sm">{n.ecosystemStrip}</span>
-        <span className="bg-harvest px-3 py-1.5 text-[13px] font-bold">{n.explore}</span>
-      </Link>
+      <HomeStrip slot={strip} lang={lang} />
 
       {/* Tin nổi bật: 2 tin có ảnh | tin chính | danh sách chữ. */}
       <section aria-label={n.latest} className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-[1fr_2fr_1fr]">
         <div className="order-2 flex flex-col gap-4 lg:order-1">
-          <StoryCard story={pillarStory(0, dict.nav.services)} size="lg" />
+          <StoryCard story={bannerStory(side1)} size="lg" />
           <div className="border-t border-rule pt-4">
-            <StoryCard story={pillarStory(3, dict.nav.export)} size="lg" />
+            <StoryCard story={bannerStory(side2)} size="lg" />
           </div>
         </div>
         <div className="order-1 md:col-span-2 lg:order-2 lg:col-span-1">
-          <LeadStory
-            preload
-            story={{
-              href: withLocale(lang, "/ecosystem"),
-              title: h.heroTitle,
-              excerpt: h.heroSubtitle,
-              image: HERO_IMAGE,
-              meta: [dict.nav.ecosystem],
-            }}
-          />
+          <LeadStory preload story={bannerStory(lead)} />
         </div>
         {topList.length > 0 && (
           <div className="order-3 flex flex-col">
@@ -248,34 +218,18 @@ export default async function HomePage({ params }: Props) {
       )}
 
       <section aria-labelledby="s-story" className="mt-10">
-        <SectionHeader id="s-story" title={n.fieldStory} href={withLocale(lang, PILLAR_HREFS[1])} />
-        <div className="flex flex-wrap bg-dark text-white">
-          <Media
-            src={PILLAR_IMAGES[1]}
-            alt={n.honeyTitle}
-            ratio=""
-            sizes="(max-width:768px) 100vw, 60vw"
-            className="min-h-[240px] flex-[3_1_480px] md:min-h-[320px]"
-          />
-          <div className="flex flex-[2_1_300px] flex-col justify-center gap-3 p-6 md:p-8">
-            <h3 className="font-serif text-2xl font-bold leading-[1.2] md:text-[28px]">{n.honeyTitle}</h3>
-            <p className="text-sm leading-relaxed text-[#d5ded7]">{h.pillars[1].body}</p>
-            <Link
-              href={withLocale(lang, PILLAR_HREFS[1])}
-              className="self-start bg-white px-3.5 py-2 text-[13px] font-bold text-ink hover:bg-[#e8e8e8]"
-            >
-              {n.readMore}
-            </Link>
-          </div>
-        </div>
+        <SectionHeader id="s-story" title={n.fieldStory} href={localHref(lang, fieldStory.href)} />
+        <FieldStoryBanner slot={fieldStory} lang={lang} />
       </section>
 
-      <AdBand label={n.ad} className="mt-10">
-        <div className="flex flex-wrap justify-center gap-4">
-          <AdCreative ad="sourcing" size="mpu" tone="image" lang={lang} dict={dict} />
-          <AdCreative ad="lotus" size="mpu" tone="primary" lang={lang} dict={dict} />
-        </div>
-      </AdBand>
+      {showAdPair && (
+        <AdBand className="mt-10">
+          <div className="flex flex-wrap justify-center gap-4">
+            <AdCreative ad="sourcing" size="mpu" tone="image" lang={lang} dict={dict} />
+            <AdCreative ad="lotus" size="mpu" tone="primary" lang={lang} dict={dict} />
+          </div>
+        </AdBand>
+      )}
 
       {products.length > 0 && (
         <section className="mt-10">
@@ -383,7 +337,7 @@ export default async function HomePage({ params }: Props) {
             return (
               <div key={category.slug} className="flex flex-col">
                 <SectionHeader
-                  title={dict.newsCategories[category.slug]}
+                  title={categoryName(category, lang)}
                   href={withLocale(lang, `/knowledge/category/${category.slug}`)}
                 />
                 <StoryCard story={{ ...toStory(lead), meta: [] }} excerpt={false} size="lg" />
@@ -409,7 +363,6 @@ export default async function HomePage({ params }: Props) {
         <NewsletterSignup
           locale={lang}
           copy={{
-            ad: n.ad,
             title: n.newsletterTitle,
             body: n.newsletterBody,
             email: n.newsletterEmail,

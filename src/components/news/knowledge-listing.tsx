@@ -3,8 +3,14 @@ import { VIDEOS, videosForTopic, videoThumbnail } from "@/lib/data/videos";
 import { withLocale, type Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import type { LocalizedArticle } from "@/lib/i18n/localized-content";
-import { NEWS_CATEGORIES } from "@/lib/legacy";
 import { coverFor } from "@/lib/media";
+import {
+  categoryDescription,
+  categoryLabeler,
+  categoryName,
+  getNewsCategories,
+  type NewsCategory,
+} from "@/lib/news-categories";
 import { formatNewsDate } from "@/lib/news-format";
 import { AdSlot } from "./ad-slot";
 import { LeadStory, RowStory, StoryCard, TextStory, VideoCard, type Story } from "./cards";
@@ -26,7 +32,7 @@ export function listPageCount(total: number): number {
  * kien-thuc-phan-bon.html). `category = null` là trang /knowledge tổng.
  * Trang 2 trở đi chỉ còn danh sách "Mới nhất" và phân trang.
  */
-export function KnowledgeListing({
+export async function KnowledgeListing({
   lang,
   dict,
   category,
@@ -35,13 +41,14 @@ export function KnowledgeListing({
 }: {
   lang: Locale;
   dict: Dictionary;
-  category: (typeof NEWS_CATEGORIES)[number]["slug"] | null;
+  category: NewsCategory | null;
   posts: LocalizedArticle[];
   page: number;
 }) {
   const n = dict.news;
-  const base = category ? `/knowledge/category/${category}` : "/knowledge";
-  const title = category ? dict.newsCategories[category] : dict.newsPage.title;
+  const base = category ? `/knowledge/category/${category.slug}` : "/knowledge";
+  const title = category ? categoryName(category, lang) : dict.newsPage.title;
+  const catLabel = categoryLabeler(await getNewsCategories(), lang);
 
   const toStory = (p: LocalizedArticle, withCategory = !category): Story => {
     const cat = p.category ?? p.categories?.[0] ?? null;
@@ -50,12 +57,7 @@ export function KnowledgeListing({
       title: p.title,
       excerpt: p.excerpt,
       image: coverFor({ cover: p.cover, category: cat }),
-      meta: [
-        formatNewsDate(p.date, lang),
-        withCategory && cat && cat in dict.newsCategories
-          ? dict.newsCategories[cat as keyof typeof dict.newsCategories]
-          : null,
-      ],
+      meta: [formatNewsDate(p.date, lang), withCategory ? catLabel(cat) : null],
     };
   };
 
@@ -65,12 +67,13 @@ export function KnowledgeListing({
   const pages = listPageCount(posts.length);
   const list = rest.slice((page - 1) * LIST_PAGE_SIZE, page * LIST_PAGE_SIZE);
   const [lead, ...sides] = top;
-  const videos = category ? videosForTopic(category, 4) : VIDEOS.filter((v) => v.kind === "howto").slice(0, 4);
+  const videos = category ? videosForTopic(category.slug, 4) : VIDEOS.filter((v) => v.kind === "howto").slice(0, 4);
 
   return (
     <ListingShell
       ad={<AdSlot ad="ashFertilizer" size="leaderboard" tone="dark" lang={lang} dict={dict} />}
       title={title}
+      intro={page === 1 && category ? categoryDescription(category, lang) : null}
     >
       {posts.length === 0 && <p className="text-muted">{n.empty}</p>}
 
@@ -133,7 +136,6 @@ export function KnowledgeListing({
           <NewsletterSignup
             locale={lang}
             copy={{
-              ad: n.ad,
               title: n.newsletterTitle,
               body: n.newsletterBody,
               email: n.newsletterEmail,

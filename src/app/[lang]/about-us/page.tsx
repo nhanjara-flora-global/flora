@@ -70,7 +70,7 @@ export default async function AboutPage({ params }: Props) {
           <AdSlot ad="partnerFarm" size="mpu" tone="image" surface="none" lang={lang} dict={dict} />
         </>
       }
-      after={<RelatedKnowledge lang={lang} dict={dict} category="goc-nhin-flora" />}
+      after={<RelatedKnowledge lang={lang} category="goc-nhin-flora" />}
     >
       <div className="mt-6">
         <ContentLocaleBadge article={page} uiLocale={lang} />

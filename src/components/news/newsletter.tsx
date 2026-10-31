@@ -5,7 +5,6 @@ import { subscribeNewsletter, type NewsletterState } from "@/app/actions/newslet
 import type { Locale } from "@/lib/i18n/config";
 
 type Copy = {
-  ad: string;
   title: string;
   body: string;
   email: string;
@@ -22,11 +21,8 @@ export function NewsletterSignup({ locale, copy }: { locale: Locale; copy: Copy 
   );
 
   return (
-    <aside aria-label={copy.ad} className="bg-ad-bg px-4 pb-4 pt-2.5">
+    <aside className="bg-ad-bg p-4">
       <div className="mx-auto max-w-[970px]">
-        <div className="mb-1.5 text-center text-[11px] uppercase tracking-[0.6px] text-muted">
-          {copy.ad}
-        </div>
         <form
           action={action}
           className="flex flex-wrap items-center gap-x-6 gap-y-3.5 border-t-4 border-harvest bg-white px-6 py-5"

@@ -5,6 +5,7 @@ import {
   withLocale,
   type Locale,
 } from "@/lib/i18n/config";
+import { loadSeoOverrides } from "@/lib/seo-overrides";
 
 /** Canonical origin, no trailing slash. Set NEXT_PUBLIC_SITE_URL per environment. */
 export const SITE_URL = (
@@ -60,8 +61,23 @@ type PageSeoInput = {
 /**
  * Per-page metadata: canonical + hreflang alternates + Open Graph + Twitter,
  * consistent across every route. `title` still runs through the layout template.
+ * SEO đặt tay trong /admin/seo (cùng đường dẫn + ngôn ngữ) thắng giá trị tự tạo:
+ * tiêu đề đặt tay là tiêu đề đầy đủ (không nối "| Flora Global").
  */
-export function pageSeo({
+export async function pageSeo(input: PageSeoInput): Promise<Metadata> {
+  const own = (await loadSeoOverrides()).get(withLocale(input.lang, input.path ?? "/"));
+  if (!own) return buildPageSeo(input);
+  return buildPageSeo({
+    ...input,
+    title: own.title || input.title,
+    titleAbsolute: own.title ? true : input.titleAbsolute,
+    description: own.description || input.description,
+    image: own.image_url || input.image,
+    noIndex: input.noIndex || own.noindex,
+  });
+}
+
+function buildPageSeo({
   lang,
   path = "/",
   title,

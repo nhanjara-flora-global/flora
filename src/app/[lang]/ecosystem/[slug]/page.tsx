@@ -93,7 +93,7 @@ export default async function EcosystemDetailPage({ params }: Props) {
         others={others}
         sectionPath="/ecosystem"
         sectionLabel={dict.ecosystemPage.title}
-        after={<RelatedKnowledge lang={lang} dict={dict} category={categoryForService(slug)} />}
+        after={<RelatedKnowledge lang={lang} category={categoryForService(slug)} />}
       />
     </>
   );

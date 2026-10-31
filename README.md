@@ -59,14 +59,16 @@ Tin tức đến từ 2 nguồn, gộp lại (Supabase ghi đè seed nếu trùn
   + `src/lib/i18n/content/news-cache.json` (bản dịch en/zh/ko/hi/si).
 - **Supabase** (khi `DATA_SOURCE=supabase`): bảng `posts`, quản lý qua `/admin`.
 
-5 category: `canh-tac-huu-co`, `chung-nhan-tieu-chuan`, `xuat-khau-logistics`,
-`thi-truong-xu-huong`, `goc-nhin-flora` (trong `src/lib/legacy.ts` + 6 file dictionary).
+Chuyên mục sửa ở `/admin/post-categories` (bảng `post_categories`, xem mục bên dưới).
+Mặc định 5 chuyên mục: `canh-tac-huu-co`, `chung-nhan-tieu-chuan`, `xuat-khau-logistics`,
+`thi-truong-xu-huong`, `goc-nhin-flora` (`NEWS_CATEGORIES` trong `src/lib/legacy.ts` + dictionary).
 Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin thì revalidate ngay).
 
 ### Đăng bài từ admin
 
 1. Chạy `supabase/schema.sql` → `0001_news_posts.sql` → `0002_post_images_storage.sql`
-   → `0003_seed_product_descriptions.sql` (trong `supabase/migrations/`) trên Supabase.
+   → `0003_seed_product_descriptions.sql` → `0004_site_content.sql` → `0005_post_categories.sql`
+   (trong `supabase/migrations/`) trên Supabase.
    (0002 tạo bucket công khai `post-images`; 0003 backfill mô tả 4 sản phẩm seed.)
 2. Đặt `DATA_SOURCE=supabase` + các key Supabase trong env (Vercel).
 3. `/admin` → **Bài viết** → **+ Viết bài**. Trình soạn 2 cột (theo mẫu admin Cây Cảnh
@@ -129,10 +131,48 @@ hết hạn sau 7 ngày — đổi `ADMIN_SECRET` là đăng xuất toàn bộ p
 |------|----------|
 | `/admin` | KPI doanh thu 30 ngày, đơn theo trạng thái, đơn & liên hệ mới nhất |
 | `/admin/posts` | CMS bài viết: viết, sửa, đăng/ẩn, xoá, dịch lại 5 ngôn ngữ |
+| `/admin/post-categories` | Chuyên mục bài viết: thêm, đổi tên vi/en, giới thiệu, sản phẩm liên quan, sắp xếp, xoá (chuyển bài sang mục khác) |
 | `/admin/orders` | Lọc theo trạng thái, tìm theo mã/tên/email/SĐT, phân trang 20 dòng |
 | `/admin/orders/[id]` | Dòng hàng, thông tin khách, địa chỉ, ghi chú + cập nhật trạng thái đơn/thanh toán |
 | `/admin/products` | Thêm / sửa / đăng-ẩn / xoá sản phẩm, gán chuyên mục; xem cả `draft`/`archived` (storefront chỉ thấy `published`) |
 | `/admin/contacts` | Submission form liên hệ, tìm kiếm + phân trang |
+| `/admin/banners` | Banner trang chủ + trang Video: ảnh, chữ vi/en, link, hẹn ngày hiện |
+| `/admin/ads` | 7 mẫu quảng cáo (mỗi mẫu hiện ở nhiều trang): sửa chữ / ảnh / link, tắt, hẹn ngày |
+| `/admin/seo` | Mọi trang công khai × ngôn ngữ: SEO đặt tay (tiêu đề, mô tả, ảnh chia sẻ, ẩn khỏi Google) + tab Cảnh báo |
+
+### Banner, quảng cáo, SEO (theo mẫu admin Cây Cảnh Miền Tây)
+
+Cần chạy `supabase/migrations/0004_site_content.sql` (bảng `site_slots` + `seo_overrides`).
+Chưa chạy thì web vẫn hiện nội dung mặc định, admin hiện hướng dẫn chạy migration.
+
+- **Nội dung mặc định nằm trong code** (`src/lib/site-slots.ts`: ảnh trong `/public`,
+  chữ trong `dictionaries/*.json`); database chỉ giữ phần admin đổi, ô trống = mặc định.
+  Thêm ô mới: khai trong `SLOTS` rồi đọc bằng `getSlot(key, lang)` ở trang.
+- **Quảng cáo**: `<AdSlot>` / `<AdCreative>` là server component async, admin tắt mẫu
+  thì ô biến mất. Ô không kèm nhãn "Quảng cáo". Ngoài khoảng ngày hẹn → nội dung mặc định.
+- **SEO đặt tay** áp trong `pageSeo()` (`src/lib/seo.ts`), khoá = đường dẫn có ngôn ngữ
+  (`/vi/knowledge`). Tiêu đề đặt tay là tiêu đề đầy đủ (không nối template). "Ẩn khỏi
+  Google" = `noindex` + rời `sitemap.xml`. Trang công khai mới nhớ dùng `pageSeo()`.
+- Lưu ở admin gọi `revalidatePath("/", "layout")` → cả web làm mới ngay.
+
+### Chuyên mục bài viết
+
+Cần chạy `supabase/migrations/0005_post_categories.sql` (bảng `post_categories`, nạp sẵn 5
+chuyên mục, chạy lại vô hại). Chưa chạy / bảng trống / đọc lỗi → web dùng 5 chuyên mục mặc
+định trong code, admin hiện hướng dẫn chạy migration.
+
+- Mọi chỗ trên web đọc qua `getNewsCategories()` (`src/lib/news-categories.ts`): menu
+  Kiến thức, cột chuyên mục trang chủ, trang `/knowledge/category/[slug]` (giới thiệu hiện
+  dưới tiêu đề + làm mô tả SEO), breadcrumb / thẻ chủ đề / hộp **Sản phẩm liên quan** của
+  bài, ô chọn chuyên mục khi viết bài, sitemap. Thứ tự trên admin = thứ tự menu.
+- Đường dẫn chuyên mục cố định sau khi tạo (đổi tên không đổi link). Tên / giới thiệu tiếng
+  Anh để trống thì tự dịch khi lưu; dịch lỗi thì để trống, trang /en dùng tên tiếng Việt.
+- Xoá chuyên mục còn bài: phải chọn mục để chuyển bài sang (cập nhật `posts.category`).
+  Bài mẫu chỉ có trong `wp-content.json` (chưa sync) thì không xoá được — chạy
+  `npm run posts:sync` trước. Lưu ý `posts:sync` lấy chuyên mục trong JSON làm chuẩn, nên
+  sync lại sau khi chuyển bài sẽ trả bài mẫu về chuyên mục cũ.
+- Nhãn chủ đề của **video** (`src/lib/data/videos.ts`) và tiêu đề khối dịch vụ "Chứng nhận"
+  trên trang chủ vẫn lấy từ dictionary — không phải chuyên mục bài.
 
 Đơn hàng, liên hệ và CMS bài viết chỉ có dữ liệu khi `DATA_SOURCE=supabase`; ở chế
 độ `local` mỗi trang hiện banner nhắc bật Supabase.
@@ -145,6 +185,7 @@ vào bảng `posts` (kèm `category`, `source_locale`, `translations` — đúng
 
 ```bash
 npm run posts:sync          # DRY_RUN=1 npm run posts:sync để xem trước
+ONLY=slug-a,slug-b npm run posts:sync   # chỉ đẩy vài bài, không đụng bài khác
 ```
 
 Cần chạy `supabase/migrations/0001_news_posts.sql` trước. Lưu ý script lấy file JSON

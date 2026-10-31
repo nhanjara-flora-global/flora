@@ -10,6 +10,7 @@
  *
  * Chạy:      npm run posts:sync
  * Thử khô:   DRY_RUN=1 npm run posts:sync
+ * Chỉ vài bài: ONLY=slug-a,slug-b npm run posts:sync   (không đụng các bài khác)
  */
 
 import fs from "node:fs";
@@ -21,6 +22,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const WP_PATH = path.join(ROOT, "src/lib/data/wp-content.json");
 const CACHE_PATH = path.join(ROOT, "src/lib/i18n/content/news-cache.json");
 const DRY_RUN = process.env.DRY_RUN === "1";
+const ONLY = process.env.ONLY ? new Set(process.env.ONLY.split(",").map((s) => s.trim())) : null;
 
 /** Nạp .env.local / .env để chạy tay không cần export biến môi trường. */
 function loadEnv() {
@@ -69,7 +71,12 @@ async function main() {
   const categoryOf = categoryIndex(categories);
   const now = new Date().toISOString();
 
-  const rows = Object.entries(posts).map(([slug, post]) => {
+  const entries = Object.entries(posts).filter(([slug]) => !ONLY || ONLY.has(slug));
+  if (ONLY) {
+    for (const slug of ONLY) if (!posts[slug]) console.warn(`  ! không có trong wp-content.json: ${slug}`);
+  }
+
+  const rows = entries.map(([slug, post]) => {
     const sourceLocale = detectSourceLocale(`${post.title}\n${post.content ?? ""}`);
     const translations = Object.fromEntries(
       Object.entries(cache[slug] ?? {})
