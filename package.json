@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "news:generate": "node scripts/generate-daily-post.mjs",
+    "news:schedule": "node --no-warnings scripts/schedule-news.mjs",
     "posts:sync": "node scripts/sync-posts-to-supabase.mjs",
     "import:voac": "node scripts/import-voac.mjs"
   },
