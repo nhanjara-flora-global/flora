@@ -69,16 +69,6 @@ export function KnowledgeListing({
 
   return (
     <ListingShell
-      navLabel={n.mainNav}
-      band={{
-        title: dict.newsPage.title,
-        href: withLocale(lang, "/knowledge"),
-        items: NEWS_CATEGORIES.map((c) => ({
-          href: withLocale(lang, `/knowledge/category/${c.slug}`),
-          label: dict.newsCategories[c.slug],
-          active: c.slug === category,
-        })),
-      }}
       ad={<AdSlot ad="ashFertilizer" size="leaderboard" tone="dark" lang={lang} dict={dict} />}
       title={title}
     >

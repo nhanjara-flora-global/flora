@@ -107,7 +107,9 @@ export default async function LocaleLayout({ children, params }: Props) {
       href: withLocale(lang, "/solutions"),
       label: dict.nav.services,
       children: SOLUTIONS_ONLY.flatMap((cluster) => [
-        { href: `#${cluster}`, label: clusterLabel[cluster], heading: true },
+        // Đường dẫn đầy đủ: hàng menu phụ trong header dùng chính các nhóm này,
+        // kể cả khi đang ở trang con /solutions/[slug].
+        { href: `${withLocale(lang, "/solutions")}#${cluster}`, label: clusterLabel[cluster], heading: true },
         ...clusteredServices[cluster].map((slug) => ({
           href: withLocale(lang, `/solutions/${slug}`),
           label: dict.services[slug],

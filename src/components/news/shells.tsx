@@ -1,25 +1,21 @@
 import Link from "next/link";
 import { RowStory, type Story } from "./cards";
 import { Media } from "./media";
-import { Breadcrumb, CategoryBand, SectionHeader } from "./ui";
+import { Breadcrumb, SectionHeader } from "./ui";
 
 type Crumb = { href: string; label: string };
 
 /**
- * Khung trang "danh mục": dải màu chủ đạo (tên mục + menu con), ô quảng cáo,
- * tiêu đề H1 và phần nội dung. Dùng cho Kiến thức, Giải pháp, Hệ sinh thái,
- * Sản phẩm để mọi trang danh sách cùng một kiểu.
+ * Khung trang "danh mục": ô quảng cáo, tiêu đề H1 và phần nội dung. Menu con
+ * của mục nằm ở hàng menu phụ trong header (kiểu BBC). Dùng cho Kiến thức,
+ * Giải pháp, Hệ sinh thái, Sản phẩm để mọi trang danh sách cùng một kiểu.
  */
 export function ListingShell({
-  band,
-  navLabel,
   ad,
   title,
   intro,
   children,
 }: {
-  band: { title: string; href: string; items?: (Crumb & { active?: boolean })[] };
-  navLabel: string;
   ad?: React.ReactNode;
   title: string;
   intro?: string | null;
@@ -27,12 +23,6 @@ export function ListingShell({
 }) {
   return (
     <>
-      <CategoryBand
-        title={band.title}
-        titleHref={band.href}
-        label={navLabel}
-        items={(band.items ?? []).map((i) => ({ ...i, active: !!i.active }))}
-      />
       {ad}
       <div className="mx-auto max-w-[1280px] px-4 pb-14 pt-6">
         <h1 className="text-[28px] font-extrabold tracking-[-0.3px] md:text-[32px]">{title}</h1>

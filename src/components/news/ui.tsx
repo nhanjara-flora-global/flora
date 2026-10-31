@@ -58,51 +58,6 @@ export function Meta({
   );
 }
 
-/** Dải màu chủ đạo với tên mục lớn và menu con (đầu trang Kiến thức). */
-export function CategoryBand({
-  title,
-  titleHref,
-  items,
-  label,
-}: {
-  title: string;
-  titleHref: string;
-  items: { href: string; label: string; active: boolean }[];
-  label: string;
-}) {
-  return (
-    <div className="bg-primary text-white">
-      <div className={`mx-auto max-w-[1280px] px-4 pt-3.5 ${items.length ? "" : "pb-3.5"}`}>
-        <Link
-          href={titleHref}
-          className="text-[26px] font-extrabold uppercase tracking-[-0.3px] hover:underline md:text-[30px]"
-        >
-          {title}
-        </Link>
-        {items.length > 0 && (
-          <nav aria-label={label} className="-mx-4 mt-2 overflow-x-auto px-4">
-            <ul className="flex w-max gap-5 text-[13px]">
-              {items.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={item.active ? "page" : undefined}
-                    className={`block whitespace-nowrap border-b-[3px] pb-[5px] pt-2 ${
-                      item.active ? "border-white font-bold" : "border-transparent hover:underline"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
-      </div>
-    </div>
-  );
-}
-
 export function Breadcrumb({
   items,
   label,

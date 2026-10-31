@@ -41,15 +41,6 @@ export default async function EcosystemPage({ params }: Props) {
 
   return (
     <ListingShell
-      navLabel={dict.news.mainNav}
-      band={{
-        title: dict.ecosystemPage.title,
-        href: withLocale(lang, "/ecosystem"),
-        items: services.map((svc) => ({
-          href: withLocale(lang, `/ecosystem/${svc.slug}`),
-          label: serviceLabel(dict, svc.slug),
-        })),
-      }}
       ad={<AdSlot ad="partnerFarm" size="leaderboard" tone="light" lang={lang} dict={dict} />}
       title={dict.ecosystemPage.title}
       intro={dict.ecosystemPage.intro}

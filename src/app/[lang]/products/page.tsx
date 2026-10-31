@@ -5,7 +5,7 @@ import { ProductsCatalog } from "@/components/products-catalog";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
 import { localizeCategories, localizeProducts } from "@/lib/i18n/localized-catalog";
-import { resolveLocale, withLocale } from "@/lib/i18n/config";
+import { resolveLocale } from "@/lib/i18n/config";
 import { pageSeo } from "@/lib/seo";
 
 export const revalidate = 300;
@@ -35,8 +35,6 @@ export default async function ProductsPage({ params }: Props) {
 
   return (
     <ListingShell
-      navLabel={dict.news.mainNav}
-      band={{ title: dict.productsPage.title, href: withLocale(lang, "/products") }}
       ad={<AdSlot ad="certification" size="leaderboard" tone="cream" lang={lang} dict={dict} />}
       title={dict.productsPage.title}
       intro={dict.productsPage.intro}

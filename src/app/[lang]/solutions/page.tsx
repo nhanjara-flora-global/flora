@@ -80,15 +80,6 @@ export default async function SolutionsPage({ params }: Props) {
 
   return (
     <ListingShell
-      navLabel={dict.news.mainNav}
-      band={{
-        title: dict.servicesPage.title,
-        href: withLocale(lang, "/solutions"),
-        items: SOLUTIONS_CLUSTERS.map(({ cluster, title }) => ({
-          href: `${withLocale(lang, "/solutions")}#${cluster}`,
-          label: title(s),
-        })),
-      }}
       ad={<AdSlot ad="certification" size="leaderboard" tone="cream" lang={lang} dict={dict} />}
       title={dict.servicesPage.title}
       intro={s.intro}
@@ -100,7 +91,7 @@ export default async function SolutionsPage({ params }: Props) {
           const [lead, ...rest] = items;
           return (
             // scroll-mt: chừa chỗ cho header dính khi bấm link #cụm trên menu.
-            <section key={cluster} id={cluster} aria-labelledby={`h-${cluster}`} className="scroll-mt-28">
+            <section key={cluster} id={cluster} aria-labelledby={`h-${cluster}`} className="scroll-mt-32">
               <SectionHeader id={`h-${cluster}`} title={title(s)} />
               <p className="-mt-1 mb-5 max-w-3xl text-sm leading-relaxed text-ink-2">{note(s)}</p>
               <FeatureStory story={toStory(lead)} kicker={serviceLabel(dict, lead.slug)} cta={dict.news.readMore} />
