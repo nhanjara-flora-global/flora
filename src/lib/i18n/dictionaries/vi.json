@@ -16,7 +16,10 @@
     "news": "Kiến thức",
     "products": "Sản phẩm",
     "contact": "Liên hệ",
-    "getInTouch": "Liên hệ"
+    "getInTouch": "Liên hệ",
+    "certification": "Chứng nhận",
+    "export": "Xuất khẩu",
+    "video": "Video"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "Đầu vào chuẩn Nhật",
@@ -196,5 +199,101 @@
     "aboutProduct": "Yêu cầu mua sỉ cho sản phẩm",
     "formTitle": "Làm thế nào chúng tôi có thể giúp bạn?",
     "formIntro": "Hãy gửi nội dung yêu cầu cho chúng tôi!"
+  },
+  "news": {
+    "ad": "Quảng cáo",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu",
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Tìm bài viết",
+    "searchResults": "{count} kết quả cho “{q}”",
+    "searchEmpty": "Không có bài viết nào khớp với “{q}”.",
+    "searchPrompt": "Nhập từ khóa để tìm trong mục Kiến thức.",
+    "mainNav": "Chuyên mục chính",
+    "footerNav": "Liên kết chân trang",
+    "breadcrumb": "Đường dẫn",
+    "pagination": "Phân trang",
+    "prevPage": "Trang trước",
+    "nextPage": "Trang sau",
+    "prev": "Trước",
+    "next": "Sau",
+    "latest": "Tin mới",
+    "latestList": "Mới nhất",
+    "featured": "Kiến thức nổi bật",
+    "recommended": "Nên đọc",
+    "fieldStory": "Câu chuyện vùng trồng",
+    "readMore": "Đọc thêm",
+    "explore": "Khám phá",
+    "ecosystemStrip": "Từ đầu vào, canh tác, chứng nhận đến xuất khẩu, truy xuất 100%",
+    "honeyTitle": "Di sản Honey No. 9: chanh dây vàng ngọt 17–19 Brix",
+    "videos": "Video nông nghiệp",
+    "watchVideos": "Xem video",
+    "play": "Phát video: {title}",
+    "upNext": "Xem thêm",
+    "missed": "Có thể bạn đã bỏ lỡ",
+    "howto": "Hướng dẫn kỹ thuật",
+    "source": "Nguồn: {source}",
+    "videoNote": "Video được nhúng từ YouTube và TikTok, bản quyền thuộc kênh đăng tải.",
+    "watchOn": "Xem trên {platform}",
+    "quote": "Liên hệ báo giá",
+    "relatedProduct": "Sản phẩm liên quan",
+    "share": "Chia sẻ",
+    "linkCopied": "Đã sao chép liên kết",
+    "byline": "Ban biên tập Flora Global",
+    "moreFrom": "Thêm từ Flora Global",
+    "sidebar": "Cột phụ",
+    "topics": "Chủ đề",
+    "photo": "Ảnh: {credit}",
+    "newsletterTitle": "Bản tin mùa vụ Flora",
+    "newsletterBody": "Kiến thức canh tác, chứng nhận và thị trường xuất khẩu gửi định kỳ vào hộp thư của bạn.",
+    "newsletterEmail": "Email của bạn",
+    "newsletterSubmit": "Đăng ký",
+    "newsletterDone": "Cảm ơn bạn đã đăng ký bản tin.",
+    "newsletterError": "Vui lòng nhập địa chỉ email hợp lệ.",
+    "empty": "Chưa có bài viết.",
+    "ads": {
+      "chickenManure": {
+        "eyebrow": "Nhập khẩu từ Nhật Bản",
+        "title": "Phân gà hữu cơ Nhật Bản, ủ hoai và xử lý nhiệt hoàn toàn",
+        "body": "Nuôi đất khỏe, nền tảng cho trái ngọt và đều.",
+        "cta": "Nhận báo giá"
+      },
+      "certification": {
+        "eyebrow": "Dịch vụ chứng nhận",
+        "title": "Cần chứng nhận hữu cơ cho vườn?",
+        "body": "Tư vấn chứng nhận VOAC, USDA, EU Organic, GlobalG.A.P. trọn gói.",
+        "cta": "Gọi 0932.108.990"
+      },
+      "sourcing": {
+        "eyebrow": "Thu mua chiến lược",
+        "title": "Tìm nguồn nông sản Việt Nam đạt chuẩn?",
+        "body": "Cầu nối của bạn đến nông sản Việt Nam.",
+        "cta": "Tìm nguồn hàng"
+      },
+      "lotus": {
+        "eyebrow": "Sản phẩm hữu cơ",
+        "title": "Bột hạt sen nguyên chất 100%",
+        "body": "Nguyên liệu cho thực phẩm chế biến và xuất khẩu.",
+        "cta": "Liên hệ báo giá"
+      },
+      "partnerFarm": {
+        "eyebrow": "Hệ sinh thái VOAC",
+        "title": "Trở thành đối tác nông trại hữu cơ cùng Flora",
+        "body": "Đầu vào chuẩn Nhật, hỗ trợ chứng nhận và đầu ra xuất khẩu.",
+        "cta": "Tìm hiểu chương trình"
+      },
+      "ashFertilizer": {
+        "eyebrow": "Sản phẩm Flora",
+        "title": "Tro phân gà nung: phân hữu cơ PK cho vườn cây ăn trái",
+        "body": "",
+        "cta": "Nhận báo giá"
+      },
+      "voacInputs": {
+        "eyebrow": "VOAC",
+        "title": "Nguyên liệu nông nghiệp hữu cơ VOAC cho nhà sản xuất",
+        "body": "",
+        "cta": "Tìm hiểu"
+      }
+    }
   }
 }

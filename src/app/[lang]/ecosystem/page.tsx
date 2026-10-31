@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/components/reveal";
-import { PageHero } from "@/components/page-hero";
-import { ServiceCardLarge } from "@/components/service/service-card";
+import { AdSlot } from "@/components/news/ad-slot";
+import { StoryCard } from "@/components/news/cards";
+import { ListingShell } from "@/components/news/shells";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getManualServices } from "@/lib/i18n/localized-content";
 import { SERVICE_ORDER } from "@/lib/legacy";
 import { getServiceTagline } from "@/lib/services/service-tagline";
-import { getSolutionCluster, serviceIndex } from "@/lib/services/service-theme";
+import { getSolutionCluster } from "@/lib/services/service-theme";
 import { pageSeo } from "@/lib/seo";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
@@ -39,40 +39,37 @@ export default async function EcosystemPage({ params }: Props) {
     (svc) => getSolutionCluster(svc.slug as ServiceSlug) === "ecosystem",
   );
 
-  const shared = (svc: (typeof services)[number]) => ({
-    slug: svc.slug,
-    title: svc.title,
-    excerpt: getServiceTagline(lang, svc.slug) ?? svc.excerpt,
-    label: serviceLabel(dict, svc.slug),
-    index: serviceIndex(svc.slug),
-    lang,
-    readMore: dict.common.readMore,
-    sectionPath: "/ecosystem",
-  });
-
   return (
-    <>
-      <PageHero
-        eyebrow={dict.ecosystemPage.eyebrow}
-        title={dict.ecosystemPage.title}
-        image="/videos/tractor-drone-poster.jpg"
-        video="/videos/tractor-drone.mp4"
-        videoSpeed={0.6}
-        homeHref={withLocale(lang, "/")}
-        crumbs={[{ href: withLocale(lang, "/ecosystem"), label: dict.ecosystemPage.title }]}
-      />
-
-      <div className="container-page section-y">
-        <p className="mx-auto max-w-3xl text-center text-[1.15rem] leading-relaxed text-[var(--muted)]">
-          {dict.ecosystemPage.intro}
-        </p>
-
-        <Reveal className="mt-14 grid gap-8 md:grid-cols-2">
-          {services.map((svc) => (
-            <ServiceCardLarge key={svc.slug} {...shared(svc)} cover={svc.cover} />
-          ))}
-        </Reveal>
+    <ListingShell
+      navLabel={dict.news.mainNav}
+      band={{
+        title: dict.ecosystemPage.title,
+        href: withLocale(lang, "/ecosystem"),
+        items: services.map((svc) => ({
+          href: withLocale(lang, `/ecosystem/${svc.slug}`),
+          label: serviceLabel(dict, svc.slug),
+        })),
+      }}
+      ad={<AdSlot ad="partnerFarm" size="leaderboard" tone="light" lang={lang} dict={dict} />}
+      title={dict.ecosystemPage.title}
+      intro={dict.ecosystemPage.intro}
+    >
+      <div className="grid gap-x-5 gap-y-8 md:grid-cols-2">
+        {services.map((svc) => (
+          <StoryCard
+            key={svc.slug}
+            size="xl"
+            sizes="(max-width:768px) 100vw, 50vw"
+            story={{
+              href: withLocale(lang, `/ecosystem/${svc.slug}`),
+              title: svc.title,
+              excerpt: getServiceTagline(lang, svc.slug) ?? svc.excerpt,
+              image: svc.cover,
+              meta: [serviceLabel(dict, svc.slug)],
+            }}
+          />
+        ))}
       </div>
-    </>
+    </ListingShell>
   );
 }

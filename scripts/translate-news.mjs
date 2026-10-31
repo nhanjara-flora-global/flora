@@ -2,7 +2,7 @@
  * Điền bản dịch cho các bài news CHƯA có trong news-cache.json,
  * dùng endpoint Google Translate miễn phí. Không cần API key.
  *
- * - Nguồn: tiếng Việt (vi). Đích: en, zh, ko, hi, si.
+ * - Nguồn: tiếng Việt (vi). Đích: en.
  * - Idempotent: chạy lại chỉ dịch bài mới / ngôn ngữ còn thiếu.
  * - Ghi tăng dần nên an toàn nếu bị ngắt giữa chừng.
  *
@@ -20,7 +20,7 @@ const WP_PATH = path.join(ROOT, "src/lib/data/wp-content.json");
 const CACHE_PATH = path.join(ROOT, "src/lib/i18n/content/news-cache.json");
 
 const SOURCE = "vi";
-const TARGETS = ["en", "zh", "ko", "hi", "si"];
+const TARGETS = ["en"];
 const ONLY = process.env.ONLY || null;
 
 async function main() {

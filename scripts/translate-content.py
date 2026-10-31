@@ -20,7 +20,7 @@ WP = ROOT / "src/lib/data/wp-content.json"
 OUT_MANUAL = ROOT / "src/lib/i18n/content/manual-bundle.json"
 OUT_NEWS = ROOT / "src/lib/i18n/content/news-cache.json"
 
-TARGET_LOCALES = ["vi", "zh", "ko", "hi", "si"]
+TARGET_LOCALES = ["vi"]
 GT_CODE = {
     "en": "en",
     "vi": "vi",

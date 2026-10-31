@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { RelatedKnowledge, categoryForService } from "@/components/news/related-knowledge";
 import { ServiceDetail } from "@/components/service/service-detail";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { locales, resolveLocale, withLocale } from "@/lib/i18n/config";
@@ -92,6 +93,7 @@ export default async function EcosystemDetailPage({ params }: Props) {
         others={others}
         sectionPath="/ecosystem"
         sectionLabel={dict.ecosystemPage.title}
+        after={<RelatedKnowledge lang={lang} dict={dict} category={categoryForService(slug)} />}
       />
     </>
   );

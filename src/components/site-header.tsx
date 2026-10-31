@@ -1,11 +1,12 @@
 "use client";
 
+import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
-import { withLocale } from "@/lib/i18n/config";
+import { localeLabels, locales, stripLocale, withLocale } from "@/lib/i18n/config";
 import { LanguageSwitcher } from "./language-switcher";
 
 /** `heading: true` biến mục thành nhãn nhóm — hiển thị, không bấm được. */
@@ -17,349 +18,289 @@ type NavItem = {
   children?: NavChild[];
 };
 
+type Labels = {
+  contact: string;
+  openMenu: string;
+  closeMenu: string;
+  search: string;
+  searchPlaceholder: string;
+  mainNav: string;
+};
+
+/**
+ * Header kiểu báo (document/flora-design-handoff): hàng trên chia ba —
+ * menu + tìm kiếm | logo giữa | Liên hệ + ngôn ngữ; hàng dưới là menu chính
+ * căn giữa, gạch chân mục đang xem. Cả khối dính đỉnh khi cuộn. Mục con
+ * (dịch vụ, chuyên mục) nằm trong ngăn kéo mở bằng nút menu.
+ */
 export function SiteHeader({
   nav,
   locale,
-  topbar,
-  getInTouch,
+  labels,
 }: {
   nav: NavItem[];
   locale: Locale;
-  topbar: { tagline: string; group: string; service: string };
-  getInTouch: string;
+  labels: Labels;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [searching, setSearching] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
-  /**
-   * Dropdown trước đây chỉ mở bằng CSS group-hover: không có thao tác nào
-   * đóng được nó, và trên thiết bị cảm ứng trạng thái hover dính lại sau khi
-   * chạm nên menu cứ hiện mãi. Giữ state để còn đóng được.
-   */
-  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
-  // Đóng mọi menu khi đổi trang. Reset ngay lúc render thay vì trong effect —
-  // effect chạy sau khi vẽ nên menu còn nháy lại một nhịp, và eslint cũng cảnh
-  // báo setState đồng bộ trong effect.
+  // Đóng ngăn kéo / ô tìm kiếm khi đổi trang. Reset lúc render thay vì trong
+  // effect để menu không nháy lại một nhịp.
   const [prevPath, setPrevPath] = useState(pathname);
   if (pathname !== prevPath) {
     setPrevPath(pathname);
     setOpen(false);
+    setSearching(false);
     setExpanded(null);
-    setOpenMenu(null);
   }
 
-  // Khoá cuộn nền khi menu mobile mở — nếu không, người dùng vuốt trong menu
-  // lại kéo trang phía sau, và thanh menu dài hơn màn hình thì bị hụt.
+  // Khoá cuộn nền và cho Esc đóng khi ngăn kéo mở.
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
     };
   }, [open]);
 
   useEffect(() => {
-    if (openMenu === null) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpenMenu(null);
-    };
-    const onPointerDown = (e: Event) => {
-      const t = e.target as HTMLElement | null;
-      if (!t?.closest("[data-nav-item]")) setOpenMenu(null);
-    };
-    document.addEventListener("keydown", onKey);
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.removeEventListener("pointerdown", onPointerDown);
-    };
-  }, [openMenu]);
+    if (searching) searchRef.current?.focus();
+  }, [searching]);
 
-  // Thanh đỏ dính đỉnh trang; khi nó chạm đỉnh (tức phần trên đã cuộn khỏi màn hình)
-  // thì hiện logo trắng ở bên trái.
-  const barRef = useRef<HTMLDivElement>(null);
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const update = () => {
-      const bar = barRef.current;
-      if (!bar) return;
-      const stuckAt = parseFloat(getComputedStyle(bar).top) || 0;
-      setScrolled(bar.getBoundingClientRect().top <= stuckAt + 0.5);
-    };
-    const raf = requestAnimationFrame(update);
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-
+  const home = withLocale(locale, "/");
   const isActive = (href: string) =>
-    pathname === href ||
-    (href !== withLocale(locale, "/") && !!pathname?.startsWith(`${href}/`));
+    pathname === href || (href !== home && !href.includes("#") && !!pathname?.startsWith(`${href}/`));
 
-  // Giới thiệu / Liên hệ nằm ở thanh trắng phía trên, không lặp lại ở thanh đỏ.
-  const topHrefs = [withLocale(locale, "/about-us"), withLocale(locale, "/contact")];
-  const topLinks = nav.filter((item) => topHrefs.includes(item.href));
-  const mainNav = nav.filter((item) => !topHrefs.includes(item.href));
+  const iconBtn =
+    "flex h-11 w-11 items-center justify-center text-ink hover:bg-ad-bg";
 
   return (
-    <header className="contents">
-      {/* Dải chữ chạy luôn dính đỉnh trang. */}
-      <div className="sticky top-0 z-50 hidden h-8 bg-[var(--brand-2)] text-white md:block">
-        <div className="marquee meta h-full">
-          {[false, true].map((copy) => (
-            <div key={String(copy)} className="marquee-track" aria-hidden={copy || undefined}>
-              {/* Lặp nội dung để một track luôn dài hơn màn hình, chữ chạy liền mạch không có khoảng trống. */}
-              {[0, 1, 2, 3].map((n) => (
-                <ul key={n} className="marquee-set" aria-hidden={n > 0 || undefined}>
-                  <li>{topbar.group}</li>
-                  <li>
-                    {topbar.service}{" "}
-                    <a
-                      href="mailto:info@flora-global.vn"
-                      tabIndex={copy || n > 0 ? -1 : undefined}
-                      className="hover:underline"
-                    >
-                      info@flora-global.vn
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="tel:0932108990"
-                      tabIndex={copy || n > 0 ? -1 : undefined}
-                      className="inline-flex items-center gap-1.5 hover:underline"
-                    >
-                      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor" aria-hidden>
-                        <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.6 21 3 13.4 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.6a1 1 0 0 1-.25 1L6.6 10.8Z" />
-                      </svg>
-                      0932.108.990
-                    </a>
-                  </li>
-                  <li>{topbar.tagline}</li>
-                </ul>
-              ))}
-            </div>
-          ))}
+    <header className="sticky top-0 z-50 border-b border-rule bg-white text-ink">
+      <div className="mx-auto grid max-w-[1280px] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-4 py-1.5 md:py-2.5">
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            aria-label={labels.openMenu}
+            aria-expanded={open}
+            aria-controls="site-drawer"
+            onClick={() => setOpen(true)}
+            className={iconBtn}
+          >
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label={labels.search}
+            aria-expanded={searching}
+            aria-controls="site-search"
+            onClick={() => setSearching((v) => !v)}
+            className={iconBtn}
+          >
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-4-4" />
+            </svg>
+          </button>
         </div>
-      </div>
 
-      {/* Thanh trắng: cuộn đi cùng trang trên desktop; trên mobile/tablet dính
-          bên dưới dải chữ chạy để nút menu luôn bấm được. */}
-      <div className="sticky top-0 z-40 bg-white shadow-md md:top-8 lg:static lg:shadow-none">
-      <div className="container-page flex items-center justify-between gap-6 py-3">
-        <Link href={withLocale(locale, "/")} className="flex items-center gap-3">
+        <Link href={home} className="flex items-center">
           <Image
             src="/images/wp/2025_08_logo.png"
-            alt="Flora Global Corporate"
-            width={120}
-            height={48}
-            className="h-11 w-auto object-contain"
-            priority
+            alt="Flora Global"
+            width={840}
+            height={282}
+            preload
+            className="h-9 w-auto md:h-11"
           />
         </Link>
 
-        <div className="hidden items-center gap-7 lg:flex">
-          {topLinks.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`text-[13px] font-semibold uppercase tracking-wide transition hover:text-[var(--brand)] ${
-                isActive(item.href) ? "text-[var(--brand)]" : "text-[var(--ink)]"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-3 lg:hidden">
-          <LanguageSwitcher locale={locale} />
-          <button
-            type="button"
-            aria-label="Menu"
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-[var(--radius-control)] border border-[var(--line)]"
+        <div className="flex items-center justify-end gap-3">
+          <Link
+            href={withLocale(locale, "/contact")}
+            className="hidden h-9 items-center bg-ink px-3.5 text-[13px] font-semibold text-white hover:bg-[#333] sm:flex"
           >
-            <span
-              className={`h-0.5 w-5 bg-[var(--ink)] transition-transform ${
-                open ? "translate-y-2 rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`h-0.5 w-5 bg-[var(--ink)] transition-opacity ${
-                open ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`h-0.5 w-5 bg-[var(--ink)] transition-transform ${
-                open ? "-translate-y-2 -rotate-45" : ""
-              }`}
-            />
-          </button>
+            {labels.contact}
+          </Link>
+          {/* Ít ngôn ngữ thì hiện thẳng "VI / EN" như thiết kế; nhiều thì gom vào menu thả. */}
+          {locales.length <= 3 ? (
+            <span className="flex items-center text-[13px] font-semibold">
+              {locales.map((code, i) => (
+                <Fragment key={code}>
+                  {i > 0 && (
+                    <span aria-hidden="true" className="text-[#9a9a9a]">
+                      /
+                    </span>
+                  )}
+                  <Link
+                    href={withLocale(code, stripLocale(pathname || "/"))}
+                    hrefLang={code}
+                    lang={code}
+                    aria-label={localeLabels[code]}
+                    aria-current={code === locale ? "true" : undefined}
+                    onClick={() => {
+                      document.cookie = `NEXT_LOCALE=${code};path=/;max-age=31536000`;
+                    }}
+                    className={`flex h-11 items-center px-1.5 ${
+                      code === locale ? "text-ink" : "text-muted hover:underline"
+                    }`}
+                  >
+                    {code.toUpperCase()}
+                  </Link>
+                </Fragment>
+              ))}
+            </span>
+          ) : (
+            <LanguageSwitcher locale={locale} />
+          )}
         </div>
       </div>
+
+      {searching && (
+        <div id="site-search" className="border-t border-rule bg-ad-bg">
+          <Form
+            action={withLocale(locale, "/search")}
+            role="search"
+            className="mx-auto flex max-w-[720px] gap-2 px-4 py-3"
+          >
+            <label className="sr-only" htmlFor="site-search-q">
+              {labels.search}
+            </label>
+            <input
+              ref={searchRef}
+              id="site-search-q"
+              type="search"
+              name="q"
+              required
+              placeholder={labels.searchPlaceholder}
+              className="h-11 min-w-0 flex-1 border border-[#8a8a8a] bg-white px-3 text-sm"
+            />
+            <button type="submit" className="h-11 bg-ink px-4 text-sm font-bold text-white">
+              {labels.search}
+            </button>
+          </Form>
+        </div>
+      )}
+
+      <nav aria-label={labels.mainNav} className="border-t border-rule">
+        {/* w-max + mx-auto: căn giữa khi đủ chỗ, cuộn ngang khi không đủ (điện thoại). */}
+        <div className="mx-auto max-w-[1280px] overflow-x-auto px-4 [scrollbar-width:none]">
+          <ul className="mx-auto flex w-max gap-[22px] text-[13px]">
+            {nav.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={active ? "page" : undefined}
+                    className={`block whitespace-nowrap border-b-[3px] pb-2 pt-2.5 ${
+                      active ? "border-ink font-bold" : "border-transparent hover:border-[#c8c8c8]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </nav>
 
       {open && (
         <>
           <button
             type="button"
-            aria-label="Close menu"
+            aria-label={labels.closeMenu}
             onClick={() => setOpen(false)}
-            className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/40"
           />
-          <nav className="absolute inset-x-0 top-full z-50 max-h-[80dvh] overflow-y-auto overscroll-contain border-t border-[var(--line)] bg-white text-[var(--ink)] shadow-xl lg:hidden">
-          {nav.map((item) => (
-            <div key={item.href} className="border-b border-[var(--line)]">
-              <div className="flex items-center justify-between">
-                <Link
-                  href={item.href}
-                  className="flex-1 px-4 py-3 text-sm font-semibold uppercase tracking-wide"
-                >
-                  {item.label}
-                </Link>
-                {item.children && (
-                  <button
-                    type="button"
-                    aria-label={item.label}
-                    onClick={() =>
-                      setExpanded((v) => (v === item.href ? null : item.href))
-                    }
-                    className="px-4 py-3 text-lg text-[var(--muted)]"
-                  >
-                    {expanded === item.href ? "−" : "+"}
-                  </button>
-                )}
-              </div>
-              {item.children && expanded === item.href && (
-                <div className="bg-[var(--bg-soft)] pb-2">
-                  {item.children.map((child) =>
-                    child.heading ? (
-                      <p
-                        key={child.href}
-                        className="px-6 pb-1 pt-3 text-[11px] font-semibold uppercase tracking-wider text-[var(--ink)]"
-                      >
-                        {child.label}
-                      </p>
-                    ) : (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="block px-6 py-2.5 text-sm text-[var(--muted)]"
-                      >
-                        {child.label}
-                      </Link>
-                    ),
-                  )}
-                </div>
-              )}
+          <nav
+            id="site-drawer"
+            aria-label={labels.mainNav}
+            className="fixed inset-y-0 left-0 z-50 flex w-[min(360px,90vw)] flex-col overflow-y-auto overscroll-contain bg-white shadow-xl"
+          >
+            <div className="flex items-center justify-between border-b border-rule px-2 py-1.5">
+              <Link href={home} className="px-2">
+                <Image src="/images/wp/2025_08_logo.png" alt="Flora Global" width={840} height={282} className="h-8 w-auto" />
+              </Link>
+              <button type="button" aria-label={labels.closeMenu} onClick={() => setOpen(false)} className={iconBtn}>
+                <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              </button>
             </div>
-          ))}
-
-          <div className="space-y-3 p-4">
-            <Link
-              href={withLocale(locale, "/contact")}
-              className="block rounded-[var(--radius-control)] bg-[var(--brand)] px-4 py-3 text-center text-[13px] font-semibold uppercase tracking-wide text-white"
-            >
-              {getInTouch}
-            </Link>
-            <div className="flex flex-col gap-1 text-sm text-[var(--muted)]">
-              <a href="tel:0932108990" className="py-1">
+            <ul>
+              {nav.map((item) => (
+                <li key={item.href} className="border-b border-rule">
+                  <div className="flex items-center justify-between">
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className={`flex-1 px-4 py-3 text-[15px] ${isActive(item.href) ? "font-bold" : "font-semibold"}`}
+                    >
+                      {item.label}
+                    </Link>
+                    {item.children && (
+                      <button
+                        type="button"
+                        aria-label={item.label}
+                        aria-expanded={expanded === item.href}
+                        onClick={() => setExpanded((v) => (v === item.href ? null : item.href))}
+                        className="flex h-11 w-12 items-center justify-center text-lg text-muted"
+                      >
+                        {expanded === item.href ? "−" : "+"}
+                      </button>
+                    )}
+                  </div>
+                  {item.children && expanded === item.href && (
+                    <ul className="bg-ad-bg pb-2">
+                      {item.children.map((child) =>
+                        child.heading ? (
+                          <li
+                            key={child.href}
+                            className="px-6 pb-1 pt-3 text-[11px] font-bold uppercase tracking-wider text-ink"
+                          >
+                            {child.label}
+                          </li>
+                        ) : (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              onClick={() => setOpen(false)}
+                              className="block px-6 py-2.5 text-sm text-ink-2 hover:underline"
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-auto flex flex-col gap-1 p-4 text-sm text-ink-2">
+              <a href="tel:0932108990" className="py-1.5">
                 0932.108.990
               </a>
-              <a href="mailto:info@flora-global.vn" className="py-1">
+              <a href="mailto:info@flora-global.vn" className="py-1.5">
                 info@flora-global.vn
               </a>
             </div>
-          </div>
-        </nav>
+          </nav>
         </>
       )}
-      </div>
-
-      <div
-        ref={barRef}
-        className={`sticky top-8 z-40 hidden bg-[var(--brand)] text-white transition-shadow lg:block ${
-          scrolled ? "shadow-md" : ""
-        }`}
-      >
-        <div className="container-page flex items-center justify-between gap-6">
-          <div className="flex items-center">
-            <Link
-              href={withLocale(locale, "/")}
-              tabIndex={scrolled ? 0 : -1}
-              aria-hidden={!scrolled}
-              className={`shrink-0 overflow-hidden transition-all duration-300 ${
-                scrolled ? "mr-7 max-w-40 opacity-100" : "pointer-events-none mr-0 max-w-0 opacity-0"
-              }`}
-            >
-              <Image
-                src="/images/wp/2025_08_logo.png"
-                alt="Flora Global Corporate"
-                width={120}
-                height={48}
-                className="h-8 w-auto max-w-none object-contain brightness-0 invert"
-              />
-            </Link>
-          <nav className="hidden items-center gap-7 lg:flex">
-            {mainNav.map((item) => {
-              const active = isActive(item.href);
-              return (
-                <div
-                  key={item.href}
-                  data-nav-item
-                  className="relative py-3"
-                  onMouseEnter={() => item.children && setOpenMenu(item.href)}
-                  onMouseLeave={() => setOpenMenu(null)}
-                >
-                  <Link
-                    href={item.href}
-                    className={`text-[13px] font-semibold uppercase tracking-wide border-b-2 border-transparent pb-1 transition hover:border-white ${
-                      active ? "border-white text-white" : "text-white/90"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.children && (
-                    <div
-                      className={`absolute left-1/2 top-full z-50 max-h-[75vh] w-72 -translate-x-1/2 overflow-y-auto border-t-2 border-[var(--brand)] bg-white shadow-xl transition ${
-                        openMenu === item.href ? "visible opacity-100" : "invisible opacity-0"
-                      }`}
-                    >
-                      {item.children.map((child) =>
-                        child.heading ? (
-                          <p
-                            key={child.href}
-                            className="border-b border-[var(--line)] bg-[var(--bg-soft)] px-4 py-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--muted)]"
-                          >
-                            {child.label}
-                          </p>
-                        ) : (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={() => setOpenMenu(null)}
-                            className="block border-b border-[var(--line)] px-4 py-3 text-[13px] text-[var(--ink)] last:border-b-0 hover:bg-[var(--bg-soft)] hover:text-[var(--brand)]"
-                          >
-                            {child.label}
-                          </Link>
-                        ),
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </nav>
-          </div>
-          <LanguageSwitcher locale={locale} onDark />
-        </div>
-      </div>
     </header>
   );
 }

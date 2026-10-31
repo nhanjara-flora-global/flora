@@ -25,6 +25,11 @@ export type LocalizedArticle = LegacyArticle & {
   sourceLocale: Locale;
   category?: string | null;
   categories?: string[];
+  /** SEO nhập trong admin — chỉ có ở bản ngôn ngữ gốc. */
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  /** Admin đang xem trước bài chưa hiện trên web. */
+  isDraft?: boolean;
 };
 
 type ManualEntry = {
@@ -105,6 +110,7 @@ function localizeArticle(
     category: article.category,
     categories: article.categories,
     sourceLocale: article.sourceLocale,
+    isDraft: article.isDraft,
   };
 
   if (locale === article.sourceLocale) {
@@ -113,6 +119,8 @@ function localizeArticle(
       title: article.title,
       excerpt: article.excerpt,
       content: article.content,
+      seoTitle: article.seoTitle,
+      seoDescription: article.seoDescription,
       isTranslated: false,
       isFallback: false,
       method: "original",
@@ -149,8 +157,9 @@ function localizeArticle(
 export async function getLocalizedPost(
   slug: string,
   locale: Locale,
+  opts: { draft?: boolean } = {},
 ): Promise<LocalizedArticle | null> {
-  const article = await articleBySlug(slug);
+  const article = await articleBySlug(slug, opts);
   return article ? localizeArticle(article, locale) : null;
 }
 
@@ -168,23 +177,11 @@ export function fallbackBadgeLabel(locale: Locale, sourceLocale: Locale): string
   const names: Record<Locale, string> = {
     en: "English",
     vi: "Tiếng Việt",
-    zh: "中文",
-    ko: "한국어",
-    hi: "हिन्दी",
-    si: "සිංහල",
   };
   const source = names[sourceLocale] ?? sourceLocale.toUpperCase();
   switch (locale) {
     case "vi":
       return `Đang hiển thị bản gốc (${source}) — bản dịch chưa có`;
-    case "zh":
-      return `显示原文（${source}）— 暂无译文`;
-    case "ko":
-      return `원문 표시 (${source}) — 번역 없음`;
-    case "hi":
-      return `मूल भाषा में दिखाया जा रहा है (${source}) — अनुवाद उपलब्ध नहीं`;
-    case "si":
-      return `මුල් භාෂාවෙන් පෙන්වයි (${source}) — පරිවර්තනය නැත`;
     default:
       return `Showing original (${source}) — translation unavailable`;
   }
@@ -194,14 +191,6 @@ export function machineBadgeLabel(locale: Locale): string {
   switch (locale) {
     case "vi":
       return "Bản dịch máy — có thể chỉnh sửa sau";
-    case "zh":
-      return "机器翻译 — 稍后可人工校对";
-    case "ko":
-      return "기계 번역 — 추후 검수 가능";
-    case "hi":
-      return "मशीन अनुवाद — बाद में संपादन संभव";
-    case "si":
-      return "යන්ත්‍ර පරිවර්තනය — පසුව සංස්කරණය කළ හැක";
     default:
       return "Machine translated — may be refined later";
   }

@@ -16,7 +16,10 @@
     "news": "知识",
     "products": "产品",
     "contact": "联系",
-    "getInTouch": "联系我们"
+    "getInTouch": "联系我们",
+    "certification": "认证",
+    "export": "出口",
+    "video": "视频"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "日本标准投入品",
@@ -196,5 +199,101 @@
     "aboutProduct": "产品批发咨询",
     "formTitle": "我们可以如何帮助您？",
     "formIntro": "请把您的需求发送给我们！"
+  },
+  "news": {
+    "ad": "广告",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "search": "搜索",
+    "searchPlaceholder": "搜索文章",
+    "searchResults": "“{q}”共有 {count} 条结果",
+    "searchEmpty": "没有与“{q}”匹配的文章。",
+    "searchPrompt": "输入关键词，在知识栏目中搜索。",
+    "mainNav": "主栏目",
+    "footerNav": "页脚链接",
+    "breadcrumb": "导航路径",
+    "pagination": "分页",
+    "prevPage": "上一页",
+    "nextPage": "下一页",
+    "prev": "上一个",
+    "next": "下一个",
+    "latest": "最新资讯",
+    "latestList": "最新",
+    "featured": "精选知识",
+    "recommended": "推荐阅读",
+    "fieldStory": "种植区故事",
+    "readMore": "阅读更多",
+    "explore": "探索",
+    "ecosystemStrip": "从农资、种植、认证到出口，100% 可追溯",
+    "honeyTitle": "Honey No. 9 传承：糖度 17–19 Brix 的黄金百香果",
+    "videos": "农业视频",
+    "watchVideos": "观看视频",
+    "play": "播放视频：{title}",
+    "upNext": "更多视频",
+    "missed": "您可能错过了",
+    "howto": "技术指南",
+    "source": "来源：{source}",
+    "videoNote": "视频嵌入自 YouTube 和 TikTok，版权归发布频道所有。",
+    "watchOn": "在 {platform} 上观看",
+    "quote": "联系报价",
+    "relatedProduct": "相关产品",
+    "share": "分享",
+    "linkCopied": "链接已复制",
+    "byline": "Flora Global 编辑部",
+    "moreFrom": "更多 Flora Global 内容",
+    "sidebar": "侧栏",
+    "topics": "主题",
+    "photo": "图片：{credit}",
+    "newsletterTitle": "Flora 农季通讯",
+    "newsletterBody": "种植、认证与出口市场知识，定期发送到您的邮箱。",
+    "newsletterEmail": "您的邮箱",
+    "newsletterSubmit": "订阅",
+    "newsletterDone": "感谢订阅通讯。",
+    "newsletterError": "请输入有效的电子邮箱地址。",
+    "empty": "暂无文章。",
+    "ads": {
+      "chickenManure": {
+        "eyebrow": "日本进口",
+        "title": "日本有机鸡粪，充分腐熟并经过热处理",
+        "body": "养好土壤，是果实甜美均匀的基础。",
+        "cta": "获取报价"
+      },
+      "certification": {
+        "eyebrow": "认证服务",
+        "title": "您的果园需要有机认证吗？",
+        "body": "一站式 VOAC、USDA、EU Organic、GlobalG.A.P. 认证咨询。",
+        "cta": "致电 0932.108.990"
+      },
+      "sourcing": {
+        "eyebrow": "战略采购",
+        "title": "寻找达标的越南农产品？",
+        "body": "您通往越南农产品的桥梁。",
+        "cta": "寻找货源"
+      },
+      "lotus": {
+        "eyebrow": "有机产品",
+        "title": "100% 纯莲子粉",
+        "body": "用于加工食品和出口的原料。",
+        "cta": "联系报价"
+      },
+      "partnerFarm": {
+        "eyebrow": "VOAC 生态系统",
+        "title": "成为 Flora 的有机合作农场",
+        "body": "日本标准农资、认证支持与出口销路。",
+        "cta": "了解计划"
+      },
+      "ashFertilizer": {
+        "eyebrow": "Flora 产品",
+        "title": "煅烧鸡粪灰：果园用有机磷钾肥",
+        "body": "",
+        "cta": "获取报价"
+      },
+      "voacInputs": {
+        "eyebrow": "VOAC",
+        "title": "面向生产商的 VOAC 有机农业原料",
+        "body": "",
+        "cta": "了解更多"
+      }
+    }
   }
 }

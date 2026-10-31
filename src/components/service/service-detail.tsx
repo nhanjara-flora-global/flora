@@ -1,9 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { CSSProperties } from "react";
 import { ContentLocaleBadge } from "@/components/content-locale-badge";
+import { ArticleShell, CtaBox, LinkList } from "@/components/news/shells";
 import { ServiceBlocks, SpecRows } from "@/components/service/service-blocks";
-import { ServiceIcon } from "@/components/service/service-icon";
 import type { Dictionary } from "@/lib/i18n/get-dictionary";
 import { withLocale, type Locale } from "@/lib/i18n/config";
 import type { LocalizedArticle } from "@/lib/i18n/localized-content";
@@ -11,11 +10,7 @@ import type { ServiceModel } from "@/lib/services/parse-service";
 import { getServiceStrings } from "@/lib/services/service-i18n";
 import { getServiceTagline } from "@/lib/services/service-tagline";
 import { getVoacImageByStep, getVoacImages } from "@/lib/services/voac-media";
-import {
-  getServiceTheme,
-  serviceIndex,
-  type ServiceTheme,
-} from "@/lib/services/service-theme";
+import { serviceIndex, type ServiceTheme } from "@/lib/services/service-theme";
 
 type Props = {
   service: LocalizedArticle;
@@ -29,167 +24,27 @@ type Props = {
   sectionPath: string;
   /** Breadcrumb label for that section (e.g. dict.solutionsPage.title). */
   sectionLabel: string;
+  /** Full-width block under the article (related knowledge posts). */
+  after?: React.ReactNode;
 };
 
 const nn = (n: number) => String(n).padStart(2, "0");
 
-function Crumbs({
-  lang,
-  sectionPath,
-  sectionLabel,
-  label,
-  dark,
-}: {
-  lang: Locale;
-  sectionPath: string;
-  sectionLabel: string;
-  label: string;
-  dark?: boolean;
-}) {
-  const base = dark ? "text-white/70" : "text-[var(--muted)]";
-  const hov = dark ? "hover:text-white" : "hover:text-[var(--sv-ink)]";
-  return (
-    <nav className={`meta flex flex-wrap items-center gap-2 ${base}`}>
-      <Link href={withLocale(lang, "/")} className={hov}>
-        Flora Global
-      </Link>
-      <span aria-hidden>→</span>
-      <Link href={withLocale(lang, sectionPath)} className={hov}>
-        {sectionLabel}
-      </Link>
-      <span aria-hidden>→</span>
-      <span className={dark ? "text-white" : "font-semibold text-[var(--ink)]"}>{label}</span>
-    </nav>
-  );
-}
-
-function Metrics({ theme, dark }: { theme: ServiceTheme; dark?: boolean }) {
+function Metrics({ theme }: { theme: ServiceTheme }) {
   if (!theme.metrics?.length) return null;
   return (
     <dl
-      className={`mt-8 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-5 ${
+      className={`mt-6 grid grid-cols-2 gap-x-6 gap-y-5 ${
         theme.metrics.length === 3 ? "sm:grid-cols-3" : ""
       }`}
     >
       {theme.metrics.map((m) => (
-        <div
-          key={m.label}
-          className={`border-t pt-4 ${dark ? "border-white/25" : "border-[var(--line)]"}`}
-        >
-          <dt
-            className={`text-lg font-bold leading-snug md:text-xl ${
-              dark ? "text-white" : "text-[var(--ink)]"
-            }`}
-          >
-            {m.value}
-          </dt>
-          <dd className={`meta mt-1 ${dark ? "text-white/70" : "text-[var(--muted)]"}`}>
-            {m.label}
-          </dd>
+        <div key={m.label} className="border-t border-[var(--line)] pt-3">
+          <dt className="font-serif text-lg font-bold leading-snug text-[var(--ink)]">{m.value}</dt>
+          <dd className="meta mt-1 text-[var(--muted)]">{m.label}</dd>
         </div>
       ))}
     </dl>
-  );
-}
-
-function CtaButton({ lang, dict, dark }: { lang: Locale; dict: Dictionary; dark?: boolean }) {
-  return (
-    <Link
-      href={withLocale(lang, "/contact")}
-      className={`body-sm mt-8 inline-flex items-center gap-2 rounded-[var(--radius-control)] px-6 py-3 font-semibold uppercase tracking-wide shadow-[var(--shadow-soft)] transition ${
-        dark
-          ? "bg-white text-[var(--brand)] hover:bg-white/90"
-          : "bg-[var(--brand)] text-white hover:bg-[color-mix(in_srgb,var(--brand)_85%,#000)]"
-      }`}
-    >
-      {dict.common.initiatePartnership}
-      <span aria-hidden>→</span>
-    </Link>
-  );
-}
-
-function HeroSpotlight({ service, theme, label, lang, dict, sectionPath, sectionLabel }: Props) {
-  return (
-    <header className="relative isolate overflow-hidden bg-[var(--sv-deep)] text-white">
-      {service.cover && (
-        <Image
-          src={service.cover}
-          alt={service.title}
-          fill
-          priority
-          sizes="100vw"
-          className="-z-10 object-cover"
-        />
-      )}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-      <div className="container-page flex min-h-[30rem] flex-col justify-between gap-12 pb-14 pt-6 md:min-h-[68vh]">
-        <Crumbs lang={lang} sectionPath={sectionPath} sectionLabel={sectionLabel} label={label} dark />
-        <div className="max-w-3xl">
-          <div className="flex items-center gap-2.5 text-white/85">
-            <ServiceIcon name={theme.icon} className="h-5 w-5" />
-            <span className="meta font-semibold uppercase tracking-[0.08em]">
-              {getServiceStrings(lang).service} {nn(serviceIndex(service.slug))}
-            </span>
-          </div>
-          <h1 className="display-lg mt-4 text-white">{service.title}</h1>
-          {getServiceTagline(lang, service.slug) && (
-            <p className="lead mt-4 max-w-2xl text-white/85">
-              {getServiceTagline(lang, service.slug)}
-            </p>
-          )}
-          <Metrics theme={theme} dark />
-          <CtaButton lang={lang} dict={dict} dark />
-        </div>
-      </div>
-    </header>
-  );
-}
-
-function HeroEditorial({ service, model, theme, label, lang, dict, sectionPath, sectionLabel }: Props) {
-  const idx = serviceIndex(service.slug);
-  const showImage = Boolean(service.cover);
-  const tagline = getServiceTagline(lang, service.slug) ?? model.tagline ?? service.excerpt;
-
-  return (
-    <header className="relative overflow-hidden border-b border-[var(--line)] bg-[var(--bg-soft)]">
-      <div className="container-page relative py-5">
-        <Crumbs lang={lang} sectionPath={sectionPath} sectionLabel={sectionLabel} label={label} />
-      </div>
-      <div className="container-page relative grid gap-10 pb-[var(--section-y-sm)] md:grid-cols-[1.1fr_1fr] md:items-center lg:gap-16">
-        <div>
-          <div className="flex items-center gap-2.5 text-[var(--sv-ink)]">
-            <ServiceIcon name={theme.icon} className="h-5 w-5" />
-            <span className="meta font-semibold uppercase tracking-[0.08em]">
-              {getServiceStrings(lang).service} {nn(idx)}
-            </span>
-          </div>
-          <h1 className="display-lg mt-4 text-[var(--ink)]">{service.title}</h1>
-          {tagline && <p className="lead mt-4 max-w-xl text-[var(--muted)]">{tagline}</p>}
-          <Metrics theme={theme} />
-          <CtaButton lang={lang} dict={dict} />
-        </div>
-
-        {showImage ? (
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-soft)]">
-            <Image
-              src={service.cover!}
-              alt={service.title}
-              fill
-              priority
-              sizes="(max-width:768px) 100vw, 40vw"
-              className="object-cover"
-            />
-          </div>
-        ) : (
-          <div className="relative mx-auto grid aspect-square w-full max-w-xs place-items-center rounded-full border border-[var(--sv-line)] bg-[var(--surface)] shadow-[var(--shadow-soft)]">
-            <div className="grid h-2/3 w-2/3 place-items-center rounded-full bg-[var(--sv-soft)]">
-              <ServiceIcon name={theme.icon} className="h-1/2 w-1/2 text-[var(--sv)]" strokeWidth={1.2} />
-            </div>
-          </div>
-        )}
-      </div>
-    </header>
   );
 }
 
@@ -268,8 +123,8 @@ function Body({ model, lang, service, theme }: Props) {
       : undefined;
 
   return (
-    <div className="container-page section-y">
-      <div className="mx-auto max-w-3xl">
+    <div className="mt-6">
+      <div>
         <ContentLocaleBadge article={service} uiLocale={lang} />
         {model.lead.length > 0 && mode !== "lead" && (
           <div className="border-l-2 border-[var(--sv)] pl-5 text-[1.15rem] leading-relaxed text-[var(--ink)] [&_.svc-rich]:text-[1.15rem]">
@@ -287,18 +142,18 @@ function Body({ model, lang, service, theme }: Props) {
           const logos = last?.kind === "logos" ? last.images : null;
           const rest = logos ? model.lead.slice(0, -1) : model.lead;
           return logos ? (
-            <div className="mx-auto mt-4 grid max-w-4xl gap-10 md:grid-cols-[1fr_18rem] md:items-start">
+            <div className="mt-4 grid gap-8 sm:grid-cols-[1fr_12rem] sm:items-start">
               <div className="leading-relaxed [&_.svc-rich]:text-[1.1rem]">
                 <ServiceBlocks blocks={rest} />
               </div>
               <div className="flex flex-row flex-wrap justify-center gap-8 md:flex-col md:items-center">
                 {logos.map((im, i) => (
-                  <div key={i} className="relative h-40 w-40 sm:h-44 sm:w-44">
+                  <div key={i} className="relative h-36 w-36">
                     <Image
                       src={im.src}
                       alt={im.alt || "Certification mark"}
                       fill
-                      sizes="176px"
+                      sizes="144px"
                       className="object-contain"
                     />
                   </div>
@@ -306,14 +161,14 @@ function Body({ model, lang, service, theme }: Props) {
               </div>
             </div>
           ) : (
-            <div className="mx-auto mt-4 max-w-3xl leading-relaxed [&_.svc-rich]:text-[1.1rem]">
+            <div className="mt-4 leading-relaxed [&_.svc-rich]:text-[1.1rem]">
               <ServiceBlocks blocks={model.lead} />
             </div>
           );
         })()}
 
       {mode === "spec-grid" && (
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {model.sections.map((sec) => (
             <div key={sec.id} className="card flex flex-col p-6">
               <h3 className="font-[family-name:var(--font-display)] text-lg font-semibold text-[var(--sv-ink)]">
@@ -333,7 +188,7 @@ function Body({ model, lang, service, theme }: Props) {
         // Lưới 2 cột như trang "Dịch vụ cốt lõi" trên voac.vn: mỗi mục là một
         // thẻ nền nhạt, ảnh trên đầu (mục nào không có ảnh thì chừa đúng khoảng
         // đó để tiêu đề các thẻ cùng hàng thẳng nhau), rồi "N. Tiêu đề" + mô tả.
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2">
           {model.sections.map((sec) => {
             const img = getVoacImageByStep(service.slug, sec.step);
             return (
@@ -375,13 +230,13 @@ function Body({ model, lang, service, theme }: Props) {
 
       {mode === "dark-cards" && (
         // Lưới thẻ nền đậm, ảnh nền mờ như trang "Dịch vụ hỗ trợ" trên voac.vn.
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2">
           {model.sections.map((sec, i) => {
             const img = nonStepImages[i] ?? null;
             return (
               <article
                 key={sec.id}
-                className="relative isolate flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-[var(--sv-deep)] p-7 text-white md:p-8"
+                className="relative isolate flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-[var(--sv-deep)] p-6 text-white"
               >
                 {img && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -409,7 +264,7 @@ function Body({ model, lang, service, theme }: Props) {
         // Mỗi mục một hàng ngang: nội dung một bên, ảnh một bên. Mục có đánh
         // số thì ảnh xen kẽ trái/phải ("Tìm nguồn sản phẩm"); còn lại ảnh nằm
         // bên phải ("Mô hình nông trại", "Đầu vào nông nghiệp hữu cơ").
-        <div className="mt-12 space-y-6">
+        <div className="mt-10 space-y-6">
           {model.sections.map((sec, i) => {
             const img = stepImageFor(sec.step) ?? nonStepImages[i] ?? null;
             const imageRight = model.numbered ? (sec.step ?? i + 1) % 2 === 1 : true;
@@ -423,7 +278,7 @@ function Body({ model, lang, service, theme }: Props) {
                 className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-softer)]"
               >
                 <div className={img ? "grid md:grid-cols-2" : ""}>
-                  <div className="p-7 md:p-9">
+                  <div className="p-6">
                     <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
                       {sec.step != null ? `${sec.step}. ` : ""}
                       {sec.title}
@@ -484,7 +339,7 @@ function Body({ model, lang, service, theme }: Props) {
       )}
 
       {mode === "prose" && (
-        <div className="mx-auto mt-12 max-w-3xl space-y-14">
+        <div className="mt-10 space-y-12">
           {model.sections.map((sec, i) =>
             theme.group === "flora" ? (
               <section key={sec.id}>
@@ -497,7 +352,7 @@ function Body({ model, lang, service, theme }: Props) {
               <section
                 key={sec.id}
                 className={
-                  i > 0 ? "border-t border-[var(--sv-line)] pt-14" : undefined
+                  i > 0 ? "border-t border-[var(--sv-line)] pt-12" : undefined
                 }
               >
                 <h2 className="font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--sv-deep)]">
@@ -535,7 +390,7 @@ function Body({ model, lang, service, theme }: Props) {
       {/* Bỏ chip trùng với chú thích ảnh — nếu không, "Gạo · Cà phê · Hạt điều"
           hiện hai lần liền nhau: một lần dưới ảnh, một lần dưới dạng chip. */}
       {tagsNotShownAsImages.length > 0 && (
-        <div className="mx-auto mt-12 max-w-3xl rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-softer)] p-6">
+        <div className="mt-12 rounded-[var(--radius-card)] border border-[var(--sv-line)] bg-[var(--sv-softer)] p-6">
           <p className="eyebrow text-[var(--sv-ink)]">{s.network}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             {tagsNotShownAsImages.map((t) => (
@@ -553,82 +408,45 @@ function Body({ model, lang, service, theme }: Props) {
   );
 }
 
-function CtaPanel({ lang, dict }: { lang: Locale; dict: Dictionary }) {
-  return (
-    <section className="bg-[var(--brand)] text-white">
-      <div className="container-page flex flex-col items-start gap-6 py-[var(--section-y-sm)] md:flex-row md:items-center md:justify-between">
-        <p className="font-[family-name:var(--font-display)] text-2xl md:max-w-2xl md:text-[1.75rem]">
-          {dict.common.readyPartner}
-        </p>
-        <Link
-          href={withLocale(lang, "/contact")}
-          className="body-sm shrink-0 rounded-[var(--radius-control)] bg-white px-7 py-3 font-semibold uppercase tracking-wide text-[var(--brand)] transition hover:bg-white/90"
-        >
-          {dict.common.initiatePartnership}
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function Explore({
-  lang,
-  others,
-  sectionPath,
-}: {
-  lang: Locale;
-  others: Props["others"];
-  sectionPath: string;
-}) {
+export function ServiceDetail(props: Props) {
+  const { service, model, theme, label, lang, dict, others, sectionPath, sectionLabel, after } = props;
   const s = getServiceStrings(lang);
   return (
-    <section className="bg-[var(--bg-soft)]">
-      <div className="container-page section-y">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <h2 className="display-md text-[var(--ink)]">{s.explore}</h2>
-          <Link
-            href={withLocale(lang, sectionPath)}
-            className="body-sm shrink-0 font-semibold text-[var(--brand)] hover:underline"
-          >
-            {s.viewAll} →
-          </Link>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {others.map((o) => {
-            const t = getServiceTheme(o.slug);
-            return (
-              <Link
-                key={o.slug}
-                href={withLocale(lang, `${sectionPath}/${o.slug}`)}
-                className="card card-interactive group flex items-start gap-4 p-5"
-                style={{ ["--sv" as string]: t.accent } as CSSProperties}
-              >
-                <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--sv-soft)] text-[var(--sv)]">
-                  <ServiceIcon name={t.icon} className="h-5 w-5" />
-                </span>
-                <span>
-                  <span className="meta uppercase text-[var(--muted)]">{o.label}</span>
-                  <span className="mt-1 block font-[family-name:var(--font-display)] font-semibold text-[var(--ink)] transition-colors group-hover:text-[var(--sv)]">
-                    {o.title}
-                  </span>
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function ServiceDetail(props: Props) {
-  const { theme } = props;
-  return (
     <div className="svc" style={{ ["--sv" as string]: theme.accent } as CSSProperties}>
-      {theme.hero === "spotlight" ? <HeroSpotlight {...props} /> : <HeroEditorial {...props} />}
-      <Body {...props} />
-      <CtaPanel lang={props.lang} dict={props.dict} />
-      <Explore lang={props.lang} others={props.others} sectionPath={props.sectionPath} />
+      <ArticleShell
+        breadcrumbLabel={dict.news.breadcrumb}
+        breadcrumb={[
+          { href: withLocale(lang, sectionPath), label: sectionLabel },
+          { href: withLocale(lang, `${sectionPath}/${service.slug}`), label },
+        ]}
+        kicker={`${s.service} ${nn(serviceIndex(service.slug))}`}
+        title={service.title}
+        standfirst={getServiceTagline(lang, service.slug) ?? model.tagline ?? null}
+        meta={<Metrics theme={theme} />}
+        figure={service.cover ? { src: service.cover, alt: service.title } : null}
+        sidebarLabel={dict.news.sidebar}
+        sidebar={
+          <>
+            <CtaBox
+              title={dict.common.readyPartner}
+              href={withLocale(lang, "/contact")}
+              cta={dict.common.initiatePartnership}
+            />
+            <LinkList
+              title={dict.common.otherServices}
+              href={withLocale(lang, sectionPath)}
+              items={others.map((o) => ({
+                href: withLocale(lang, `${sectionPath}/${o.slug}`),
+                label: o.title,
+                note: o.label,
+              }))}
+            />
+          </>
+        }
+        after={after}
+      >
+        <Body {...props} />
+      </ArticleShell>
     </div>
   );
 }
@@ -646,10 +464,10 @@ function VoacCaptionGrid({ slug, exclude }: { slug: string; exclude?: Set<string
   if (items.length === 0) return null;
 
   return (
-    <div className="mx-auto mt-14 max-w-4xl">
-      <div className="flex flex-wrap justify-center gap-6">
+    <div className="mt-12">
+      <div className="flex flex-wrap justify-center gap-5">
         {items.map((m) => (
-          <figure key={m.src} className="w-full max-w-[19rem] flex-1 basis-64">
+          <figure key={m.src} className="w-full max-w-[15rem] flex-1 basis-48">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={m.src}

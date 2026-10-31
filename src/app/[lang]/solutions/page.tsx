@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/components/reveal";
-import { PageHero } from "@/components/page-hero";
-import { ServiceCardFeature, ServiceCardLarge } from "@/components/service/service-card";
+import { AdSlot } from "@/components/news/ad-slot";
+import { FeatureStory, StoryCard, type Story } from "@/components/news/cards";
+import { ListingShell } from "@/components/news/shells";
+import { SectionHeader } from "@/components/news/ui";
 import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { resolveLocale, withLocale } from "@/lib/i18n/config";
 import { getManualServices } from "@/lib/i18n/localized-content";
 import { SERVICE_ORDER } from "@/lib/legacy";
 import { getServiceStrings, type ServiceStrings } from "@/lib/services/service-i18n";
 import { getServiceTagline } from "@/lib/services/service-tagline";
-import {
-  getSolutionCluster,
-  serviceIndex,
-  type SolutionCluster,
-} from "@/lib/services/service-theme";
+import { getSolutionCluster, type SolutionCluster } from "@/lib/services/service-theme";
 import { pageSeo } from "@/lib/seo";
 
 type ServiceSlug = (typeof SERVICE_ORDER)[number];
@@ -73,69 +70,51 @@ export default async function SolutionsPage({ params }: Props) {
   const s = getServiceStrings(lang);
   const services = getManualServices(lang);
 
-  const byCluster = (cluster: SolutionCluster) =>
-    services.filter((svc) => getSolutionCluster(svc.slug as ServiceSlug) === cluster);
-
-  const shared = (svc: (typeof services)[number]) => ({
-    slug: svc.slug,
+  const toStory = (svc: (typeof services)[number]): Story => ({
+    href: withLocale(lang, `/solutions/${svc.slug}`),
     title: svc.title,
     excerpt: getServiceTagline(lang, svc.slug) ?? svc.excerpt,
-    label: serviceLabel(dict, svc.slug),
-    index: serviceIndex(svc.slug),
-    lang,
-    readMore: dict.common.readMore,
-    sectionPath: "/solutions",
+    image: svc.cover,
+    meta: [serviceLabel(dict, svc.slug)],
   });
 
   return (
-    <>
-      <PageHero
-        eyebrow={dict.servicesPage.eyebrow}
-        title={dict.servicesPage.title}
-        image="/videos/solutions-hero-poster.jpg"
-        video="/videos/solutions-hero.mp4"
-        homeHref={withLocale(lang, "/")}
-        crumbs={[{ href: withLocale(lang, "/solutions"), label: dict.servicesPage.title }]}
-      />
-
-      <div className="container-page section-y space-y-20">
-        <p className="mx-auto max-w-3xl text-center text-[1.15rem] leading-relaxed text-[var(--muted)]">
-          {s.intro}
-        </p>
-
-        {SOLUTIONS_CLUSTERS.map(({ cluster, title, note }, i) => {
-          const items = byCluster(cluster);
+    <ListingShell
+      navLabel={dict.news.mainNav}
+      band={{
+        title: dict.servicesPage.title,
+        href: withLocale(lang, "/solutions"),
+        items: SOLUTIONS_CLUSTERS.map(({ cluster, title }) => ({
+          href: `${withLocale(lang, "/solutions")}#${cluster}`,
+          label: title(s),
+        })),
+      }}
+      ad={<AdSlot ad="certification" size="leaderboard" tone="cream" lang={lang} dict={dict} />}
+      title={dict.servicesPage.title}
+      intro={s.intro}
+    >
+      <div className="flex flex-col gap-10">
+        {SOLUTIONS_CLUSTERS.map(({ cluster, title, note }) => {
+          const items = services.filter((svc) => getSolutionCluster(svc.slug as ServiceSlug) === cluster);
           if (items.length === 0) return null;
           const [lead, ...rest] = items;
           return (
-            <section key={cluster} id={cluster} className="scroll-mt-28">
-              <SectionHead n={String(i + 1).padStart(2, "0")} title={title(s)} note={note(s)} />
-              <div className="space-y-8">
-                <Reveal>
-                  <ServiceCardFeature {...shared(lead)} cover={lead.cover} />
-                </Reveal>
-                {rest.length > 0 && (
-                  <Reveal className="grid gap-8 md:grid-cols-2">
-                    {rest.map((svc) => (
-                      <ServiceCardLarge key={svc.slug} {...shared(svc)} cover={svc.cover} />
-                    ))}
-                  </Reveal>
-                )}
-              </div>
+            // scroll-mt: chừa chỗ cho header dính khi bấm link #cụm trên menu.
+            <section key={cluster} id={cluster} aria-labelledby={`h-${cluster}`} className="scroll-mt-28">
+              <SectionHeader id={`h-${cluster}`} title={title(s)} />
+              <p className="-mt-1 mb-5 max-w-3xl text-sm leading-relaxed text-ink-2">{note(s)}</p>
+              <FeatureStory story={toStory(lead)} kicker={serviceLabel(dict, lead.slug)} cta={dict.news.readMore} />
+              {rest.length > 0 && (
+                <div className="mt-6 grid gap-5 border-t border-rule pt-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {rest.map((svc) => (
+                    <StoryCard key={svc.slug} story={toStory(svc)} size="lg" />
+                  ))}
+                </div>
+              )}
             </section>
           );
         })}
       </div>
-    </>
-  );
-}
-
-function SectionHead({ n, title, note }: { n: string; title: string; note: string }) {
-  return (
-    <header className="mb-8 max-w-3xl">
-      <p className="eyebrow text-[var(--brand)]">{n}</p>
-      <h2 className="display-md mt-2">{title}</h2>
-      <p className="body-base mt-3 text-[var(--muted)]">{note}</p>
-    </header>
+    </ListingShell>
   );
 }

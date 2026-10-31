@@ -16,7 +16,10 @@
     "news": "Knowledge",
     "products": "Products",
     "contact": "Contact",
-    "getInTouch": "Get in touch"
+    "getInTouch": "Get in touch",
+    "certification": "Certification",
+    "export": "Export",
+    "video": "Video"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "Japanese Inputs",
@@ -196,5 +199,101 @@
     "aboutProduct": "Wholesale inquiry for product",
     "formTitle": "How can we help you?",
     "formIntro": "Send us your request!"
+  },
+  "news": {
+    "ad": "Advertisement",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "search": "Search",
+    "searchPlaceholder": "Search articles",
+    "searchResults": "{count} results for “{q}”",
+    "searchEmpty": "No articles match “{q}”.",
+    "searchPrompt": "Type a keyword to search the Knowledge section.",
+    "mainNav": "Main sections",
+    "footerNav": "Footer links",
+    "breadcrumb": "Breadcrumb",
+    "pagination": "Pagination",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "prev": "Previous",
+    "next": "Next",
+    "latest": "Latest",
+    "latestList": "Latest",
+    "featured": "Featured knowledge",
+    "recommended": "Recommended reading",
+    "fieldStory": "Field stories",
+    "readMore": "Read more",
+    "explore": "Explore",
+    "ecosystemStrip": "From inputs, cultivation and certification to export — 100% traceable",
+    "honeyTitle": "The Honey No. 9 legacy: golden passion fruit at 17–19 Brix",
+    "videos": "Farm videos",
+    "watchVideos": "Watch videos",
+    "play": "Play video: {title}",
+    "upNext": "More videos",
+    "missed": "You may have missed",
+    "howto": "Technical guides",
+    "source": "Source: {source}",
+    "videoNote": "Videos are embedded from YouTube and TikTok. Copyright belongs to the publishing channels.",
+    "watchOn": "Watch on {platform}",
+    "quote": "Request a quote",
+    "relatedProduct": "Related product",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "byline": "Flora Global editorial team",
+    "moreFrom": "More from Flora Global",
+    "sidebar": "Sidebar",
+    "topics": "Topics",
+    "photo": "Photo: {credit}",
+    "newsletterTitle": "Flora seasonal bulletin",
+    "newsletterBody": "Farming, certification and export-market know-how, delivered to your inbox.",
+    "newsletterEmail": "Your email",
+    "newsletterSubmit": "Subscribe",
+    "newsletterDone": "Thank you — you are subscribed to the bulletin.",
+    "newsletterError": "Please enter a valid email address.",
+    "empty": "No articles yet.",
+    "ads": {
+      "chickenManure": {
+        "eyebrow": "Imported from Japan",
+        "title": "Japanese organic chicken manure, fully composted and heat-treated",
+        "body": "Healthy soil — the foundation for sweet, uniform fruit.",
+        "cta": "Get a quote"
+      },
+      "certification": {
+        "eyebrow": "Certification services",
+        "title": "Need organic certification for your farm?",
+        "body": "End-to-end advisory for VOAC, USDA, EU Organic and GlobalG.A.P.",
+        "cta": "Call 0932.108.990"
+      },
+      "sourcing": {
+        "eyebrow": "Strategic sourcing",
+        "title": "Looking for certified Vietnamese produce?",
+        "body": "Your bridge to Vietnamese agricultural products.",
+        "cta": "Find suppliers"
+      },
+      "lotus": {
+        "eyebrow": "Organic products",
+        "title": "100% pure lotus seed powder",
+        "body": "An ingredient for processed foods and export.",
+        "cta": "Request a quote"
+      },
+      "partnerFarm": {
+        "eyebrow": "VOAC ecosystem",
+        "title": "Become an organic partner farm with Flora",
+        "body": "Japanese-standard inputs, certification support and export offtake.",
+        "cta": "Explore the programme"
+      },
+      "ashFertilizer": {
+        "eyebrow": "Flora products",
+        "title": "Calcined chicken-manure ash: organic PK fertiliser for orchards",
+        "body": "",
+        "cta": "Get a quote"
+      },
+      "voacInputs": {
+        "eyebrow": "VOAC",
+        "title": "VOAC organic agricultural inputs for producers",
+        "body": "",
+        "cta": "Learn more"
+      }
+    }
   }
 }

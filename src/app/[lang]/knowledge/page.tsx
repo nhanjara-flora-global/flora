@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/components/reveal";
-import { ArticleCard } from "@/components/article";
-import { NewsTabs } from "@/components/news-tabs";
-import { PageHero } from "@/components/page-hero";
+import { KnowledgeListing } from "@/components/news/knowledge-listing";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
-import { resolveLocale, withLocale } from "@/lib/i18n/config";
+import { resolveLocale } from "@/lib/i18n/config";
 import { getLocalizedPosts } from "@/lib/i18n/localized-content";
 import { pageSeo } from "@/lib/seo";
 
@@ -31,29 +28,5 @@ export default async function NewsPage({ params }: Props) {
   const dict = getDictionary(lang);
   const posts = await getLocalizedPosts(lang);
 
-  return (
-    <>
-      <PageHero
-        eyebrow={dict.newsPage.eyebrow}
-        title={dict.newsPage.title}
-        image="/videos/organic-farm-poster.jpg"
-        video="/videos/organic-farm.mp4"
-        homeHref={withLocale(lang, "/")}
-        crumbs={[{ href: withLocale(lang, "/knowledge"), label: dict.newsPage.title }]}
-      />
-      <div className="container-page section-y">
-        <NewsTabs active={null} locale={lang} dict={dict} />
-        <Reveal className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <ArticleCard
-              key={post.slug}
-              article={post}
-              href={withLocale(lang, `/knowledge/${post.slug}`)}
-              readMore={dict.common.readMore}
-            />
-          ))}
-        </Reveal>
-      </div>
-    </>
-  );
+  return <KnowledgeListing lang={lang} dict={dict} category={null} posts={posts} page={1} />;
 }

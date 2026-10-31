@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  /* Headings share the body sans-serif (with CJK/Indic fallbacks). */
-  --font-display: var(--font-body), var(--font-zh), var(--font-ko), var(--font-hi), var(--font-si),
-    system-ui, sans-serif;
-  /* Legacy Flatsome palette: primary #7c1226, secondary #144ba0 */
+  /* Headings share the body sans-serif. */
+  --font-display: var(--font-body), system-ui, sans-serif;
+  /* Older pages read these names; they now point at the design tokens below
+     (document/flora-design-handoff/HANDOFF.md) instead of the Flatsome maroon. */
   --bg: #ffffff;
   --bg-soft: #f6f4f2;
-  --ink: #232323;
-  --muted: #6b6b6b;
-  --line: #e3ded9;
-  --brand: #7c1226;
-  --brand-2: #5c0d1c;
-  --accent: #144ba0;
+  --ink: var(--color-ink);
+  --muted: var(--color-muted);
+  --line: var(--color-rule);
+  --brand: var(--color-primary);
+  --brand-2: var(--color-dark);
+  --accent: var(--color-harvest);
   --surface: #ffffff;
   --background: var(--bg);
   --foreground: var(--ink);
@@ -20,18 +20,38 @@
   --radius-card: 1rem;
   --radius-control: 0.5rem;
 
-  --shadow-soft: 0 1px 2px -1px rgb(35 35 35 / 0.06), 0 10px 26px -14px rgb(35 35 35 / 0.14);
-  --shadow-lift: 0 2px 6px -2px rgb(35 35 35 / 0.08), 0 22px 44px -20px rgb(124 18 38 / 0.26);
+  --shadow-soft: 0 1px 2px -1px rgb(20 20 20 / 0.06), 0 10px 26px -14px rgb(20 20 20 / 0.14);
+  --shadow-lift: 0 2px 6px -2px rgb(20 20 20 / 0.08), 0 22px 44px -20px rgb(31 94 59 / 0.26);
 
   /* Vertical rhythm: every page section uses one of these two */
   --section-y: clamp(3.5rem, 2.4rem + 3.6vw, 6rem);
   --section-y-sm: clamp(2.5rem, 1.9rem + 2vw, 3.75rem);
 }
 
+/* Design tokens from the news-style redesign. `static` keeps every variable in
+   the output even when no utility uses it, because the aliases above do. */
+@theme static {
+  --color-primary: #1f5e3b;
+  --color-harvest: #a3541a;
+  --color-logo: #1e4e8c;
+  --color-ink: #141414;
+  --color-ink-2: #3a3a3a;
+  --color-muted: #5a5a5a;
+  --color-rule: #e3e3e3;
+  --color-ad-bg: #f2f2f2;
+  --color-dark: #12301f;
+  --color-dark-2: #0e2418;
+  --color-video-bg: #0d1a12;
+  --color-cream: #fbf3e6;
+  --color-on-dark-muted: #a9b8ad;
+  --color-on-dark: #cfdad2;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-body);
+  --font-serif: var(--font-noto-serif), Georgia, serif;
 }
 
 /* ── Typography scale ───────────────────────────────────────────────
@@ -141,55 +161,6 @@
   }
 }
 
-/* ── Scroll reveal ─────────────────────────────────────────────────
-   Only active once RevealScript has set data-reveal="on" on <html>,
-   so content stays visible when the script does not run. Uses the
-   `translate` property rather than `transform` so it composes with
-   card-interactive's hover lift instead of overriding it. */
-
-:root[data-reveal="on"] [data-reveal-group] > * {
-  opacity: 0;
-  translate: 0 2.5rem;
-}
-
-:root[data-reveal="on"] [data-reveal-group][data-revealed] > * {
-  opacity: 1;
-  translate: none;
-  transition:
-    opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-    translate 600ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Độ trễ so le. Trước đây RevealScript gán transitionDelay thẳng vào style
-   của từng thẻ; script chạy trước khi React hydrate nên React thấy một thuộc
-   tính style nó không dựng ra và báo hydration mismatch. Đặt bằng CSS thì
-   không đụng vào DOM, hết cảnh báo mà hiệu ứng giữ nguyên. */
-:root[data-reveal="on"] [data-reveal-group][data-revealed] > *:nth-child(2) {
-  transition-delay: 100ms;
-}
-:root[data-reveal="on"] [data-reveal-group][data-revealed] > *:nth-child(3) {
-  transition-delay: 200ms;
-}
-:root[data-reveal="on"] [data-reveal-group][data-revealed] > *:nth-child(4) {
-  transition-delay: 300ms;
-}
-:root[data-reveal="on"] [data-reveal-group][data-revealed] > *:nth-child(5) {
-  transition-delay: 400ms;
-}
-:root[data-reveal="on"] [data-reveal-group][data-revealed] > *:nth-child(n + 6) {
-  transition-delay: 500ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :root[data-reveal="on"] [data-reveal-group] > *,
-  :root[data-reveal="on"] [data-reveal-group][data-revealed] > * {
-    opacity: 1;
-    translate: none;
-    transition: none;
-    transition-delay: 0ms;
-  }
-}
-
 /* iOS thu phóng khi focus vào ô nhập có font < 16px. Ép cỡ chữ tối thiểu
    trên màn hình nhỏ để trang không giật khi người dùng chạm vào form. */
 @media (width < 40rem) {
@@ -205,15 +176,6 @@ body {
   color: var(--ink);
   font-family:
     var(--font-body),
-    var(--font-zh),
-    var(--font-ko),
-    var(--font-hi),
-    var(--font-si),
-    "PingFang SC",
-    "Microsoft YaHei",
-    "Apple SD Gothic Neo",
-    "Malgun Gothic",
-    "Nirmala UI",
     system-ui,
     sans-serif;
 }
@@ -679,4 +641,71 @@ body {
   .marquee-track[aria-hidden] {
     display: none;
   }
+}
+
+/* Thân bài kiểu báo (trang /knowledge/[slug]): serif 18px/1.7, tiêu đề mục
+   đen thay vì màu thương hiệu, trích dẫn kẻ trái màu chủ đạo. Đặt sau
+   .prose-legacy để ghi đè. */
+.prose-news {
+  font-family: var(--font-noto-serif), Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.prose-news > * + * {
+  margin-top: 1.125rem;
+}
+
+.prose-news :is(h2, h3, h4) {
+  font-family: inherit;
+  color: var(--color-ink);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.prose-news h2 {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  margin-top: 2rem;
+}
+
+.prose-news h3 {
+  font-size: 1.25rem;
+  line-height: 1.35;
+  margin-top: 1.6rem;
+}
+
+.prose-news blockquote {
+  border-left: 4px solid var(--color-primary);
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  font-size: 1.375rem;
+  line-height: 1.45;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--color-ink);
+}
+
+.prose-news :is(img, figure, table) {
+  border-radius: 0;
+}
+
+.prose-news a {
+  color: var(--color-primary);
+}
+
+/* Giao diện kiểu báo cho toàn bộ trang công khai (bọc trong [lang]/layout).
+   Các component cũ (thẻ dịch vụ, tab sản phẩm, form...) đọc các biến này nên
+   tự về góc vuông, phẳng, tiêu đề serif — không cần sửa từng file. Trang
+   /admin nằm ngoài lớp này nên giữ nguyên. */
+.site-news {
+  --radius-card: 0;
+  --radius-control: 0;
+  --shadow-soft: none;
+  --shadow-lift: none;
+  --font-display: var(--font-noto-serif), Georgia, serif;
+}
+
+.site-news .card-interactive:hover {
+  transform: none;
+  border-color: var(--color-ink);
 }

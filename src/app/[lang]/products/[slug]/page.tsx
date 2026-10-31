@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { Reveal } from "@/components/reveal";
-import { ProductCard } from "@/components/product-card";
+import { AdSlot } from "@/components/news/ad-slot";
+import { ProductTile } from "@/components/news/cards";
+import { RelatedKnowledge } from "@/components/news/related-knowledge";
+import { ArticleShell, CtaBox } from "@/components/news/shells";
+import { SectionHeader } from "@/components/news/ui";
 import { ProductGallery } from "@/components/product-gallery";
 import { ProductTabs, type ProductTab } from "@/components/product-tabs";
 import { getCategories, getProductBySlug, getProducts } from "@/lib/catalog";
@@ -11,6 +14,7 @@ import { getDictionary, type Dictionary } from "@/lib/i18n/get-dictionary";
 import { localizeProduct, localizeProducts } from "@/lib/i18n/localized-catalog";
 import { locales, resolveLocale, withLocale, type Locale } from "@/lib/i18n/config";
 import { JsonLd } from "@/components/seo/json-ld";
+import { PRODUCT_FALLBACK_IMAGE } from "@/lib/media";
 import { SITE_NAME, abs, breadcrumbLd, pageSeo } from "@/lib/seo";
 
 export const revalidate = 300;
@@ -173,23 +177,7 @@ function ProductDetail({
         </div>
       ),
     },
-    !!specs.length && {
-      key: "specs",
-      label: pd.specsTitle,
-      content: (
-        <dl className="max-w-3xl divide-y divide-[var(--line)] rounded-[var(--radius-card)] border border-[var(--line)] bg-[var(--surface)]">
-          {specs.map((s) => (
-            <div
-              key={s.label}
-              className="flex flex-col gap-1 px-5 py-3.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
-            >
-              <dt className="body-sm shrink-0 text-[var(--muted)] sm:w-56">{s.label}</dt>
-              <dd className="body-sm font-medium text-[var(--ink)] sm:text-right">{s.value}</dd>
-            </div>
-          ))}
-        </dl>
-      ),
-    },
+    // Thông số đã nằm ở cột phải nên không lặp lại thành tab.
     !!product.capabilityDetails?.length && {
       key: "capability",
       label: pd.capabilityTitle,
@@ -223,83 +211,105 @@ function ProductDetail({
     },
   ].filter(Boolean) as ProductTab[];
 
+  const quoteHref = `${withLocale(lang, "/contact")}?product=${encodeURIComponent(product.name)}#contact-form`;
+  const fallback = product.image_url ? undefined : PRODUCT_FALLBACK_IMAGE[product.slug];
+  const images = gallery.length ? gallery : fallback ? [fallback.src] : [];
+
   return (
     <>
       <JsonLd data={[productLd, crumbs]} />
-      <Reveal className="container-page section-y grid gap-10 md:grid-cols-2">
-        <div>
-          <ProductGallery images={gallery} alt={product.name} />
-        </div>
-        <div className="min-w-0">
-          <Link
-            href={withLocale(lang, "/products")}
-            className="body-sm text-[var(--muted)] hover:text-[var(--brand)]"
-          >
-            {dict.common.backProducts}
-          </Link>
-          <h1 className="display-lg mt-4 break-words text-[var(--ink)]">{product.name}</h1>
-          {product.short_description && (
-            <p className="body-base mt-4 text-[var(--ink)]/85">{product.short_description}</p>
-          )}
-
-          {!!product.highlights?.length && (
-            <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
-              {product.highlights.map((text) => (
-                <li
-                  key={text}
-                  className="flex gap-2.5 rounded-[var(--radius-control)] bg-[var(--bg-soft)] p-3"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="mt-0.5 h-4 w-4 shrink-0 text-[var(--brand)]"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
-                    <path d="m5 13 4 4L19 7" />
-                  </svg>
-                  <span className="body-sm text-[var(--ink)]">{text}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className="card mt-8 border-[var(--brand)]/25 bg-[var(--brand)]/5 p-5">
-            <Link
-              href={`${withLocale(lang, "/contact")}?product=${encodeURIComponent(product.name)}#contact-form`}
-              className="inline-flex items-center justify-center rounded-[var(--radius-control)] bg-[var(--brand)] px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-soft)] transition hover:bg-[var(--brand-2)]"
-            >
-              {dict.common.wholesaleCta}
-            </Link>
+      <ArticleShell
+        breadcrumbLabel={dict.news.breadcrumb}
+        breadcrumb={[{ href: withLocale(lang, "/products"), label: dict.productsPage.title }]}
+        kicker={dict.common.organic}
+        title={product.name}
+        standfirst={product.short_description}
+        sidebarLabel={dict.news.sidebar}
+        sidebar={
+          <>
+            {specs.length > 0 && (
+              <section aria-labelledby="p-specs">
+                <SectionHeader id="p-specs" title={pd.specsTitle} />
+                <dl className="text-sm">
+                  {specs.map((sp) => (
+                    <div key={sp.label} className="border-b border-rule py-2.5">
+                      <dt className="text-xs text-muted">{sp.label}</dt>
+                      <dd className="mt-0.5 font-medium text-ink">{sp.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )}
+            <CtaBox title={dict.common.readyPartner} body="0932.108.990 · info@flora-global.vn" href={quoteHref} cta={dict.news.quote} />
+            <AdSlot ad="certification" size="mpu" tone="cream" surface="none" lang={lang} dict={dict} />
+          </>
+        }
+        after={
+          <>
+            <RelatedProducts lang={lang} dict={dict} product={product} />
+            <RelatedKnowledge
+              lang={lang}
+              dict={dict}
+              category={product.category_slugs?.includes("nguyen-lieu-nhap-khau-huu-co") ? "canh-tac-huu-co" : "thi-truong-xu-huong"}
+            />
+          </>
+        }
+      >
+        {images.length > 0 && (
+          <div className="mt-6" title={fallback ? dict.news.photo.replace("{credit}", fallback.credit) : undefined}>
+            <ProductGallery images={images} alt={product.name} />
           </div>
-        </div>
-      </Reveal>
+        )}
 
-      {tabs.length > 0 && (
-        <div className="border-t border-[var(--line)] bg-[var(--bg-soft)]">
-          <div className="container-page section-y">
+        {!!product.highlights?.length && (
+          <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
+            {product.highlights.map((text) => (
+              <li key={text} className="flex gap-2.5 bg-ad-bg p-3">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden
+                >
+                  <path d="m5 13 4 4L19 7" />
+                </svg>
+                <span className="text-sm text-ink">{text}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Nút báo giá ngay dưới ảnh — trên điện thoại cột phải nằm tận cuối trang. */}
+        <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <Link href={quoteHref} className="bg-ink px-5 py-3 text-sm font-bold text-white hover:bg-[#333]">
+            {dict.news.quote}
+          </Link>
+          <a href="tel:0932108990" className="py-2 text-sm font-bold text-primary hover:underline">
+            0932.108.990
+          </a>
+        </div>
+
+        {tabs.length > 0 && (
+          <div className="mt-9">
             <ProductTabs tabs={tabs} />
           </div>
-        </div>
-      )}
+        )}
 
-      <RelatedProducts lang={lang} dict={dict} product={product} />
-
-      {!!product.faqs?.length && (
-        <div className="border-t border-[var(--line)]">
-          <div className="container-page section-y max-w-3xl">
-            <p className="display-sm text-[var(--ink)]">{pd.faqTitle}</p>
-            <div className="mt-5 divide-y divide-[var(--line)] rounded-[var(--radius-card)] border border-[var(--line)]">
+        {!!product.faqs?.length && (
+          <section aria-labelledby="p-faq" className="mt-6">
+            <SectionHeader id="p-faq" title={pd.faqTitle} />
+            <div className="divide-y divide-rule border-y border-rule">
               {product.faqs.map((f) => (
-                <details key={f.question} className="group p-5">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 body-base font-medium text-[var(--ink)] marker:content-none">
+                <details key={f.question} className="group py-4">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-serif text-base font-bold text-ink marker:content-none">
                     {f.question}
                     <svg
                       viewBox="0 0 24 24"
-                      className="h-5 w-5 shrink-0 text-[var(--brand)] transition group-open:rotate-45"
+                      className="h-5 w-5 shrink-0 text-primary transition group-open:rotate-45"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -310,13 +320,13 @@ function ProductDetail({
                       <path d="M12 5v14M5 12h14" />
                     </svg>
                   </summary>
-                  <p className="body-sm mt-3 text-[var(--ink)]/80">{f.answer}</p>
+                  <p className="body-sm mt-3 text-ink-2">{f.answer}</p>
                 </details>
               ))}
             </div>
-          </div>
-        </div>
-      )}
+          </section>
+        )}
+      </ArticleShell>
     </>
   );
 }
@@ -338,20 +348,25 @@ async function RelatedProducts({
   if (related.length === 0) return null;
 
   return (
-    <div className="border-t border-[var(--line)] bg-[var(--bg-soft)]">
-      <div className="container-page section-y">
-        <p className="display-sm text-[var(--ink)]">{dict.productDetail.relatedTitle}</p>
-        <Reveal className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {related.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              href={withLocale(lang, `/products/${p.slug}`)}
-              organicLabel={dict.common.organic}
-            />
-          ))}
-        </Reveal>
-      </div>
-    </div>
+    <section aria-labelledby="p-related" className="mt-12">
+      <SectionHeader id="p-related" title={dict.productDetail.relatedTitle} href={withLocale(lang, "/products")} />
+      <ul className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
+        {related.map((p) => {
+          const fb = p.image_url ? undefined : PRODUCT_FALLBACK_IMAGE[p.slug];
+          return (
+            <li key={p.id}>
+              <ProductTile
+                href={withLocale(lang, `/products/${p.slug}`)}
+                name={p.name}
+                label={dict.common.organic}
+                image={p.image_url ?? fb?.src ?? null}
+                imageTitle={fb && dict.news.photo.replace("{credit}", fb.credit)}
+                note={dict.news.quote}
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }

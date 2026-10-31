@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PageHero } from "@/components/page-hero";
+import { AdSlot } from "@/components/news/ad-slot";
+import { ListingShell } from "@/components/news/shells";
 import { ProductsCatalog } from "@/components/products-catalog";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { getDictionary } from "@/lib/i18n/get-dictionary";
@@ -33,28 +34,23 @@ export default async function ProductsPage({ params }: Props) {
   const categories = localizeCategories(rawCategories, lang);
 
   return (
-    <>
-      <PageHero
-        eyebrow={dict.productsPage.eyebrow}
-        title={dict.productsPage.title}
-        image="/videos/farmers-field-poster.jpg"
-        video="/videos/farmers-field.mp4"
-        videoSpeed={0.6}
-        homeHref={withLocale(lang, "/")}
-        crumbs={[{ href: withLocale(lang, "/products"), label: dict.productsPage.title }]}
+    <ListingShell
+      navLabel={dict.news.mainNav}
+      band={{ title: dict.productsPage.title, href: withLocale(lang, "/products") }}
+      ad={<AdSlot ad="certification" size="leaderboard" tone="cream" lang={lang} dict={dict} />}
+      title={dict.productsPage.title}
+      intro={dict.productsPage.intro}
+    >
+      <ProductsCatalog
+        lang={lang}
+        products={products}
+        categories={categories}
+        organicLabel={dict.common.organic}
+        allLabel={dict.productsPage.all}
+        emptyLabel={dict.productsPage.empty}
+        quoteLabel={dict.news.quote}
+        photoLabel={dict.news.photo}
       />
-      <div className="container-page section-y">
-        <p className="lead max-w-2xl text-[var(--muted)]">{dict.productsPage.intro}</p>
-
-        <ProductsCatalog
-          lang={lang}
-          products={products}
-          categories={categories}
-          organicLabel={dict.common.organic}
-          allLabel={dict.productsPage.all}
-          emptyLabel={dict.productsPage.empty}
-        />
-      </div>
-    </>
+    </ListingShell>
   );
 }

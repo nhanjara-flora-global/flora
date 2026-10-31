@@ -69,9 +69,21 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
    → `0003_seed_product_descriptions.sql` (trong `supabase/migrations/`) trên Supabase.
    (0002 tạo bucket công khai `post-images`; 0003 backfill mô tả 4 sản phẩm seed.)
 2. Đặt `DATA_SOURCE=supabase` + các key Supabase trong env (Vercel).
-3. `/admin` → **Bài viết** → **Viết bài mới**. Viết tiếng Việt; bấm **Đăng bài** →
-   hệ thống tự dịch sang 5 ngôn ngữ (Google Translate free) rồi publish.
-   **Lưu nháp** để lưu mà chưa hiện ra web. Trang sửa có nút **Dịch lại**.
+3. `/admin` → **Bài viết** → **+ Viết bài**. Trình soạn 2 cột (theo mẫu admin Cây Cảnh
+   Miền Tây): bên trái tiêu đề / đoạn dẫn / nội dung, bên phải các khung **Xuất bản**
+   (chuyên mục, lịch đăng), **Ảnh bìa**, **Bản dịch**, **SEO & đường dẫn** (xem trước
+   kết quả Google) và **Kiểm tra trước khi đăng** — mục *bắt buộc* chưa đạt thì không
+   đăng được (server kiểm lại y hệt, `src/lib/admin/posts.ts`).
+   - Viết tiếng Việt; **Đăng bài** / **Cập nhật** tự dịch máy sang các ngôn ngữ còn lại.
+     **Lưu nháp** lưu mà chưa hiện ra web; bài đã đăng có **Gỡ bài** (về nháp) và **Xoá**.
+   - **Lịch đăng** ở tương lai → nút thành **Lên lịch đăng**; bài tự hiện khi tới giờ
+     (trễ tối đa ~5 phút do `revalidate = 300`).
+   - **Xem trước ↗** (bài nháp / lên lịch) mở bài trên web qua Draft Mode
+     (`/admin/preview?id=…`, chỉ admin đã đăng nhập); thanh vàng cuối trang để thoát.
+   - Đường dẫn sửa được khi bài chưa đăng; bài đã đăng giữ nguyên link.
+   - Ảnh (bìa + trong bài) được nén ở trình duyệt về cạnh dài 1600px trước khi tải lên.
+   - Danh sách bài có tab Đã đăng / Lên lịch / Nháp (kèm số bài), tìm theo tiêu đề và lọc
+     chuyên mục.
 4. Ô **Nội dung** là trình soạn thảo trực quan **Plate.js** (Slate): dán thẳng từ
    Word / Google Docs giữ nguyên định dạng. Thanh công cụ: đậm/nghiêng/gạch chân/
    gạch ngang, sub/sup, H2-H3, danh sách, trích dẫn, liên kết, **màu chữ + bút

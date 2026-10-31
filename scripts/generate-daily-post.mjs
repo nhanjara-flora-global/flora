@@ -5,7 +5,7 @@
  *   1. Đọc các bài đã có (để tránh trùng chủ đề) + log các bài từng auto-sinh.
  *   2. Gọi Claude viết 1 bài tiếng Việt (evergreen, kiến thức/phân tích — KHÔNG phải
  *      tin thời sự, không bịa số liệu/ngày tháng/nhân vật).
- *   3. Gọi Claude dịch bài đó sang en/zh/ko/hi/si.
+ *   3. Gọi Claude dịch bài đó sang tiếng Anh (en).
  *   4. Ghi bài vào src/lib/data/wp-content.json (posts + categories)
  *      và bản dịch vào src/lib/i18n/content/news-cache.json.
  *   5. Ghi vào scripts/data/auto-post-log.json để lần sau không lặp lại.
@@ -30,7 +30,7 @@ const LOG_PATH = path.join(ROOT, "scripts/data/auto-post-log.json");
 const MODEL = process.env.NEWS_MODEL || "claude-opus-5";
 const DRY_RUN = process.env.DRY_RUN === "1";
 const SOURCE_LOCALE = "vi";
-const TARGET_LOCALES = ["en", "zh", "ko", "hi", "si"];
+const TARGET_LOCALES = ["en"];
 /** Đồng bộ với NEWS_CATEGORIES trong src/lib/legacy.ts (5 nhóm chủ đề). */
 const CATEGORIES = [
   "canh-tac-huu-co",
@@ -195,7 +195,7 @@ async function translateArticle(client, article) {
         role: "user",
         content:
           `Dịch bài viết tiếng Việt sau sang: ${TARGET_LOCALES.join(", ")} ` +
-          `(en=English, zh=中文 giản thể, ko=한국어, hi=हिन्दी, si=සිංහල).\n` +
+          `(en=English).\n` +
           `Giữ nguyên toàn bộ cấu trúc thẻ HTML, chỉ dịch phần chữ. Giọng chuyên nghiệp, tự nhiên.\n\n` +
           `TIÊU ĐỀ: ${article.title}\n\nTÓM TẮT: ${article.excerpt}\n\nTHÂN BÀI:\n${article.content_html}`,
       },

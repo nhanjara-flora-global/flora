@@ -24,6 +24,11 @@ export type NewsArticle = LegacyArticle & {
   translations: Partial<Record<Locale, ArticleTranslation>>;
   sourceLocale: Locale;
   origin: "seed" | "db";
+  /** SEO tiếng Việt nhập trong admin (chỉ dùng cho ngôn ngữ gốc). */
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  /** Bài chưa hiện trên web (nháp / lên lịch) — chỉ có khi admin xem trước. */
+  isDraft?: boolean;
 };
 
 const newsCache = newsCacheJson as Record<
@@ -63,7 +68,13 @@ type DbRow = {
   created_at: string | null;
   source_locale: string | null;
   translations: Partial<Record<Locale, ArticleTranslation>> | null;
+  seo_title: string | null;
+  seo_description: string | null;
+  status?: string;
 };
+
+const DB_COLUMNS =
+  "slug,title,excerpt,content,cover_url,category,published_at,created_at,source_locale,translations,seo_title,seo_description";
 
 function dbToArticle(r: DbRow): NewsArticle {
   return {
@@ -78,6 +89,8 @@ function dbToArticle(r: DbRow): NewsArticle {
     translations: r.translations ?? {},
     sourceLocale: (r.source_locale as Locale) ?? "vi",
     origin: "db",
+    seoTitle: r.seo_title,
+    seoDescription: r.seo_description,
   };
 }
 
@@ -88,10 +101,10 @@ async function dbArticles(): Promise<NewsArticle[]> {
     const supabase = createPublicClient();
     const { data, error } = await supabase
       .from("posts")
-      .select(
-        "slug,title,excerpt,content,cover_url,category,published_at,created_at,source_locale,translations",
-      )
+      .select(DB_COLUMNS)
       .eq("status", "published")
+      // Bài lên lịch: chưa tới giờ thì chưa hiện (trang tin revalidate 5 phút).
+      .lte("published_at", new Date().toISOString())
       .order("published_at", { ascending: false });
     if (error || !data) return [];
     return (data as DbRow[]).map(dbToArticle);
@@ -109,7 +122,33 @@ export async function allArticles(): Promise<NewsArticle[]> {
   );
 }
 
-export async function articleBySlug(slug: string): Promise<NewsArticle | null> {
+/** Admin xem trước: đọc bài ở mọi trạng thái bằng service role. */
+async function dbDraftArticle(slug: string): Promise<NewsArticle | null> {
+  const { getServiceClient } = await import("@/lib/admin/data");
+  const supabase = await getServiceClient();
+  if (!supabase) return null;
+  const { data } = await supabase
+    .from("posts")
+    .select(`${DB_COLUMNS},status`)
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!data) return null;
+  const row = data as DbRow;
+  const live =
+    row.status === "published" &&
+    !!row.published_at &&
+    new Date(row.published_at).getTime() <= Date.now();
+  return { ...dbToArticle(row), isDraft: !live };
+}
+
+export async function articleBySlug(
+  slug: string,
+  opts: { draft?: boolean } = {},
+): Promise<NewsArticle | null> {
+  if (opts.draft) {
+    const draft = await dbDraftArticle(slug);
+    if (draft) return draft;
+  }
   const db = await dbArticles();
   const hit = db.find((a) => a.slug === slug);
   if (hit) return hit;

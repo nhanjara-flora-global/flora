@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { OrderStatus, PaymentStatus } from "@/lib/admin/data";
+import type { PostState } from "@/lib/admin/posts";
 
 /* ── Surfaces ─────────────────────────────────────────────────────── */
 
@@ -171,6 +172,13 @@ export const PAYMENT_STATUS_TONE: Record<PaymentStatus, Tone> = {
 export const PRODUCT_STATUS_TONE: Record<string, Tone> = {
   published: "green",
   draft: "amber",
+  archived: "neutral",
+};
+
+export const POST_STATE_TONE: Record<PostState, Tone> = {
+  draft: "amber",
+  scheduled: "blue",
+  published: "green",
   archived: "neutral",
 };
 

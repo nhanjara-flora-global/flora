@@ -18,10 +18,6 @@ const DEFAULT_OG_IMAGE = "/images/wp/2025_09_banner1-1.jpg";
 const OG_LOCALE: Record<Locale, string> = {
   en: "en_US",
   vi: "vi_VN",
-  zh: "zh_CN",
-  ko: "ko_KR",
-  hi: "hi_IN",
-  si: "si_LK",
 };
 
 export function ogLocale(lang: Locale): string {

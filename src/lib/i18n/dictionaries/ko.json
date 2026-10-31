@@ -16,7 +16,10 @@
     "news": "지식",
     "products": "제품",
     "contact": "문의",
-    "getInTouch": "문의하기"
+    "getInTouch": "문의하기",
+    "certification": "인증",
+    "export": "수출",
+    "video": "동영상"
   },
   "services": {
     "premium-agricultural-inputs-the-japanese-foundation": "일본 기준 투입재",
@@ -196,5 +199,101 @@
     "aboutProduct": "제품 도매 문의",
     "formTitle": "무엇을 도와드릴까요?",
     "formIntro": "요청 내용을 보내 주세요!"
+  },
+  "news": {
+    "ad": "광고",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "search": "검색",
+    "searchPlaceholder": "기사 검색",
+    "searchResults": "“{q}” 검색 결과 {count}건",
+    "searchEmpty": "“{q}”와 일치하는 기사가 없습니다.",
+    "searchPrompt": "키워드를 입력해 지식 섹션에서 검색하세요.",
+    "mainNav": "주요 섹션",
+    "footerNav": "푸터 링크",
+    "breadcrumb": "이동 경로",
+    "pagination": "페이지 이동",
+    "prevPage": "이전 페이지",
+    "nextPage": "다음 페이지",
+    "prev": "이전",
+    "next": "다음",
+    "latest": "최신 소식",
+    "latestList": "최신",
+    "featured": "추천 지식",
+    "recommended": "추천 읽을거리",
+    "fieldStory": "재배지 이야기",
+    "readMore": "더 읽기",
+    "explore": "살펴보기",
+    "ecosystemStrip": "투입재, 재배, 인증부터 수출까지 100% 이력 추적",
+    "honeyTitle": "Honey No. 9의 유산: 당도 17–19 Brix 황금 패션프루트",
+    "videos": "농업 동영상",
+    "watchVideos": "동영상 보기",
+    "play": "동영상 재생: {title}",
+    "upNext": "더 많은 동영상",
+    "missed": "놓쳤을 수도 있는 영상",
+    "howto": "기술 가이드",
+    "source": "출처: {source}",
+    "videoNote": "동영상은 YouTube와 TikTok에서 삽입되었으며 저작권은 게시 채널에 있습니다.",
+    "watchOn": "{platform}에서 보기",
+    "quote": "견적 문의",
+    "relatedProduct": "관련 제품",
+    "share": "공유",
+    "linkCopied": "링크가 복사되었습니다",
+    "byline": "Flora Global 편집팀",
+    "moreFrom": "Flora Global의 다른 글",
+    "sidebar": "사이드바",
+    "topics": "주제",
+    "photo": "사진: {credit}",
+    "newsletterTitle": "Flora 시즌 뉴스레터",
+    "newsletterBody": "재배, 인증, 수출 시장 정보를 정기적으로 메일로 보내 드립니다.",
+    "newsletterEmail": "이메일 주소",
+    "newsletterSubmit": "구독",
+    "newsletterDone": "뉴스레터를 구독해 주셔서 감사합니다.",
+    "newsletterError": "올바른 이메일 주소를 입력하세요.",
+    "empty": "아직 기사가 없습니다.",
+    "ads": {
+      "chickenManure": {
+        "eyebrow": "일본 수입",
+        "title": "완전 부숙·열처리한 일본산 유기 계분",
+        "body": "건강한 토양이 달고 고른 과실의 기초입니다.",
+        "cta": "견적 받기"
+      },
+      "certification": {
+        "eyebrow": "인증 서비스",
+        "title": "농장에 유기 인증이 필요하신가요?",
+        "body": "VOAC, USDA, EU Organic, GlobalG.A.P. 인증 원스톱 컨설팅.",
+        "cta": "전화 0932.108.990"
+      },
+      "sourcing": {
+        "eyebrow": "전략적 소싱",
+        "title": "기준을 충족하는 베트남 농산물을 찾으시나요?",
+        "body": "베트남 농산물로 이어지는 가교.",
+        "cta": "공급처 찾기"
+      },
+      "lotus": {
+        "eyebrow": "유기농 제품",
+        "title": "100% 순수 연자 분말",
+        "body": "가공식품 및 수출용 원료.",
+        "cta": "견적 문의"
+      },
+      "partnerFarm": {
+        "eyebrow": "VOAC 생태계",
+        "title": "Flora와 함께하는 유기농 파트너 농장",
+        "body": "일본 기준 투입재, 인증 지원, 수출 판로.",
+        "cta": "프로그램 알아보기"
+      },
+      "ashFertilizer": {
+        "eyebrow": "Flora 제품",
+        "title": "소성 계분 재: 과수원용 유기 PK 비료",
+        "body": "",
+        "cta": "견적 받기"
+      },
+      "voacInputs": {
+        "eyebrow": "VOAC",
+        "title": "생산자를 위한 VOAC 유기농 원료",
+        "body": "",
+        "cta": "자세히 보기"
+      }
+    }
   }
 }

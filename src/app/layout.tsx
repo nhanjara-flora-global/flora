@@ -1,11 +1,5 @@
 import Script from "next/script";
-import {
-  Be_Vietnam_Pro,
-  Noto_Sans_SC,
-  Noto_Sans_KR,
-  Noto_Sans_Devanagari,
-  Noto_Sans_Sinhala,
-} from "next/font/google";
+import { Be_Vietnam_Pro, Noto_Serif } from "next/font/google";
 import "./globals.css";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-T6XBRYJGWJ";
@@ -13,31 +7,14 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "G-T6XBRYJGWJ";
 const body = Be_Vietnam_Pro({
   variable: "--font-body",
   subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const notoSc = Noto_Sans_SC({
-  variable: "--font-zh",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
-
-const notoKr = Noto_Sans_KR({
-  variable: "--font-ko",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-});
-
-const notoHi = Noto_Sans_Devanagari({
-  variable: "--font-hi",
-  subsets: ["devanagari", "latin"],
-  weight: ["400", "500", "700"],
-});
-
-const notoSi = Noto_Sans_Sinhala({
-  variable: "--font-si",
-  subsets: ["sinhala", "latin"],
-  weight: ["400", "500", "700"],
+// Tiêu đề bài và thân bài kiểu báo (xem document/flora-design-handoff).
+const serif = Noto_Serif({
+  variable: "--font-noto-serif",
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "600", "700"],
 });
 
 export default function RootLayout({
@@ -48,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       suppressHydrationWarning
-      className={`${body.variable} ${notoSc.variable} ${notoKr.variable} ${notoHi.variable} ${notoSi.variable} h-full`}
+      className={`${body.variable} ${serif.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">
         {children}

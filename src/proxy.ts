@@ -4,7 +4,11 @@ import {
   isLocale,
   localeForCountry,
   locales,
+  withLocale,
 } from "@/lib/i18n/config";
+
+/** Locales the site used to serve (zh, ko, hi, si) — removed, now English-only fallback. */
+const RETIRED_LOCALES = ["zh", "ko", "hi", "si"];
 
 /**
  * Locale priority: explicit cookie choice → visitor country (Vercel edge geo)
@@ -51,6 +55,14 @@ export function proxy(request: NextRequest) {
   // Admin stays outside locale routing
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
     return NextResponse.next();
+  }
+
+  // Retired locales: send old (possibly indexed) URLs to the English page
+  const first = pathname.split("/")[1];
+  if (RETIRED_LOCALES.includes(first)) {
+    const url = request.nextUrl.clone();
+    url.pathname = withLocale(defaultLocale, pathname.slice(first.length + 1) || "/");
+    return NextResponse.redirect(url, 308);
   }
 
   const hasLocale = locales.some(

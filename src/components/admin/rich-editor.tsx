@@ -46,6 +46,7 @@ import {
 } from "@platejs/table";
 import { slateToHtml } from "@/lib/admin/plate-serialize";
 import { uploadPostImage } from "@/app/actions/upload";
+import { compressImage } from "@/lib/compress-image";
 
 type Props = { value: string; onChange: (html: string) => void };
 
@@ -109,8 +110,13 @@ function PlateRichEditor({ value, onChange }: Props) {
   const editor = usePlateEditor({ plugins: PLUGINS, value: initialHtml });
 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Slate gọi onChange cả khi chỉ di chuyển con trỏ (value giữ nguyên tham chiếu) — bỏ qua,
+  // để trình soạn bài không báo "có thay đổi chưa lưu" khi chỉ bấm vào nội dung.
+  const last = useRef<unknown>(editor.children);
   const emit = useCallback(
     (v: unknown) => {
+      if (v === last.current) return;
+      last.current = v;
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => onChange(slateToHtml(v)), 300);
     },
@@ -179,7 +185,7 @@ function Toolbar({ editor }: { editor: PlateEditor }) {
       setUploading(true);
       try {
         const fd = new FormData();
-        fd.append("file", file);
+        fd.append("file", await compressImage(file));
         const res = await uploadPostImage(fd);
         if (!res.ok) {
           alert(res.error);

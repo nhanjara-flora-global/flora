@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FloatingContact } from "@/components/floating-contact";
-import { RevealScript } from "@/components/reveal";
+import { AdSlot } from "@/components/news/ad-slot";
+import { HomeOnly } from "@/components/news/home-only";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -125,6 +126,24 @@ export default async function LocaleLayout({ children, params }: Props) {
         label: dict.services[slug],
       })),
     },
+    // Chứng nhận / Xuất khẩu là hai cụm trong /solutions, đưa lên menu chính
+    // như thiết kế kiểu báo; con của chúng là các trang dịch vụ trong cụm.
+    {
+      href: `${withLocale(lang, "/solutions")}#certification`,
+      label: dict.nav.certification,
+      children: clusteredServices.certification.map((slug) => ({
+        href: withLocale(lang, `/solutions/${slug}`),
+        label: dict.services[slug],
+      })),
+    },
+    {
+      href: `${withLocale(lang, "/solutions")}#export`,
+      label: dict.nav.export,
+      children: [...clusteredServices.export, ...clusteredServices.sourcing].map((slug) => ({
+        href: withLocale(lang, `/solutions/${slug}`),
+        label: dict.services[slug],
+      })),
+    },
     {
       href: withLocale(lang, "/knowledge"),
       label: dict.nav.news,
@@ -133,6 +152,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         label: dict.newsCategories[c.slug],
       })),
     },
+    { href: withLocale(lang, "/video"), label: dict.nav.video },
     { href: withLocale(lang, "/about-us"), label: dict.nav.about },
     { href: withLocale(lang, "/contact"), label: dict.nav.contact },
   ];
@@ -144,17 +164,30 @@ export default async function LocaleLayout({ children, params }: Props) {
           __html: `document.documentElement.lang=${JSON.stringify(lang)};`,
         }}
       />
-      <RevealScript />
       <JsonLd data={[organizationLd(), websiteLd()]} />
-      <SiteHeader
-        nav={nav}
-        locale={lang}
-        topbar={dict.topbar}
-        getInTouch={dict.nav.getInTouch}
-      />
-      <main className="flex-1">{children}</main>
-      <SiteFooter locale={lang} dict={dict} />
-      <FloatingContact locale={lang} label={dict.floating.contact} />
+      {/* `contents`: lớp này chỉ để truyền biến giao diện (xem .site-news trong
+          globals.css), không tạo hộp nên header vẫn dính và footer vẫn ở đáy. */}
+      <div className="site-news contents">
+        {/* Thiết kế đặt billboard phía trên header, chỉ ở trang chủ. */}
+        <HomeOnly home={withLocale(lang, "/")}>
+          <AdSlot ad="chickenManure" size="billboard" lang={lang} dict={dict} />
+        </HomeOnly>
+        <SiteHeader
+          nav={nav}
+          locale={lang}
+          labels={{
+            contact: dict.nav.getInTouch,
+            openMenu: dict.news.openMenu,
+            closeMenu: dict.news.closeMenu,
+            search: dict.news.search,
+            searchPlaceholder: dict.news.searchPlaceholder,
+            mainNav: dict.news.mainNav,
+          }}
+        />
+        <main className="flex-1">{children}</main>
+        <SiteFooter locale={lang} dict={dict} nav={nav} />
+        <FloatingContact locale={lang} label={dict.floating.contact} />
+      </div>
     </>
   );
 }

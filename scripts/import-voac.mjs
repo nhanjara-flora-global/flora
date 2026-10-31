@@ -45,7 +45,7 @@ const ONLY = (ARGS.find((a) => a.startsWith("--only=")) || "")
   .map(Number);
 
 const SLUG_PREFIX = "voac-";
-const TARGET_LOCALES = ["en", "zh", "ko", "hi", "si"];
+const TARGET_LOCALES = ["en"];
 const MAX_IMG_BYTES = 3 * 1024 * 1024;
 
 /** Trang voac VI cần lấy. type: product | service | skip (mặc định không import). */

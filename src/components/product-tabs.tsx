@@ -19,10 +19,10 @@ export function ProductTabs({ tabs }: { tabs: ProductTab[] }) {
             role="tab"
             aria-selected={i === active}
             onClick={() => setActive(i)}
-            className={`-mb-px border-b-2 px-1 py-3 body-sm font-semibold transition ${
+            className={`-mb-px border-b-[3px] px-1 py-3 text-sm transition ${
               i === active
-                ? "border-[var(--brand)] text-[var(--brand)]"
-                : "border-transparent text-[var(--muted)] hover:text-[var(--ink)]"
+                ? "border-ink font-bold text-ink"
+                : "border-transparent text-muted hover:text-ink"
             }`}
           >
             {t.label}
