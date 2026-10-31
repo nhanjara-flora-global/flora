@@ -14,7 +14,8 @@ import {
   type PostStatus,
 } from "@/lib/admin/posts";
 import { locales } from "@/lib/i18n/config";
-import { slugify, textToHtml } from "@/lib/slug.mjs";
+import { blocksToHtml, cleanBlocks, type PostBlock } from "@/lib/post-blocks";
+import { slugify } from "@/lib/slug.mjs";
 import { translateArticle } from "@/lib/gt-translate.mjs";
 import { getPost as getSeedPost } from "@/lib/legacy";
 import { getNewsCategory } from "@/lib/news-categories";
@@ -26,7 +27,8 @@ export type PostInput = {
   title: string;
   category: string;
   excerpt: string;
-  content: string; // văn bản hoặc HTML tiếng Việt
+  /** Nội dung tiếng Việt dạng khối — máy chủ kiểm lại rồi dựng HTML. */
+  blocks: PostBlock[];
   coverUrl: string | null;
   /** Chỉ đổi được khi bài chưa đăng — bài đã đăng giữ link cũ. Trống = tự tạo theo tiêu đề. */
   slug?: string;
@@ -85,7 +87,7 @@ export async function savePost(input: PostInput, intent: Intent): Promise<PostRe
 
   const title = input.title.replace(/\s+/g, " ").trim();
   const excerpt = input.excerpt.trim();
-  const contentHtml = textToHtml(input.content);
+  const contentHtml = blocksToHtml(cleanBlocks(input.blocks));
   const coverUrl = input.coverUrl?.trim() || null;
   const seoTitle = input.seoTitle.trim().slice(0, 150);
   const seoDescription = input.seoDescription.trim().slice(0, 300);

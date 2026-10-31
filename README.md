@@ -86,14 +86,25 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
    - Ảnh (bìa + trong bài) được nén ở trình duyệt về cạnh dài 1600px trước khi tải lên.
    - Danh sách bài có tab Đã đăng / Lên lịch / Nháp (kèm số bài), tìm theo tiêu đề và lọc
      chuyên mục.
-4. Ô **Nội dung** là trình soạn thảo trực quan **Plate.js** (Slate): dán thẳng từ
-   Word / Google Docs giữ nguyên định dạng. Thanh công cụ: đậm/nghiêng/gạch chân/
-   gạch ngang, sub/sup, H2-H3, danh sách, trích dẫn, liên kết, **màu chữ + bút
-   dạ**, **canh lề**, **font + cỡ chữ**, **bảng**, IN HOA. Nút 🖼 chèn ảnh: **tải
-   lên** (lưu vào Supabase Storage) hoặc **dán URL ngoài**.
-   Nút **Tải lên** ở ô Ảnh bìa dùng chung kho ảnh đó.
-   Nội dung vẫn lưu dạng HTML (`posts.content`) — Plate serialize khi lưu,
-   deserialize khi mở lại (xem `src/lib/admin/plate-serialize.ts`).
+4. **Nội dung soạn theo khối** (như trình soạn Cây Cảnh Miền Tây): thanh công cụ thêm
+   **H2 / H3 / Đoạn văn / Danh sách / Trích dẫn**, **Ảnh** (tải lên nhiều ảnh, hoặc
+   **Link ảnh**), **Video** YouTube, **Bảng** (+/− hàng, cột; hàng đầu là tiêu đề cột),
+   **Hộp lưu ý**, **Khối sản phẩm** (tối đa 6, hiện thẻ sản phẩm + nút báo giá).
+   Mỗi khối có ↑ ↓ ✕ và ô đổi loại (vd. Đoạn văn ↔ H2/H3, giữ chữ). Trong ô chữ: bôi
+   đen rồi bấm **B** (`**đậm**`), **I** (`*nghiêng*`), **Link** (`[chữ](đường dẫn)`);
+   bỏ trống một dòng là sang đoạn mới; Enter ở ô tiêu đề thêm đoạn văn ngay sau.
+   Dán từ Word / Google Docs / web khác tự tách thành khối (giữ tiêu đề, danh sách,
+   bảng, ảnh link, đậm / nghiêng / link; bỏ màu, phông, cỡ chữ; dòng in đậm ngắn đứng
+   riêng thành tiêu đề).
+   Nội dung vẫn lưu dạng HTML (`posts.content`): máy chủ dựng HTML từ khối
+   (`blocksToHtml`, `src/lib/post-blocks.ts`), mở lại thì đọc HTML thành khối
+   (`src/lib/post-html.ts`). Khối sản phẩm lưu là `<div class="post-products"
+   data-products="…">`, trang bài thay bằng thẻ sản phẩm lúc hiển thị
+   (`src/components/news/article-content.tsx`).
+   41 bài cũ (WordPress + seed) đã được chuyển sang dạng này ngày 31/10/2026; bản
+   trước khi chuyển ở `scripts/data/backup-posts-truoc-chuyen-khoi-2026-10-31.json`.
+   `npm run posts:sync` ghi đè lại nội dung theo `wp-content.json` (dạng cũ) — trình
+   soạn vẫn mở được, nhưng mở rồi bấm Cập nhật thì bài mới về dạng khối.
 
 ### Thêm bài hàng loạt (seed, không cần Supabase)
 

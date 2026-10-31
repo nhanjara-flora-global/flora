@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getServiceClient } from "@/lib/admin/data";
 import { categoryName, getNewsCategories } from "@/lib/news-categories";
+import { productPicks } from "@/lib/admin/post-products";
 import { SITE_URL } from "@/lib/seo";
 import { PostEditor } from "../post-editor";
 
@@ -32,6 +33,7 @@ export default async function EditPostPage({ params }: Props) {
   return (
     <PostEditor
       categories={categories}
+      products={await productPicks()}
       siteUrl={SITE_URL}
       initial={{
         id: post.id,

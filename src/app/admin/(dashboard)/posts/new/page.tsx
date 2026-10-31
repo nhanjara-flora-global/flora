@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { categoryName, getNewsCategories } from "@/lib/news-categories";
+import { productPicks } from "@/lib/admin/post-products";
 import { SITE_URL } from "@/lib/seo";
 import { PostEditor } from "../post-editor";
 
@@ -16,6 +17,7 @@ export default async function NewPostPage({
   return (
     <PostEditor
       categories={categories}
+      products={await productPicks()}
       siteUrl={SITE_URL}
       initial={{
         slug: "",

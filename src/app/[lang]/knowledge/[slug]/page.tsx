@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArticleBody } from "@/components/article";
 import { ContentLocaleBadge } from "@/components/content-locale-badge";
 import { AdSlot } from "@/components/news/ad-slot";
+import { ArticleContent } from "@/components/news/article-content";
 import { Media } from "@/components/news/media";
 import { ShareButton } from "@/components/news/share-button";
 import { ArticleShell, MoreStories } from "@/components/news/shells";
@@ -152,12 +152,12 @@ export default async function NewsPostPage({ params }: Props) {
         </div>
 
         <div className="mt-6">
-          <ArticleBody html={body ? body[0] : post.content} className={PROSE} />
+          <ArticleContent html={body ? body[0] : post.content} className={PROSE} lang={lang} quoteLabel={n.quote} />
         </div>
         {body && (
           <>
             <AdSlot ad="chickenManure" size="mpu" tone="primary" lang={lang} dict={dict} className="my-7" />
-            <ArticleBody html={body[1]} className={PROSE} />
+            <ArticleContent html={body[1]} className={PROSE} lang={lang} quoteLabel={n.quote} />
           </>
         )}
 
