@@ -116,13 +116,14 @@ Trang news dùng `revalidate = 300` (làm mới sau ~5 phút; đăng từ admin 
 
 ### Lên lịch bài hàng loạt (Supabase, mỗi ngày một bài)
 
-40 bài (31/10 → 09/12/2026, 07:00 giờ VN, xen kẽ 5 chuyên mục) đã được đưa vào bảng
+90 bài (31/10/2026 → 28/01/2027, 07:00 giờ VN, xen kẽ 5 chuyên mục) đã được đưa vào bảng
 `posts` bằng `scripts/schedule-news.mjs` — dùng đúng cơ chế **Lên lịch đăng** của admin
 (`status = published` + `published_at` tương lai), nên sửa / dời ngày / gỡ ở `/admin/posts`
 tab **Lên lịch** như bài thường.
 
-- Nội dung: `scripts/data/scheduled/<chuyên mục>.mjs`, viết theo khối (viết tắt trong
-  `blocks.mjs`). Ảnh ghi theo tên file Wikimedia Commons, tra link trong `media.json`.
+- Nội dung: `scripts/data/scheduled/<chuyên mục>.mjs` (đợt 1, 40 bài) và
+  `<chuyên mục>-2.mjs` (đợt 2, 50 bài), viết theo khối (viết tắt trong `blocks.mjs`).
+  Ảnh ghi theo tên file Wikimedia Commons, tra link trong `media.json`.
 - Ảnh và video **không lưu trên server**: ảnh là link trực tiếp Wikimedia Commons (giấy phép
   tự do, chú thích tự kèm tác giả + giấy phép, nguồn ảnh bìa ở cuối bài), video là YouTube nhúng.
 - Script kiểm mọi link ảnh / video còn sống và bài qua đủ "Kiểm tra trước khi đăng" rồi mới
@@ -135,7 +136,7 @@ DRY_RUN=1 npm run news:schedule   # xem lịch + kiểm tra, không ghi
 npm run news:schedule             # ghi bài mới; START=YYYY-MM-DD để tự chọn ngày bài đầu
 ```
 
-Thêm đợt mới: thêm bài vào các file chuyên mục, thêm ảnh vào `media.json`, rồi chạy lại.
+Thêm đợt mới: tạo `<chuyên mục>-3.mjs`… (hoặc thêm vào file cũ), thêm ảnh vào `media.json`, rồi chạy lại.
 Bài đã có được bỏ qua; bài mới tự xếp mỗi ngày một bài, bắt đầu từ ngày sau bài đăng muộn
 nhất trong bảng `posts` (không trùng ngày với lịch cũ).
 

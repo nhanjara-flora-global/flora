@@ -75,5 +75,558 @@
     "category": "canh-tac-huu-co",
     "publishedAt": "2026-11-10T00:00:00.000Z",
     "createdAt": "2026-10-31T11:21:36.576Z"
+  },
+  {
+    "id": "0fd47363-f4b4-4c41-91d9-c86ae49ecf4e",
+    "slug": "vietgap-globalg-a-p-va-huu-co-khac-nhau-o-diem-nao",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-11-11T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:22:14.879Z"
+  },
+  {
+    "id": "4903cf16-40c5-4cc8-bd27-5dda4c7ce6d6",
+    "slug": "duong-bien-hay-hang-khong-chon-cach-van-chuyen-nong-san-tuoi",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-11-12T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:23:00.555Z"
+  },
+  {
+    "id": "06b4d797-3fe8-4443-9ac8-1d4b26d11baf",
+    "slug": "nong-nghiep-do-thi-trong-rau-tren-mai-nha-co-thuc-su-hieu-qua",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-11-13T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:23:46.322Z"
+  },
+  {
+    "id": "abbd8b88-0eaf-4823-a6bc-afc631f2857f",
+    "slug": "mo-hinh-lua-tom-thuan-thien-tren-vung-dat-man-ven-bien",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-11-14T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:24:23.492Z"
+  },
+  {
+    "id": "2e08c3a5-dc43-4e4a-a380-11ea07c8f384",
+    "slug": "trong-xen-va-cay-ban-dong-hanh-da-dang-de-vuon-khoe-hon",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-11-15T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:25:16.233Z"
+  },
+  {
+    "id": "e4632e5f-d3b1-466f-9978-f4abd978ac75",
+    "slug": "chung-nhan-fairtrade-la-gi-thuong-mai-cong-bang-cho-nong-dan",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-11-16T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:25:56.121Z"
+  },
+  {
+    "id": "7be74c60-88f7-4c32-97a6-f62a62384fb8",
+    "slug": "kiem-dich-thuc-vat-khi-xuat-khau-nong-san-quy-trinh-co-ban",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-11-17T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:26:35.351Z"
+  },
+  {
+    "id": "435d3cec-6efd-483f-baa9-399e8f50be10",
+    "slug": "kinh-te-tuan-hoan-trong-nong-nghiep-bien-phu-pham-thanh-tai-nguyen",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-11-18T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:27:14.157Z"
+  },
+  {
+    "id": "f3b80577-b4ef-4b96-ad76-9180466283ca",
+    "slug": "an-theo-mua-loi-cho-nguoi-tieu-dung-nong-dan-va-dat-dai",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-11-19T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:27:44.715Z"
+  },
+  {
+    "id": "c0f65c23-e74b-4e30-a274-50eb5115f9fb",
+    "slug": "phu-goc-bang-rom-ra-giu-am-han-che-co-dai-va-nuoi-dat",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-11-20T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:28:32.522Z"
+  },
+  {
+    "id": "86ae9571-4b0b-4d17-8f08-2e8ba5d17656",
+    "slug": "vat-tu-dau-vao-cho-san-xuat-huu-co-kiem-tra-gi-truoc-khi-dung",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-11-21T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:29:01.374Z"
+  },
+  {
+    "id": "ea517303-498b-4232-af6a-29b79cd67b1c",
+    "slug": "say-va-che-bien-sau-thu-hoach-nang-gia-tri-nong-san-huu-co",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-11-22T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:29:46.020Z"
+  },
+  {
+    "id": "56767111-0098-466c-87e2-433849b676cf",
+    "slug": "protein-thay-the-dau-nanh-tao-spirulina-va-co-hoi-cho-nong-san",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-11-23T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:30:27.566Z"
+  },
+  {
+    "id": "53185a99-2836-43c2-8037-71285f48fb2a",
+    "slug": "nong-dan-tre-va-nong-nghiep-huu-co-vi-sao-can-mot-the-he-moi",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-11-24T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:31:07.657Z"
+  },
+  {
+    "id": "66c35c55-71a7-4c4f-b0ee-90496f8c326a",
+    "slug": "thien-dich-trong-vuon-huu-co-bo-rua-ruoi-an-rep-va-ong-ky-sinh",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-11-25T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:31:45.136Z"
+  },
+  {
+    "id": "79f9da1a-d6bb-4904-869e-e13a56f59a8b",
+    "slug": "chan-nuoi-huu-co-nhung-nguyen-tac-co-ban-nguoi-moi-can-biet",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-11-26T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:32:24.751Z"
+  },
+  {
+    "id": "28bc32b0-0d1b-40e4-801c-e6038fa52404",
+    "slug": "chong-am-moc-cho-nong-san-kho-khi-di-container-duong-bien",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-11-27T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:33:02.143Z"
+  },
+  {
+    "id": "cfc628c5-c7b0-439d-860c-f3e1de6e8d2c",
+    "slug": "nong-nghiep-thong-minh-drone-cam-bien-va-du-lieu-tren-dong-ruong",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-11-28T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:33:33.696Z"
+  },
+  {
+    "id": "e31be8ba-7e5d-43b5-9b40-a1a97f4f0a41",
+    "slug": "5-cau-hoi-nen-dat-ra-truoc-khi-chon-phan-bon-huu-co",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-11-29T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:34:11.340Z"
+  },
+  {
+    "id": "9f2c53db-469b-4e2a-90cf-186f7434b72d",
+    "slug": "nam-trichoderma-vi-sinh-doi-khang-bao-ve-bo-re-cay-trong",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-11-30T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:34:50.259Z"
+  },
+  {
+    "id": "102a9fa9-2970-437c-a1f8-d3b5939d1891",
+    "slug": "cach-nhan-biet-san-pham-huu-co-that-doc-nhan-va-ma-chung-nhan",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-12-01T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:35:27.996Z"
+  },
+  {
+    "id": "7e560e3d-6544-4799-be66-3a6d8eb5154a",
+    "slug": "thanh-toan-quoc-te-cho-nha-xuat-khau-t-t-l-c-hay-nho-thu",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-12-02T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:36:11.756Z"
+  },
+  {
+    "id": "d41e6ee7-1ffd-4f85-9724-23b2dce430f5",
+    "slug": "tin-chi-carbon-trong-nong-nghiep-hieu-dung-truoc-khi-ky-vong",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-12-03T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:36:52.958Z"
+  },
+  {
+    "id": "8a5f4bb2-0400-47eb-b6e4-9589b45f1420",
+    "slug": "hop-tac-xa-kieu-moi-mat-xich-quan-trong-cua-chuoi-gia-tri-huu-co",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-12-04T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:37:32.791Z"
+  },
+  {
+    "id": "9f8c7924-1ba4-4005-9d40-7163ce4de554",
+    "slug": "lay-mau-dat-va-doc-ket-qua-phan-tich-buoc-dau-cua-bon-phan-dung",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-05T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:38:31.392Z"
+  },
+  {
+    "id": "d500ad65-f588-45e4-9e60-6f7a67e58f14",
+    "slug": "gui-mau-va-ho-so-chao-hang-tao-an-tuong-voi-nha-nhap-khau",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-12-06T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:39:22.871Z"
+  },
+  {
+    "id": "d2a73db8-954d-4c1b-bbc4-a77bd60f9a83",
+    "slug": "du-lich-nong-nghiep-khi-trang-trai-huu-co-mo-cua-don-khach",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-12-07T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:40:07.530Z"
+  },
+  {
+    "id": "7508ea94-bc30-42ab-9f9a-4a5679583007",
+    "slug": "giong-cay-ban-dia-kho-bau-nguon-gen-can-duoc-gin-giu",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-12-08T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:40:46.280Z"
+  },
+  {
+    "id": "71476ad1-dbe3-4f46-8fc5-b02aee120b4c",
+    "slug": "bokashi-u-len-men-phu-pham-nhanh-it-mui-cho-vuon-huu-co",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-09T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:41:30.599Z"
+  },
+  {
+    "id": "7451dafc-dbbf-41f6-838d-5ef9626161b8",
+    "slug": "cay-ho-dau-va-not-san-nuoi-dam-cho-dat-khong-can-phan-hoa-hoc",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-10T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:58:05.222Z"
+  },
+  {
+    "id": "ec6f0f40-849c-49f5-8452-a012667089e6",
+    "slug": "quy-dinh-huu-co-eu-2018-848-nhung-thay-doi-nha-xuat-khau-can-biet",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-12-11T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:58:35.026Z"
+  },
+  {
+    "id": "ddf8906f-56f3-4b42-b343-d168e2da3025",
+    "slug": "xuat-khau-nong-san-sang-nhat-ban-chat-luong-du-luong-va-su-ti-mi",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-12-12T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:59:05.909Z"
+  },
+  {
+    "id": "bff69e82-23b6-4396-9c5b-445239252183",
+    "slug": "ban-nong-san-qua-thuong-mai-dien-tu-va-livestream-co-hoi-va-cam-bay",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-12-13T00:00:00.000Z",
+    "createdAt": "2026-10-31T11:59:37.881Z"
+  },
+  {
+    "id": "b01c26d9-d8aa-4348-99cd-de5bc04ea864",
+    "slug": "bai-hoc-tu-nhung-con-sot-nong-san-dung-trong-theo-phong-trao",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-12-14T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:00:03.143Z"
+  },
+  {
+    "id": "68e2b237-9886-4bec-99b2-e84969d25ecc",
+    "slug": "phan-dam-ca-thuy-phan-tan-dung-phu-pham-ca-lam-dinh-duong-cho-cay",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-15T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:00:34.028Z"
+  },
+  {
+    "id": "2b082a71-22ba-4428-bf0e-b164b26cdcf6",
+    "slug": "usda-organic-siet-thuc-thi-chung-nhan-nhap-khau-va-chuoi-cung-ung",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-12-16T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:01:05.460Z"
+  },
+  {
+    "id": "0d6a4b3e-1d0f-4b92-90fc-681a3895a97d",
+    "slug": "dua-nong-san-vao-eu-du-luong-kiem-dich-va-kiem-soat-tai-bien-gioi",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-12-17T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:01:30.544Z"
+  },
+  {
+    "id": "acd7256a-d964-42e1-9233-40c13f0d326f",
+    "slug": "ca-phe-dac-san-viet-nam-tu-robusta-thuong-mai-den-hat-cao-cap",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-12-18T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:02:05.935Z"
+  },
+  {
+    "id": "084f1287-1438-42b1-b8d7-b13e665c4d59",
+    "slug": "nhung-nguoi-tho-thu-phan-tham-lang-bao-ve-loai-ong-de-giu-mua-mang",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-12-19T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:02:34.795Z"
+  },
+  {
+    "id": "f307f4ef-0653-401b-9dcb-f2d5faa4df3a",
+    "slug": "che-pham-thao-moc-toi-ot-gung-dung-sao-cho-dung-va-an-toan",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-20T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:03:00.189Z"
+  },
+  {
+    "id": "906e1092-ca96-43ac-936a-254aef4d0532",
+    "slug": "ghi-nhan-huu-co-cho-thuc-pham-che-bien-ty-le-thanh-phan-quyet-dinh",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-12-21T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:03:34.803Z"
+  },
+  {
+    "id": "3d5401aa-df9e-426c-a171-b95144c3ec45",
+    "slug": "xuat-khau-chinh-ngach-sang-trung-quoc-dang-ky-ma-so-va-nhan-mac",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-12-22T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:04:08.507Z"
+  },
+  {
+    "id": "51e6a704-7004-4299-b114-d4f4a71d0b2f",
+    "slug": "ca-cao-viet-nam-va-lan-song-so-co-la-thu-cong-tu-hat-den-thanh",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-12-23T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:04:33.290Z"
+  },
+  {
+    "id": "7afe16ea-fc6c-465f-8951-c36ef16b580b",
+    "slug": "trong-nam-rom-bien-rom-ra-sau-mua-gat-thanh-thu-nhap",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-12-24T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:05:15.075Z"
+  },
+  {
+    "id": "76f317b1-22f2-4e00-a5f6-c2ee4fd3f8e2",
+    "slug": "tuyen-trung-hai-re-nhan-biet-va-quan-ly-bang-bien-phap-huu-co",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-25T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:05:49.339Z"
+  },
+  {
+    "id": "5d4be899-1614-4288-a6e3-e226d7b863e6",
+    "slug": "chung-nhan-co-so-che-bien-huu-co-nha-xuong-can-dap-ung-nhung-gi",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-12-26T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:06:23.938Z"
+  },
+  {
+    "id": "88d89f72-ff66-4276-b110-4d9f5476286a",
+    "slug": "xuat-khau-thuc-pham-sang-my-dang-ky-fda-thong-bao-truoc-va-fsma",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2026-12-27T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:06:48.150Z"
+  },
+  {
+    "id": "8111fba5-b14a-414c-aa52-8a8f33a543a4",
+    "slug": "thuc-pham-len-men-xu-huong-toan-cau-tu-nhung-mon-quen-cua-nguoi-viet",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2026-12-28T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:07:36.922Z"
+  },
+  {
+    "id": "555f35bf-c9fa-441b-a8b7-cec7dac5798c",
+    "slug": "phu-nu-trong-nong-nghiep-huu-co-luc-luong-tham-lang-cua-dong-ruong",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2026-12-29T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:08:12.336Z"
+  },
+  {
+    "id": "0f11ad72-5107-4f4a-ab9e-c8eb57bc379b",
+    "slug": "bay-con-trung-trong-vuon-huu-co-bay-dinh-bay-pheromone-bay-den",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2026-12-30T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:09:09.269Z"
+  },
+  {
+    "id": "cfbd2884-74e4-4de1-8a38-c064e55f925c",
+    "slug": "phat-hien-du-luong-tren-san-pham-huu-co-nguyen-nhan-va-cach-xu-ly",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2026-12-31T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:09:59.430Z"
+  },
+  {
+    "id": "846a0648-00c7-4bc8-8f04-b6b564c62c1e",
+    "slug": "tan-dung-hiep-dinh-thuong-mai-tu-do-c-o-uu-dai-cho-nong-san",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2027-01-01T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:10:41.913Z"
+  },
+  {
+    "id": "75a14228-5cde-45a0-9d62-b7b19651f615",
+    "slug": "sua-hat-va-do-uong-thuc-vat-co-hoi-cho-dau-nanh-dua-hat-sen",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2027-01-02T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:11:15.917Z"
+  },
+  {
+    "id": "76181304-8445-4e81-a9b1-518da5c1cfdb",
+    "slug": "tru-nuoc-mua-cho-mua-kho-kinh-nghiem-cu-giai-phap-moi",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2027-01-03T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:11:54.176Z"
+  },
+  {
+    "id": "f8e45073-0a00-43f0-906d-14ff66935b7e",
+    "slug": "phong-benh-nam-mua-mua-trong-vuon-huu-co-than-thu-suong-mai",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2027-01-04T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:12:34.429Z"
+  },
+  {
+    "id": "6dc0f42a-0993-470f-97b5-f65e310e763b",
+    "slug": "chung-nhan-rainforest-alliance-nong-nghiep-ben-vung-cho-ca-phe-che",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2027-01-05T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:13:16.130Z"
+  },
+  {
+    "id": "a9ee9734-71c7-4f55-99a9-2180f95af1ee",
+    "slug": "hop-dong-xuat-khau-nong-san-nhung-dieu-khoan-khong-duoc-bo-qua",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2027-01-06T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:13:51.162Z"
+  },
+  {
+    "id": "d66983c3-aa00-47f4-bc43-fd354f162f26",
+    "slug": "nong-san-xau-xi-va-cuoc-chien-chong-lang-phi-thuc-pham",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2027-01-07T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:14:26.737Z"
+  },
+  {
+    "id": "1835c69b-746b-47cb-a864-00fc4d95ff38",
+    "slug": "suc-khoe-nguoi-nong-dan-ly-do-it-duoc-nhac-den-cua-nong-nghiep-huu-co",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2027-01-08T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:15:02.396Z"
+  },
+  {
+    "id": "c3fa611c-c153-4baf-9e37-c7b119f66f8a",
+    "slug": "uom-cay-con-huu-co-gia-the-khay-uom-va-nhung-loi-thuong-gap",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2027-01-09T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:15:43.548Z"
+  },
+  {
+    "id": "fade7ce8-b3e5-4eda-ba29-b251c1da3dd7",
+    "slug": "haccp-va-iso-22000-nen-tang-an-toan-thuc-pham-cho-co-so-che-bien",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2027-01-10T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:16:15.446Z"
+  },
+  {
+    "id": "3c454fc7-bef7-437d-85d7-7bd2474da4f6",
+    "slug": "bao-hiem-hang-hoa-xuat-khau-dieu-kien-a-b-c-va-cach-chon",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2027-01-11T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:16:52.204Z"
+  },
+  {
+    "id": "1b74dec1-0107-4647-b11b-64c10fbf8195",
+    "slug": "my-pham-thien-nhien-thi-truong-moi-cho-dua-sa-nghe-tinh-dau",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2027-01-12T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:17:25.191Z"
+  },
+  {
+    "id": "2bb6087c-c11a-41c8-aeaa-b15233e265f5",
+    "slug": "rau-sach-cho-bua-an-hoc-duong-khi-nong-trai-ket-noi-truong-hoc",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2027-01-13T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:18:04.248Z"
+  },
+  {
+    "id": "95ede299-3ad0-4c97-ab26-0c1dd3120646",
+    "slug": "beo-hoa-dau-nha-may-dam-nho-be-tren-ruong-lua-huu-co",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2027-01-14T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:18:39.568Z"
+  },
+  {
+    "id": "70c075b0-e13e-4c49-8292-9f24fdc32d03",
+    "slug": "chung-nhan-halal-canh-cua-vao-thi-truong-thuc-pham-hoi-giao",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2027-01-15T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:19:02.015Z"
+  },
+  {
+    "id": "a5e790f8-3a78-4cf9-958b-1a7c7a965bdc",
+    "slug": "giam-dinh-hang-hoa-truoc-khi-giao-lay-mau-kiem-tra-va-chung-thu",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2027-01-16T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:19:33.538Z"
+  },
+  {
+    "id": "4e149575-a895-46df-84af-583de385ea14",
+    "slug": "dua-san-pham-huu-co-len-ke-sieu-thi-nha-san-xuat-can-chuan-bi-gi",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2027-01-17T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:20:03.733Z"
+  },
+  {
+    "id": "b7b36ae8-adba-4043-8e6c-ba734201cef2",
+    "slug": "vi-sao-mot-trang-trai-lon-xon-lai-thuong-khoe-hon",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2027-01-18T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:20:39.061Z"
+  },
+  {
+    "id": "a52bc794-a2bf-4628-a9e9-343207422139",
+    "slug": "cai-tao-dat-phen-theo-huong-huu-co-o-dong-bang-song-cuu-long",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2027-01-19T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:21:22.338Z"
+  },
+  {
+    "id": "ef9a6004-70b4-4d3b-8127-857280cdb335",
+    "slug": "chi-dan-dia-ly-tai-san-chung-giup-nong-san-dac-san-giu-gia-tri",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2027-01-20T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:22:02.791Z"
+  },
+  {
+    "id": "2c27890a-e107-4fa7-ac49-06f77c3ca259",
+    "slug": "phong-tru-con-trung-kho-cho-nong-san-huu-co-khong-dung-hoa-chat",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2027-01-21T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:22:55.615Z"
+  },
+  {
+    "id": "059b4af3-d59c-47d1-8423-8f0d5a1403f2",
+    "slug": "tri-tue-nhan-tao-trong-nong-nghiep-chan-doan-sau-benh-qua-anh-chup",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2027-01-22T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:23:29.355Z"
+  },
+  {
+    "id": "3175b8db-7ec9-44ad-8e03-5d59533a884f",
+    "slug": "rac-thai-nhua-trong-nong-nghiep-mang-phu-bao-bi-thuoc-va-giai-phap",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2027-01-23T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:24:02.182Z"
+  },
+  {
+    "id": "d08658e4-e2f7-4fc4-8103-a9f8d2388a1e",
+    "slug": "nha-luoi-nha-mang-trong-san-xuat-rau-huu-co-khi-nao-nen-dau-tu",
+    "category": "canh-tac-huu-co",
+    "publishedAt": "2027-01-24T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:24:48.592Z"
+  },
+  {
+    "id": "8c7b6a40-419f-420c-b448-8d25096c31e2",
+    "slug": "chuong-trinh-ocop-co-hoi-nang-tam-san-pham-nong-nghiep-dia-phuong",
+    "category": "chung-nhan-tieu-chuan",
+    "publishedAt": "2027-01-25T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:25:19.538Z"
+  },
+  {
+    "id": "f95c1912-bcbd-47ab-afa2-905a0f34d680",
+    "slug": "tham-gia-hoi-cho-thuc-pham-quoc-te-chuan-bi-gi-de-co-don-hang",
+    "category": "xuat-khau-logistics",
+    "publishedAt": "2027-01-26T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:26:03.171Z"
+  },
+  {
+    "id": "9cc3b97e-2a42-4795-9b84-bb56722d31da",
+    "slug": "thi-truong-phan-bon-huu-co-vi-sao-nong-dan-dang-chuyen-huong",
+    "category": "thi-truong-xu-huong",
+    "publishedAt": "2027-01-27T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:26:38.968Z"
+  },
+  {
+    "id": "c2bdb82d-770f-4166-a456-28df8cb5a3e5",
+    "slug": "mua-tet-va-nong-san-len-ke-hoach-de-khong-duoc-mua-mat-gia",
+    "category": "goc-nhin-flora",
+    "publishedAt": "2027-01-28T00:00:00.000Z",
+    "createdAt": "2026-10-31T12:27:10.949Z"
   }
 ]

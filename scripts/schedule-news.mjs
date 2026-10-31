@@ -1,6 +1,7 @@
 /**
- * Lên lịch hàng loạt bài News (scripts/data/scheduled/<chuyên mục>.mjs) vào bảng `posts`
- * của Supabase: mỗi ngày một bài lúc 07:00 giờ VN, xen kẽ các chuyên mục.
+ * Lên lịch hàng loạt bài News (scripts/data/scheduled/<chuyên mục>.mjs, các đợt sau ở
+ * <chuyên mục>-2.mjs, -3.mjs…) vào bảng `posts` của Supabase: mỗi ngày một bài lúc
+ * 07:00 giờ VN, xen kẽ các chuyên mục.
  *
  * Bài lên lịch = status "published" + published_at ở tương lai — đúng cơ chế "Lên lịch
  * đăng" của /admin: web tự hiện bài khi tới giờ (dbArticles trong src/lib/news.ts, trễ tối
@@ -86,20 +87,34 @@ function scheduleFor(start, index) {
   return d.toISOString();
 }
 
-/** Xếp xen kẽ: lần lượt mỗi chuyên mục một bài cho tới khi hết. */
+/**
+ * Bài theo từng chuyên mục, đúng thứ tự file: `<chuyên mục>.mjs`, rồi các đợt sau
+ * `<chuyên mục>-2.mjs`, `-3.mjs`…
+ */
 async function loadArticles() {
+  const files = fs.readdirSync(DATA_DIR);
   const lists = [];
   for (const category of CATEGORIES) {
-    const file = path.join(DATA_DIR, `${category}.mjs`);
-    if (!fs.existsSync(file)) continue;
-    const list = (await import(file)).default;
-    for (const a of list) {
-      if (a.category !== category) throw new Error(`Sai chuyên mục trong ${category}.mjs: ${a.title}`);
+    const own = files
+      .filter((f) => f === `${category}.mjs` || new RegExp(`^${category}-\\d+\\.mjs$`).test(f))
+      .sort((a, b) => (Number(a.match(/-(\d+)\.mjs$/)?.[1]) || 1) - (Number(b.match(/-(\d+)\.mjs$/)?.[1]) || 1));
+    const list = [];
+    for (const f of own) {
+      for (const a of (await import(path.join(DATA_DIR, f))).default) {
+        if (a.category !== category) throw new Error(`Sai chuyên mục trong ${f}: ${a.title}`);
+        list.push(a);
+      }
     }
-    lists.push([...list]);
+    lists.push(list);
   }
+  return lists;
+}
+
+/** Xếp xen kẽ: lần lượt mỗi chuyên mục một bài cho tới khi hết. */
+function interleave(lists) {
+  const queues = lists.map((l) => [...l]);
   const out = [];
-  while (lists.some((l) => l.length)) for (const l of lists) if (l.length) out.push(l.shift());
+  while (queues.some((q) => q.length)) for (const q of queues) if (q.length) out.push(q.shift());
   return out;
 }
 
@@ -123,14 +138,26 @@ function buildBlocks(article, media) {
   return { blocks, coverUrl: cover?.src ?? null, problems };
 }
 
+/** Máy dịch tách số phiên bản giấy phép ảnh ("CC BY-SA 4. 0") — ghép lại. */
+function fixLicenses(translations) {
+  return JSON.parse(JSON.stringify(translations).replace(/(CC BY(?:-SA)? \d)\. (\d)/g, "$1.$2"));
+}
+
+/** Thử lại vài lần — lỗi mạng chập chờn không phải là link chết. */
 async function checkUrl(url) {
-  try {
-    const res = await fetch(url, { method: "HEAD", headers: { "User-Agent": UA } });
-    const type = res.headers.get("content-type") ?? "";
-    return res.ok && type.startsWith("image/") ? null : `HTTP ${res.status} ${type}`;
-  } catch (error) {
-    return error.message;
+  let problem = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await fetch(url, { method: "HEAD", headers: { "User-Agent": UA } });
+      const type = res.headers.get("content-type") ?? "";
+      if (res.ok && type.startsWith("image/")) return null;
+      problem = `HTTP ${res.status} ${type}`;
+    } catch (error) {
+      problem = error.message;
+    }
+    await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
   }
+  return problem;
 }
 
 async function checkYoutube(id) {
@@ -164,11 +191,9 @@ async function main() {
   const { data: productRows } = await supabase.from("products").select("slug").eq("status", "published");
   const productSlugs = new Set((productRows ?? []).map((r) => r.slug));
 
-  const articles = await loadArticles();
   const errors = [];
   const seen = new Set();
-  let newCount = 0;
-  const posts = articles.map((a) => {
+  const build = (a) => {
     const { blocks, coverUrl, problems } = buildBlocks(a, media);
     const clean = cleanBlocks(blocks);
     if (clean.length !== blocks.length) problems.push(`${blocks.length - clean.length} khối không hợp lệ bị bỏ`);
@@ -188,20 +213,25 @@ async function main() {
     if (seedSlugs.has(slug)) problems.push(`trùng slug bài mẫu trong wp-content.json: ${slug}`);
     if (problems.length) errors.push(`${a.title}\n    - ${problems.join("\n    - ")}`);
 
-    const exists = dbSlugs.has(slug);
     return {
       article: a,
       slug,
       content,
       coverUrl,
       warnings,
-      exists,
-      publishedAt: exists ? null : scheduleFor(start, newCount++),
+      exists: dbSlugs.has(slug),
+      publishedAt: null,
       words: plainText(content).split(/\s+/).length,
       images: clean.filter((b) => b.type === "image").map((b) => b.src),
       videos: clean.filter((b) => b.type === "video").map((b) => b.youtubeId),
     };
-  });
+  };
+
+  // Chỉ bài mới được xếp lịch, xen kẽ chuyên mục, mỗi ngày một bài từ `start`.
+  const built = (await loadArticles()).map((list) => list.map(build));
+  const skipped = built.flat().filter((p) => p.exists).length;
+  const posts = interleave(built.map((list) => list.filter((p) => !p.exists)));
+  posts.forEach((p, i) => (p.publishedAt = scheduleFor(start, i)));
 
   // Link ảnh / video phải còn sống trước khi lên lịch — kiểm cả ảnh bìa.
   const imageUrls = [...new Set(posts.flatMap((p) => [p.coverUrl, ...p.images]).filter(Boolean))];
@@ -215,11 +245,11 @@ async function main() {
     if (problem) errors.push(`Video ${id}: ${problem}`);
   }
 
-  console.log(`${posts.length} bài, ${imageUrls.length} ảnh, ${videoIds.length} video. Lịch đăng (07:00 giờ VN):`);
+  console.log(`${skipped} bài đã có trong DB — bỏ qua.`);
+  console.log(`${posts.length} bài mới, ${imageUrls.length} ảnh, ${videoIds.length} video. Lịch đăng (07:00 giờ VN):`);
   for (const p of posts) {
-    const day = p.exists ? "đã có     " : p.publishedAt.slice(0, 10);
-    const tag = p.exists ? "bỏ qua" : `${p.words} chữ, ${p.images.length + 1} ảnh, ${p.videos.length} video`;
-    console.log(`  ${day}  ${p.article.category.padEnd(22)} ${p.article.title}  [${tag}]`);
+    const tag = `${p.words} chữ, ${p.images.length + 1} ảnh, ${p.videos.length} video`;
+    console.log(`  ${p.publishedAt.slice(0, 10)}  ${p.article.category.padEnd(22)} ${p.article.title}  [${tag}]`);
     for (const w of p.warnings) console.log(`              · ${w}`);
   }
   if (errors.length) {
@@ -232,12 +262,10 @@ async function main() {
   }
 
   const log = fs.existsSync(LOG_PATH) ? JSON.parse(fs.readFileSync(LOG_PATH, "utf8")) : [];
-  for (const p of posts.filter((x) => !x.exists)) {
+  for (const p of posts) {
     const a = p.article;
-    const translations = await translateArticle(
-      { title: a.title, excerpt: a.excerpt, content: p.content },
-      TARGET_LOCALES,
-      "vi",
+    const translations = fixLicenses(
+      await translateArticle({ title: a.title, excerpt: a.excerpt, content: p.content }, TARGET_LOCALES, "vi"),
     );
     const now = new Date().toISOString();
     const { data, error } = await supabase
