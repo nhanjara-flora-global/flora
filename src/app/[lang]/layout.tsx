@@ -173,7 +173,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       <div className="site-news contents">
         {/* Thiết kế đặt billboard phía trên header, chỉ ở trang chủ. */}
         <HomeOnly home={withLocale(lang, "/")}>
-          <AdSlot ad="chickenManure" size="billboard" lang={lang} dict={dict} />
+          <AdSlot ad="chickenManure" size="billboard" compact className="max-md:p-2" lang={lang} dict={dict} />
         </HomeOnly>
         <SiteHeader
           nav={nav}

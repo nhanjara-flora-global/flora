@@ -47,7 +47,7 @@ export function Meta({
   const shown = parts.filter(Boolean);
   if (shown.length === 0) return null;
   return (
-    <div className={`text-xs ${onDark ? "text-on-dark-muted" : "text-muted"} ${className}`}>
+    <div className={`text-[13px] md:text-xs ${onDark ? "text-on-dark-muted" : "text-muted"} ${className}`}>
       {shown.map((part, i) => (
         <span key={i}>
           {i > 0 && <span aria-hidden="true"> | </span>}

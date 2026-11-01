@@ -6,17 +6,20 @@ import { Media } from "./media";
 
 /** Banner sửa được trong /admin/banners — chỉ vẽ, dùng chung cho web và khung xem trước. */
 
-/** Dải xanh ngay dưới menu trang chủ. */
+/**
+ * Dải xanh ngay dưới menu trang chủ. Trên điện thoại gọn một hàng (nhãn + nút,
+ * bỏ đoạn mô tả nếu đã có nhãn) để không đẩy tin chính xuống dưới màn hình đầu.
+ */
 export function HomeStrip({ slot, lang }: { slot: ResolvedSlot; lang: Locale }) {
   const { copy } = slot;
   return (
     <Link
       href={localHref(lang, slot.href)}
-      className="flex flex-wrap items-center gap-x-5 gap-y-2 bg-primary px-5 py-3 text-white"
+      className="flex flex-wrap items-center gap-x-5 gap-y-2 bg-primary px-5 py-3 text-white max-md:flex-nowrap max-md:justify-between max-md:px-4 max-md:py-2.5"
     >
       {copy.eyebrow && <span className="text-[13px] font-extrabold uppercase tracking-[0.5px]">{copy.eyebrow}</span>}
-      <span className="flex-[1_1_240px] text-sm">{copy.body}</span>
-      {copy.cta && <span className="bg-harvest px-3 py-1.5 text-[13px] font-bold">{copy.cta}</span>}
+      <span className={`flex-[1_1_240px] text-sm ${copy.eyebrow ? "max-md:hidden" : ""}`}>{copy.body}</span>
+      {copy.cta && <span className="shrink-0 bg-harvest px-3 py-1.5 text-[13px] font-bold">{copy.cta}</span>}
     </Link>
   );
 }

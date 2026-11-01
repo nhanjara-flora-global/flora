@@ -142,10 +142,10 @@ export default async function HomePage({ params }: Props) {
 
       {/* Tin nổi bật: 2 tin có ảnh | tin chính | danh sách chữ. */}
       <section aria-label={n.latest} className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-[1fr_2fr_1fr]">
-        <div className="order-2 flex flex-col gap-4 lg:order-1">
-          <StoryCard story={bannerStory(side1)} size="lg" />
+        <div className="order-2 flex flex-col gap-4 max-md:border-t max-md:border-rule max-md:pt-4 lg:order-1">
+          <StoryCard story={bannerStory(side1)} size="lg" mobileRow />
           <div className="border-t border-rule pt-4">
-            <StoryCard story={bannerStory(side2)} size="lg" />
+            <StoryCard story={bannerStory(side2)} size="lg" mobileRow />
           </div>
         </div>
         <div className="order-1 md:col-span-2 lg:order-2 lg:col-span-1">
@@ -175,24 +175,31 @@ export default async function HomePage({ params }: Props) {
         <section aria-labelledby="s-latest" className="mt-10">
           <SectionHeader id="s-latest" title={n.latest} href={withLocale(lang, "/knowledge")} />
           <div className="grid gap-5 border-b border-rule pb-5 lg:grid-cols-[3fr_1fr]">
-            <article className="group relative grid gap-5 md:grid-cols-[2fr_3fr]">
+            {/* Điện thoại: ảnh lên trước chữ, như mọi thẻ khác (không thì ảnh trông như của tin bên dưới). */}
+            <article className="group relative grid gap-2.5 md:grid-cols-[2fr_3fr] md:gap-5">
               <div className="flex flex-col gap-2">
                 <h3 className="font-serif text-2xl font-bold leading-tight">
                   <Link href={toStory(latest[0]).href} className="after:absolute after:inset-0 group-hover:underline">
                     {latest[0].title}
                   </Link>
                 </h3>
-                <p className="text-sm leading-[1.55] text-ink-2">{latest[0].excerpt}</p>
+                <p className="text-[15px] leading-[1.55] text-ink-2 md:text-sm">{latest[0].excerpt}</p>
                 <Meta parts={toStory(latest[0]).meta ?? []} />
               </div>
-              <Media src={toStory(latest[0]).image} alt="" ratio="16/10" sizes="(max-width:768px) 100vw, 45vw" />
+              <Media
+                src={toStory(latest[0]).image}
+                alt=""
+                ratio="16/10"
+                sizes="(max-width:768px) 100vw, 45vw"
+                className="order-first md:order-none"
+              />
             </article>
-            <StoryCard story={toStory(latest[1])} size="lg" />
+            <StoryCard story={toStory(latest[1])} size="lg" mobileRow />
           </div>
           {latest.length >= 6 && (
             <div className="grid gap-5 border-b border-rule py-5 sm:grid-cols-2 lg:grid-cols-4">
               {latest.slice(2, 6).map((p) => (
-                <StoryCard key={p.slug} story={toStory(p)} />
+                <StoryCard key={p.slug} story={toStory(p)} mobileRow />
               ))}
             </div>
           )}
@@ -301,6 +308,7 @@ export default async function HomePage({ params }: Props) {
                 key={slug}
                 story={{ href: serviceHref(lang, slug), title: s.title, image: s.cover, meta: [dict.nav.ecosystem] }}
                 excerpt={false}
+                mobileRow
               />
             );
           })}
@@ -324,6 +332,7 @@ export default async function HomePage({ params }: Props) {
                 story={{ href: serviceHref(lang, slug), title: s.title, image: s.cover }}
                 excerpt={false}
                 onDark
+                mobileRow
               />
             );
           })}
@@ -346,7 +355,7 @@ export default async function HomePage({ params }: Props) {
                     <li key={p.slug} className="border-t border-rule">
                       <Link
                         href={toStory(p).href}
-                        className="block py-2.5 font-serif text-sm font-bold leading-[1.35] hover:underline"
+                        className="block py-2.5 font-serif text-base font-bold leading-[1.35] hover:underline md:text-sm"
                       >
                         {p.title}
                       </Link>
@@ -409,7 +418,7 @@ export default async function HomePage({ params }: Props) {
           ].map((card) => (
             <article key={card.href} className="flex flex-col gap-1.5 border-t-[3px] border-harvest pt-3">
               <h3 className="font-serif text-lg font-bold leading-[1.3]">{card.title}</h3>
-              <p className="text-[13px] leading-normal text-ink-2">{card.body}</p>
+              <p className="text-[15px] leading-normal text-ink-2 md:text-[13px]">{card.body}</p>
               <Link href={withLocale(lang, card.href)} className="py-1 text-[13px] font-bold hover:underline">
                 {card.cta} <span aria-hidden="true">›</span>
               </Link>

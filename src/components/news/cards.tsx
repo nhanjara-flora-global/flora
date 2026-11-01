@@ -16,12 +16,16 @@ export type Story = {
 
 const stretched = "after:absolute after:inset-0 group-hover:underline";
 
+// Điện thoại dùng cỡ lớn hơn một bậc: đọc bằng một tay, không phóng to.
 const TITLE_SIZE = {
-  sm: "text-[15px] leading-[1.35]",
-  md: "text-base leading-[1.35]",
+  sm: "text-base leading-[1.35] md:text-[15px]",
+  md: "text-[17px] leading-[1.35] md:text-base",
   lg: "text-[17px] leading-[1.3]",
   xl: "text-xl leading-[1.3]",
 } as const;
+
+/** Đoạn mô tả: 15px trên điện thoại, 13px trên màn hình lớn. */
+const EXCERPT = "text-[15px] leading-normal md:text-[13px]";
 
 /** Tin chính: ảnh lớn, tiêu đề 30px. */
 export function LeadStory({
@@ -53,8 +57,9 @@ export function StoryCard({
   size = "md",
   excerpt = true,
   onDark = false,
-  sizes = "(max-width:768px) 100vw, 25vw",
+  sizes,
   ratio = "16/9",
+  mobileRow = false,
 }: {
   story: Story;
   size?: keyof typeof TITLE_SIZE;
@@ -62,25 +67,42 @@ export function StoryCard({
   onDark?: boolean;
   sizes?: string;
   ratio?: string;
+  /**
+   * Điện thoại: ảnh nhỏ bên trái, chữ bên phải, bỏ mô tả (dòng tin kiểu BBC) —
+   * mỗi khối chỉ giữ một ảnh lớn nên trang ngắn và lướt nhanh hơn.
+   */
+  mobileRow?: boolean;
 }) {
   return (
-    <article className="group relative flex flex-col gap-1.5">
-      <Media src={story.image} alt="" sizes={sizes} ratio={ratio} />
-      <h3 className={`mt-1 font-serif font-bold ${TITLE_SIZE[size]}`}>
-        <Link href={story.href} className={stretched}>
-          {story.title}
-        </Link>
-      </h3>
-      {excerpt && story.excerpt && (
-        <p
-          className={`line-clamp-3 leading-normal ${size === "xl" ? "text-sm" : "text-[13px]"} ${
-            onDark ? "text-[#cbd8ce]" : "text-ink-2"
-          }`}
-        >
-          {story.excerpt}
-        </p>
-      )}
-      <Meta parts={story.meta ?? []} onDark={onDark} />
+    <article
+      className={`group relative flex flex-col gap-1.5 ${
+        mobileRow ? "max-md:flex-row max-md:items-start max-md:gap-3" : ""
+      }`}
+    >
+      <Media
+        src={story.image}
+        alt=""
+        sizes={sizes ?? `(max-width:768px) ${mobileRow ? "40vw" : "100vw"}, 25vw`}
+        ratio={ratio}
+        className={mobileRow ? "max-md:w-[40%] max-md:shrink-0" : ""}
+      />
+      <div className="flex min-w-0 flex-col gap-1.5">
+        <h3 className={`mt-1 font-serif font-bold ${TITLE_SIZE[size]} ${mobileRow ? "max-md:mt-0" : ""}`}>
+          <Link href={story.href} className={stretched}>
+            {story.title}
+          </Link>
+        </h3>
+        {excerpt && story.excerpt && (
+          <p
+            className={`line-clamp-3 ${size === "xl" ? "text-[15px] leading-normal md:text-sm" : EXCERPT} ${
+              onDark ? "text-[#cbd8ce]" : "text-ink-2"
+            } ${mobileRow ? "max-md:hidden" : ""}`}
+          >
+            {story.excerpt}
+          </p>
+        )}
+        <Meta parts={story.meta ?? []} onDark={onDark} />
+      </div>
     </article>
   );
 }
@@ -105,14 +127,14 @@ export function TextStory({
         </Link>
       </h3>
       {excerpt && story.excerpt && (
-        <p className="line-clamp-2 text-[13px] leading-normal text-ink-2">{story.excerpt}</p>
+        <p className={`line-clamp-2 text-ink-2 ${EXCERPT}`}>{story.excerpt}</p>
       )}
       <Meta parts={story.meta ?? []} />
     </article>
   );
 }
 
-/** Ảnh nhỏ bên trái, tiêu đề bên phải. */
+/** Ảnh nhỏ bên trái (40% trên điện thoại), tiêu đề bên phải. */
 export function ThumbStory({
   story,
   className = "",
@@ -123,10 +145,10 @@ export function ThumbStory({
   onDark?: boolean;
 }) {
   return (
-    <article className={`group relative flex gap-3 ${className}`}>
-      <Media src={story.image} alt="" sizes="96px" className="w-24 shrink-0" />
+    <article className={`group relative flex items-start gap-3 ${className}`}>
+      <Media src={story.image} alt="" sizes="(max-width:768px) 40vw, 96px" className="w-[40%] shrink-0 md:w-24" />
       <div className="flex min-w-0 flex-col gap-1">
-        <h3 className="font-serif text-[15px] font-bold leading-[1.3]">
+        <h3 className="font-serif text-[17px] font-bold leading-[1.3] md:text-[15px]">
           <Link href={story.href} className={stretched}>
             {story.title}
           </Link>
@@ -148,9 +170,7 @@ export function RowStory({ story, date }: { story: Story; date: string }) {
             {story.title}
           </Link>
         </h3>
-        {story.excerpt && (
-          <p className="line-clamp-2 text-[13px] leading-normal text-ink-2">{story.excerpt}</p>
-        )}
+        {story.excerpt && <p className={`line-clamp-2 text-ink-2 ${EXCERPT}`}>{story.excerpt}</p>}
         <Meta parts={story.meta ?? []} />
       </div>
       {story.image && (

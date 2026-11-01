@@ -14,6 +14,8 @@ type CreativeProps = {
   dict: Dictionary;
   /** Billboard: ảnh bên trái thay vì bên phải. */
   reverse?: boolean;
+  /** Billboard: trên điện thoại chỉ còn tiêu đề + nút. */
+  compact?: boolean;
 };
 
 /**
@@ -29,6 +31,7 @@ export async function AdSlot({
   tone,
   lang,
   reverse,
+  compact,
 }: CreativeProps & {
   /** band: dải xám quanh ô; dark: dải tối (trang Video); none: không có dải (cột phải). */
   surface?: "band" | "dark" | "none";
@@ -42,7 +45,7 @@ export async function AdSlot({
       className={className}
       innerClassName={`${adWidth(size)} ${size === "mpu" || size === "halfpage" ? "flex flex-col items-center" : ""}`}
     >
-      <AdCreativeView slot={slot} size={size} tone={tone} lang={lang} reverse={reverse} />
+      <AdCreativeView slot={slot} size={size} tone={tone} lang={lang} reverse={reverse} compact={compact} />
     </AdBand>
   );
 }

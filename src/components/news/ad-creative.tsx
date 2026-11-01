@@ -74,6 +74,7 @@ export function AdCreativeView({
   tone = "dark",
   lang,
   reverse = false,
+  compact = false,
 }: {
   slot: ResolvedSlot;
   size: AdSize;
@@ -81,6 +82,8 @@ export function AdCreativeView({
   lang: Locale;
   /** Billboard: ảnh bên trái thay vì bên phải. */
   reverse?: boolean;
+  /** Billboard: trên điện thoại chỉ còn tiêu đề + nút, để tin chính vẫn lọt màn hình đầu. */
+  compact?: boolean;
 }) {
   const { copy, image } = slot;
   const t = TONE[tone];
@@ -98,23 +101,38 @@ export function AdCreativeView({
   );
 
   if (size === "billboard") {
+    const mobileHidden = compact ? "max-md:hidden" : "";
     return (
       <Link
         href={link}
         className={`flex flex-col md:h-[250px] ${reverse ? "md:flex-row-reverse" : "md:flex-row"} ${t.box}`}
       >
-        <div className="flex flex-col justify-center gap-2.5 px-6 py-5 md:flex-[1_1_360px] md:px-7">
-          <span className={`text-xs font-bold uppercase tracking-[0.6px] ${t.eyebrow}`}>
+        <div
+          className={`flex flex-col justify-center gap-2.5 px-6 py-5 md:flex-[1_1_360px] md:px-7 ${
+            compact ? "max-md:gap-2 max-md:px-4 max-md:py-3" : ""
+          }`}
+        >
+          <span className={`text-xs font-bold uppercase tracking-[0.6px] ${t.eyebrow} ${mobileHidden}`}>
             {copy.eyebrow}
           </span>
-          <span className="font-serif text-[22px] font-bold leading-[1.2] md:text-[26px]">
+          <span
+            className={`font-serif text-[22px] font-bold leading-[1.2] md:text-[26px] ${
+              compact ? "max-md:text-[17px]" : ""
+            }`}
+          >
             {copy.title}
           </span>
-          {copy.body && <span className={`text-sm ${t.body}`}>{copy.body}</span>}
+          {copy.body && <span className={`text-sm ${t.body} ${mobileHidden}`}>{copy.body}</span>}
           {cta}
         </div>
         {image && (
-          <Media src={image} alt="" ratio="" sizes="(max-width:768px) 100vw, 420px" className="h-32 md:h-auto md:flex-[1_1_280px]" />
+          <Media
+            src={image}
+            alt=""
+            ratio=""
+            sizes="(max-width:768px) 100vw, 420px"
+            className={`h-32 md:h-auto md:flex-[1_1_280px] ${mobileHidden}`}
+          />
         )}
       </Link>
     );
