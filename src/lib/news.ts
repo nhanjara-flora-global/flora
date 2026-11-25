@@ -16,6 +16,8 @@ export type ArticleTranslation = {
   title: string;
   excerpt: string;
   content: string;
+  /** true = bản dịch đã được người biên tập (không phải dịch máy) → không hiện nhãn "Machine translated". */
+  edited?: boolean;
 };
 
 export type NewsArticle = LegacyArticle & {

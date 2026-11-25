@@ -137,7 +137,7 @@ function localizeArticle(
       content: entry.content,
       isTranslated: true,
       isFallback: false,
-      method: "machine",
+      method: entry.edited ? "manual" : "machine",
       displayLocale: locale,
     };
   }
