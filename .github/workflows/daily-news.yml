@@ -1,9 +1,11 @@
 name: Daily auto news
 
 on:
-  schedule:
-    # 00:00 UTC = 07:00 giờ Việt Nam, mỗi ngày
-    - cron: "0 0 * * *"
+  # Tắt lịch chạy hằng ngày (DIGIS, 25/11/2026): bài mới nay do hệ thống vận hành DIGIS
+  # đăng qua /api/digis/v1 — xem document/DIGIS-API.md. Vẫn chạy tay được khi cần.
+  # schedule:
+  #   # 00:00 UTC = 07:00 giờ Việt Nam, mỗi ngày
+  #   - cron: "0 0 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
